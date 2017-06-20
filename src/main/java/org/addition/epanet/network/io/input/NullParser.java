@@ -17,8 +17,8 @@
 
 package org.addition.epanet.network.io.input;
 
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.Network;
+import org.addition.epanet.util.ENException;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 /**
  * Network conversion units only class.
  */
-public class NullParser extends InputParser{
+public class NullParser extends InputParser {
     protected NullParser(Logger log) {
         super(log);
     }

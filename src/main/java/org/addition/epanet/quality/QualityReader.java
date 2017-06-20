@@ -17,7 +17,6 @@
 
 package org.addition.epanet.quality;
 
-
 import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.util.ENException;
 
@@ -89,7 +88,6 @@ public class QualityReader implements Iterable<QualityReader.Step> {
 
         }
 
-
         /**
          * Get node quality values in user units.
          *
@@ -133,7 +131,7 @@ public class QualityReader implements Iterable<QualityReader.Step> {
          *
          * @return Step availability.
          */
-		public boolean hasNext() {
+        public boolean hasNext() {
             return current < nPeriods;
         }
 
@@ -142,7 +140,7 @@ public class QualityReader implements Iterable<QualityReader.Step> {
          *
          * @return Reference to step snapshot.
          */
-		public Step next() {
+        public Step next() {
             current++;
             try {
                 qStep.read();
@@ -155,7 +153,7 @@ public class QualityReader implements Iterable<QualityReader.Step> {
         /**
          * Not implemented.
          */
-		public void remove() {
+        public void remove() {
             throw new RuntimeException("not implemented");
         }
 
@@ -225,7 +223,6 @@ public class QualityReader implements Iterable<QualityReader.Step> {
         return nodeCount;
     }
 
-
     /**
      * Get the number of reported quality step snapshots in the file.
      *
@@ -240,7 +237,7 @@ public class QualityReader implements Iterable<QualityReader.Step> {
      *
      * @return StepSnapshot iterator.
      */
-	public Iterator<Step> iterator() {
+    public Iterator<Step> iterator() {
         return new StepIterator();
     }
 

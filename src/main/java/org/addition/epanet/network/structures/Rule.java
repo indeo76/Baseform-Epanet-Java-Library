@@ -17,7 +17,6 @@
 
 package org.addition.epanet.network.structures;
 
-
 import org.addition.epanet.network.io.Keywords;
 import org.addition.epanet.util.Utilities;
 
@@ -28,22 +27,23 @@ public class Rule {
     /**
      * Rule object types.
      */
-    static public enum Objects{
-        r_JUNC      (Keywords.wr_JUNC  ),
-        r_LINK      (Keywords.wr_LINK  ),
-        r_NODE      (Keywords.wr_NODE  ),
-        r_PIPE      (Keywords.wr_PIPE  ),
-        r_PUMP      (Keywords.wr_PUMP  ),
-        r_RESERV    (Keywords.wr_RESERV),
-        r_SYSTEM    (Keywords.wr_SYSTEM),
-        r_TANK      (Keywords.wr_TANK  ),
-        r_VALVE     (Keywords.wr_VALVE );
+    static public enum Objects {
+        r_JUNC(Keywords.wr_JUNC),
+        r_LINK(Keywords.wr_LINK),
+        r_NODE(Keywords.wr_NODE),
+        r_PIPE(Keywords.wr_PIPE),
+        r_PUMP(Keywords.wr_PUMP),
+        r_RESERV(Keywords.wr_RESERV),
+        r_SYSTEM(Keywords.wr_SYSTEM),
+        r_TANK(Keywords.wr_TANK),
+        r_VALVE(Keywords.wr_VALVE);
 
         public static Objects parse(String text) {
             for (Objects type : Objects.values())
                 if (Utilities.match(text, type.parseStr)) return type;
             return null;
         }
+
         public final String parseStr;
 
         private Objects(String text) {
@@ -65,11 +65,13 @@ public class Rule {
         LT("<"),
         NE("<>"),
         NOT(Keywords.wr_NOT);
+
         public static Operators parse(String text) {
             for (Operators type : Operators.values())
                 if (text.equalsIgnoreCase(type.parseStr)) return type;
             return null;
         }
+
         public final String parseStr;
 
         private Operators(String text) {
@@ -80,15 +82,15 @@ public class Rule {
     /**
      * Rule statements.
      */
-    static public enum Rulewords{
-        r_AND       (Keywords.wr_AND     ),
-        r_ELSE      (Keywords.wr_ELSE    ),
-        r_ERROR     (""   ),
-        r_IF        (Keywords.wr_IF      ),
-        r_OR        (Keywords.wr_OR      ),
-        r_PRIORITY  (Keywords.wr_PRIORITY),
-        r_RULE      (Keywords.wr_RULE    ),
-        r_THEN      (Keywords.wr_THEN    );
+    static public enum Rulewords {
+        r_AND(Keywords.wr_AND),
+        r_ELSE(Keywords.wr_ELSE),
+        r_ERROR(""),
+        r_IF(Keywords.wr_IF),
+        r_OR(Keywords.wr_OR),
+        r_PRIORITY(Keywords.wr_PRIORITY),
+        r_RULE(Keywords.wr_RULE),
+        r_THEN(Keywords.wr_THEN);
 
         public static Rulewords parse(String text) {
             for (Rulewords type : Rulewords.values())
@@ -106,22 +108,23 @@ public class Rule {
     /**
      * Rule values types.
      */
-    static public enum Values{
-        IS_ACTIVE   (3,Keywords.wr_ACTIVE),
-        IS_CLOSED   (2,Keywords.wr_CLOSED),
-        IS_NUMBER   (0,"XXXX"),
-        IS_OPEN     (1,Keywords.wr_OPEN);
+    static public enum Values {
+        IS_ACTIVE(3, Keywords.wr_ACTIVE),
+        IS_CLOSED(2, Keywords.wr_CLOSED),
+        IS_NUMBER(0, "XXXX"),
+        IS_OPEN(1, Keywords.wr_OPEN);
 
         public static Values parse(String text) {
             for (Values type : Values.values())
                 if (Utilities.match(text, type.parseStr)) return type;
             return null;
         }
+
         public final int id;
 
         public final String parseStr;
 
-        private Values(int id,String text) {
+        private Values(int id, String text) {
             this.id = id;
             this.parseStr = text;
         }
@@ -130,20 +133,20 @@ public class Rule {
     /**
      * Rule variables.
      */
-    static public enum Varwords{
+    static public enum Varwords {
         r_CLOCKTIME(Keywords.wr_CLOCKTIME),
-        r_DEMAND   (Keywords.wr_DEMAND   ),
-        r_DRAINTIME(Keywords.wr_DRAINTIME ),
-        r_FILLTIME (Keywords.wr_FILLTIME ),
-        r_FLOW     (Keywords.wr_FLOW     ),
-        r_GRADE    (Keywords.wr_GRADE    ),
-        r_HEAD     (Keywords.wr_HEAD     ),
-        r_LEVEL    (Keywords.wr_LEVEL    ),
-        r_POWER    (Keywords.wr_POWER    ),
-        r_PRESSURE (Keywords.wr_PRESSURE ),
-        r_SETTING  (Keywords.wr_SETTING  ),
-        r_STATUS   (Keywords.wr_STATUS   ),
-        r_TIME     (Keywords.wr_TIME     );
+        r_DEMAND(Keywords.wr_DEMAND),
+        r_DRAINTIME(Keywords.wr_DRAINTIME),
+        r_FILLTIME(Keywords.wr_FILLTIME),
+        r_FLOW(Keywords.wr_FLOW),
+        r_GRADE(Keywords.wr_GRADE),
+        r_HEAD(Keywords.wr_HEAD),
+        r_LEVEL(Keywords.wr_LEVEL),
+        r_POWER(Keywords.wr_POWER),
+        r_PRESSURE(Keywords.wr_PRESSURE),
+        r_SETTING(Keywords.wr_SETTING),
+        r_STATUS(Keywords.wr_STATUS),
+        r_TIME(Keywords.wr_TIME);
 
         public static Varwords parse(String text) {
             for (Varwords type : Varwords.values())
@@ -161,6 +164,7 @@ public class Rule {
     private String code;
 
     private String label;
+
     public Rule() {
         label = "";
         code = "";

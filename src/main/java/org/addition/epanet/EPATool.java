@@ -17,7 +17,6 @@
 
 package org.addition.epanet;
 
-
 import org.addition.epanet.hydraulic.HydraulicSim;
 import org.addition.epanet.hydraulic.io.AwareStep;
 import org.addition.epanet.hydraulic.io.HydraulicReader;
@@ -106,7 +105,6 @@ public class EPATool {
         }
     }
 
-
     static enum LinkVariableType {
         LENGHT("LENGHT", FieldsMap.Type.LENGTH),
         DIAMETER("DIAMETER", FieldsMap.Type.DIAM),
@@ -124,7 +122,6 @@ public class EPATool {
             this.name = name;
             this.type = type;
         }
-
 
         public double getValue(PropertiesMap.FormType formType, FieldsMap fmap, AwareStep step, Link link, int index) throws ENException {
             switch (this) {
@@ -152,7 +149,6 @@ public class EPATool {
             }
         }
     }
-
 
     public static void main(String[] args) {
         Logger log = Logger.getLogger(EPATool.class.toString());
@@ -256,14 +252,12 @@ public class EPATool {
             HydraulicSim hydSim = new HydraulicSim(net, log);
             hydSim.simulate(hydFile);
 
-
             if (!net.getPropertiesMap().getQualflag().equals(PropertiesMap.QualType.NONE)) {
                 qualFile = File.createTempFile("qualSim", "bin");
 
                 QualitySim q = new QualitySim(net, log);
                 q.simulate(hydFile, qualFile);
             }
-
 
             HydraulicReader hydReader = new HydraulicReader(new RandomAccessFile(hydFile, "r"));
 
@@ -290,7 +284,6 @@ public class EPATool {
                 nodesTextWriter.write("\n");
             }
 
-
             if (targetNodes.size() == 0 && targetLinks.size() == 0 || targetLinks.size() > 0) {
                 linksOutputFile = new File(inFile.getAbsolutePath() + ".links.out");
                 linksTextWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(linksOutputFile), "UTF-8"));
@@ -311,7 +304,6 @@ public class EPATool {
                 }
                 linksTextWriter.write("\n");
             }
-
 
             for (long time = pMap.getRstart(); time <= pMap.getDuration(); time += pMap.getRstep()) {
                 AwareStep step = hydReader.getStep((int) time);

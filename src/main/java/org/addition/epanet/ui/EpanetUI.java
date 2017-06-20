@@ -18,12 +18,12 @@
 package org.addition.epanet.ui;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.io.input.InputParser;
 import org.addition.epanet.network.io.output.OutputComposer;
 import org.addition.epanet.network.structures.Node;
 import org.addition.epanet.network.structures.Tank;
+import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.ENLevels;
 import org.addition.epanet.util.Utilities;
 
@@ -34,7 +34,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.*;
 
 /**
@@ -105,7 +104,6 @@ public class EpanetUI implements ActionListener {
      * Reference to the report options window.
      */
     ReportOptions reportOptions;
-
 
     /**
      * Application title string.
@@ -183,7 +181,6 @@ public class EpanetUI implements ActionListener {
             }
         });
     }
-
 
     /**
      * Aware-P Epanet frontend constructor.
@@ -355,7 +352,6 @@ public class EpanetUI implements ActionListener {
 
         Network.FileType netType = Network.FileType.INP_FILE;
 
-
         if (fileSaver.getFileFilter() instanceof XLSXFilter) {
             netType = Network.FileType.EXCEL_FILE;
         } else if (fileSaver.getFileFilter() instanceof XMLFilter) {
@@ -423,7 +419,6 @@ public class EpanetUI implements ActionListener {
                     return;
                 }
 
-
                 epanetNetwork = new Network();
                 InputParser inpParser = InputParser.create(netType, log);
                 try {
@@ -445,13 +440,11 @@ public class EpanetUI implements ActionListener {
                 int resrvCount = 0;
                 int tanksCount = 0;
 
-
                 for (Tank tank : epanetNetwork.getTanks())
                     if (tank.getArea() == 0.0)
                         resrvCount++;
                     else
                         tanksCount++;
-
 
                 textReservoirs.setText(Integer.toString(resrvCount));
                 textTanks.setText(Integer.toString(tanksCount));
@@ -518,7 +511,6 @@ public class EpanetUI implements ActionListener {
      *
      * @param args
      * @throws UnsupportedLookAndFeelException
-     *
      */
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
 //        if (Utilities.isMac()) {
@@ -556,7 +548,7 @@ public class EpanetUI implements ActionListener {
                 Class<?> appCl = Class.forName("com.apple.eawt.Application");
                 Object app = appCl.getMethod("getApplication", new Class[]{}).invoke(null);
                 Image dockImage = Toolkit.getDefaultToolkit().getImage(EpanetUI.class.getResource("/uiresources/ae.png"));
-                appCl.getMethod("setDockIconImage",java.awt.Image.class).invoke(app, dockImage);
+                appCl.getMethod("setDockIconImage", java.awt.Image.class).invoke(app, dockImage);
                 JMenuBar menuBar = new JMenuBar();
                 JMenu fileMenu = new JMenu("File");
                 menuBar.add(fileMenu);

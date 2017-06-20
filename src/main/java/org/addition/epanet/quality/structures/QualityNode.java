@@ -17,7 +17,6 @@
 
 package org.addition.epanet.quality.structures;
 
-
 import org.addition.epanet.network.structures.Node;
 import org.addition.epanet.network.structures.Tank;
 
@@ -29,8 +28,8 @@ public class QualityNode {
     /**
      * Factory method to instantiate the quality node from the hydraulic network node.
      */
-    public static QualityNode create(Node node){
-        if(node instanceof Tank)
+    public static QualityNode create(Node node) {
+        if (node instanceof Tank)
             return new QualityTank(node);
         else
             return new QualityNode(node);
@@ -39,37 +38,37 @@ public class QualityNode {
     /**
      * Node demand [Feet^3/Second]
      */
-    private double  demand;
+    private double demand;
 
     /**
-     *  Total mass inflow to node.
+     * Total mass inflow to node.
      */
-    private double  massIn;
+    private double massIn;
 
     /**
      *
      */
-    private double  massRate;
+    private double massRate;
 
     /**
      * Hydraulic network node reference.
      */
-    private final Node    node;
+    private final Node node;
 
     /**
      * Species concentration [user units].
      */
-    private double  quality;
+    private double quality;
 
     /**
      *
      */
-    private double  sourceContribution;
+    private double sourceContribution;
 
     /**
      * Total volume inflow to node.
      */
-    private double  volumeIn;
+    private double volumeIn;
 
     /**
      * Init quality node properties.
@@ -77,7 +76,7 @@ public class QualityNode {
     QualityNode(Node node) {
         this.node = node;
         quality = node.getC0()[0];
-        if(this.node.getSource()!=null)
+        if (this.node.getSource() != null)
             massRate = 0.0;
     }
 
@@ -92,7 +91,6 @@ public class QualityNode {
     public double getMassRate() {
         return massRate;
     }
-
 
     /**
      * Get the original hydraulic network node.

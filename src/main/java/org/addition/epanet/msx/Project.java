@@ -16,30 +16,32 @@
  */
 
 package org.addition.epanet.msx;
+
 import org.addition.epanet.msx.EnumTypes.*;
 import org.addition.epanet.msx.Structures.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class Project {
 
-
-    public void loadDependencies(EpanetMSX epa)
-    {
+    public void loadDependencies(EpanetMSX epa) {
         MSX = epa.getNetwork();
         reader = epa.getReader();
     }
 
     Network MSX;
 
-    Map<String, Integer> [] Htable;
+    Map<String, Integer>[] Htable;
 
     InpReader reader;
 
     // Opens an EPANET-MSX project.
-    int  MSXproj_open(File msxFile) throws IOException {
+    int MSXproj_open(File msxFile) throws IOException {
         int errcode = 0;
 
         //MSX.QualityOpened = false;
@@ -83,8 +85,7 @@ public class Project {
 
     //=============================================================================
     // closes the current EPANET-MSX project.
-    void MSXproj_close()
-    {
+    void MSXproj_close() {
         //if ( MSX.RptFile.file ) fclose(MSX.RptFile.file);                          //(LR-11/20/07, to fix bug 08)
         //MSX.RptFile.close();
         //if ( MSX.HydFile.file ) fclose(MSX.HydFile.file);
@@ -113,59 +114,52 @@ public class Project {
 
     //=============================================================================
     // adds an object ID to the project's hash tables.
-    int   MSXproj_addObject(ObjectTypes type, String id, int n)
-    {
-        int  result = 0;
-        int  len;
+    int MSXproj_addObject(ObjectTypes type, String id, int n) {
+        int result = 0;
+        int len;
         String newID = id;
 
 // --- do nothing if object already exists in a hash table
 
-        if ( MSXproj_findObject(type, id) > 0 ) return 0;
-
-
+        if (MSXproj_findObject(type, id) > 0) return 0;
 
 // --- insert object's ID into the hash table for that type of object
 
         //result = HTinsert(Htable[type], newID, n);
-        if(Htable[type.id].put(newID,n)==null)
+        if (Htable[type.id].put(newID, n) == null)
             result = 1;
 
-        if ( result == 0 )
+        if (result == 0)
             result = -1;
         return result;
     }
 
     //=============================================================================
     // uses hash table to find index of an object with a given ID.
-    int   MSXproj_findObject(ObjectTypes type, String id)
-    {
+    int MSXproj_findObject(ObjectTypes type, String id) {
         Integer val = Htable[type.id].get(id);
-        return val==null?-1:val;
+        return val == null ? -1 : val;
     }
 
     //=============================================================================
     // uses hash table to find address of given string entry.
-    String MSXproj_findID(ObjectTypes type, String id)
-    {
+    String MSXproj_findID(ObjectTypes type, String id) {
         Integer val = Htable[type.id].get(id);
-        return val==null?"":id;
+        return val == null ? "" : id;
     }
 
     //=============================================================================
     // gets the text of an error message.
-    String MSXproj_getErrmsg(int errcode)
-    {
-        if ( errcode <= ErrorCodeType.ERR_FIRST.id || errcode >= ErrorCodeType.ERR_MAX.id ) return Constants.Errmsg[0];
+    String MSXproj_getErrmsg(int errcode) {
+        if (errcode <= ErrorCodeType.ERR_FIRST.id || errcode >= ErrorCodeType.ERR_MAX.id) return Constants.Errmsg[0];
         else return Constants.Errmsg[errcode - ErrorCodeType.ERR_FIRST.id];
     }
 
     // assigns default values to project variables.
-    void setDefaults()
-    {
+    void setDefaults() {
         MSX.Title = "";
         MSX.Rptflag = false;
-        for (int i=0; i<ObjectTypes.MAX_OBJECTS.id; i++)
+        for (int i = 0; i < ObjectTypes.MAX_OBJECTS.id; i++)
             MSX.Nobjects[i] = 0;
         MSX.Unitsflag = UnitSystemType.US;
         MSX.Flowflag = FlowUnitsType.GPM;
@@ -193,8 +187,7 @@ public class Project {
     }
 
     // Converts user's units to internal EPANET units.
-    int convertUnits()
-    {
+    int convertUnits() {
         // Flow conversion factors (to cfs)
         double fcf[] = {1.0, Constants.GPMperCFS, Constants.MGDperCFS, Constants.IMGDperCFS, Constants.AFDperCFS,
                 Constants.LPSperCFS, Constants.LPMperCFS, Constants.MLDperCFS, Constants.CMHperCFS, Constants.CMDperCFS};
@@ -205,25 +198,25 @@ public class Project {
         int i, m, errcode = 0;
 
         // Conversions for length & tank volume
-        if ( MSX.Unitsflag == UnitSystemType.US )
-        {
+        if (MSX.Unitsflag == UnitSystemType.US) {
             MSX.Ucf[UnitsType.LENGTH_UNITS.id] = 1.0;
-            MSX.Ucf[UnitsType.DIAM_UNITS.id]   = 12.0;
-            MSX.Ucf[UnitsType.VOL_UNITS.id]    = 1.0;
-        }
-        else
-        {
+            MSX.Ucf[UnitsType.DIAM_UNITS.id] = 12.0;
+            MSX.Ucf[UnitsType.VOL_UNITS.id] = 1.0;
+        } else {
             MSX.Ucf[UnitsType.LENGTH_UNITS.id] = Constants.MperFT;
-            MSX.Ucf[UnitsType.DIAM_UNITS.id]   = 1000.0*Constants.MperFT;
-            MSX.Ucf[UnitsType.VOL_UNITS.id]    = Constants.M3perFT3;
+            MSX.Ucf[UnitsType.DIAM_UNITS.id] = 1000.0 * Constants.MperFT;
+            MSX.Ucf[UnitsType.VOL_UNITS.id] = Constants.M3perFT3;
         }
 
         // Conversion for surface area
         MSX.Ucf[UnitsType.AREA_UNITS.id] = 1.0;
-        switch (MSX.AreaUnits)
-        {
-            case M2:  MSX.Ucf[UnitsType.AREA_UNITS.id] = Constants.M2perFT2;  break;
-            case CM2: MSX.Ucf[UnitsType.AREA_UNITS.id] = Constants.CM2perFT2; break;
+        switch (MSX.AreaUnits) {
+            case M2:
+                MSX.Ucf[UnitsType.AREA_UNITS.id] = Constants.M2perFT2;
+                break;
+            case CM2:
+                MSX.Ucf[UnitsType.AREA_UNITS.id] = Constants.CM2perFT2;
+                break;
         }
 
         // Conversion for flow rate
@@ -234,54 +227,52 @@ public class Project {
         MSX.Ucf[UnitsType.RATE_UNITS.id] = rcf[MSX.RateUnits.id];
 
         // Convert pipe diameter & length
-        for (i=1; i<=MSX.Nobjects[ObjectTypes.LINK.id]; i++){
-            MSX.Link[i].setDiam( MSX.Link[i].getDiam() / MSX.Ucf[UnitsType.DIAM_UNITS.id]);
-            MSX.Link[i].setLen(MSX.Link[i].getLen() /  MSX.Ucf[UnitsType.LENGTH_UNITS.id]);
+        for (i = 1; i <= MSX.Nobjects[ObjectTypes.LINK.id]; i++) {
+            MSX.Link[i].setDiam(MSX.Link[i].getDiam() / MSX.Ucf[UnitsType.DIAM_UNITS.id]);
+            MSX.Link[i].setLen(MSX.Link[i].getLen() / MSX.Ucf[UnitsType.LENGTH_UNITS.id]);
         }
 
         // Convert initial tank volumes
-        for (i=1; i<=MSX.Nobjects[ObjectTypes.TANK.id]; i++){
+        for (i = 1; i <= MSX.Nobjects[ObjectTypes.TANK.id]; i++) {
             MSX.Tank[i].setV0(MSX.Tank[i].getV0() / MSX.Ucf[UnitsType.VOL_UNITS.id]);
             MSX.Tank[i].setvMix(MSX.Tank[i].getvMix() / MSX.Ucf[UnitsType.VOL_UNITS.id]);
         }
 
         // Assign default tolerances to species
-        for (m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++){
-            if ( MSX.Species[m].getrTol() == 0.0 ) MSX.Species[m].setrTol(MSX.DefRtol);
-            if ( MSX.Species[m].getaTol()  == 0.0 ) MSX.Species[m].setaTol(MSX.DefAtol);
+        for (m = 1; m <= MSX.Nobjects[ObjectTypes.SPECIES.id]; m++) {
+            if (MSX.Species[m].getrTol() == 0.0) MSX.Species[m].setrTol(MSX.DefRtol);
+            if (MSX.Species[m].getaTol() == 0.0) MSX.Species[m].setaTol(MSX.DefAtol);
         }
 
         return errcode;
     }
 
     // creates multi-species data objects.
-    int createObjects()
-    {
+    int createObjects() {
         // Create nodes, links, & tanks
-        MSX.Node = new Node[MSX.Nobjects[ObjectTypes.NODE.id]+1];
-        MSX.Link = new Link[MSX.Nobjects[ObjectTypes.LINK.id]+1];
-        MSX.Tank = new Tank[MSX.Nobjects[ObjectTypes.TANK.id]+1];
+        MSX.Node = new Node[MSX.Nobjects[ObjectTypes.NODE.id] + 1];
+        MSX.Link = new Link[MSX.Nobjects[ObjectTypes.LINK.id] + 1];
+        MSX.Tank = new Tank[MSX.Nobjects[ObjectTypes.TANK.id] + 1];
 
         // Create species, terms, parameters, constants & time patterns
-        MSX.Species = new Species[MSX.Nobjects[ObjectTypes.SPECIES.id]+1];
-        MSX.Term    = new Term[MSX.Nobjects[ObjectTypes.TERM.id]+1];
-        MSX.Param   = new Param[MSX.Nobjects[ObjectTypes.PARAMETER.id]+1];
-        MSX.Const   = new Const[MSX.Nobjects[ObjectTypes.CONSTANT.id]+1];
-        MSX.Pattern = new Pattern[MSX.Nobjects[ObjectTypes.PATTERN.id]+1];
+        MSX.Species = new Species[MSX.Nobjects[ObjectTypes.SPECIES.id] + 1];
+        MSX.Term = new Term[MSX.Nobjects[ObjectTypes.TERM.id] + 1];
+        MSX.Param = new Param[MSX.Nobjects[ObjectTypes.PARAMETER.id] + 1];
+        MSX.Const = new Const[MSX.Nobjects[ObjectTypes.CONSTANT.id] + 1];
+        MSX.Pattern = new Pattern[MSX.Nobjects[ObjectTypes.PATTERN.id] + 1];
 
-        for(int i = 0;i<=MSX.Nobjects[ObjectTypes.CONSTANT.id];i++)
+        for (int i = 0; i <= MSX.Nobjects[ObjectTypes.CONSTANT.id]; i++)
             MSX.Const[i] = new Const();
 
         // Create arrays for demands, heads, & flows
-        MSX.D = new float[MSX.Nobjects[ObjectTypes.NODE.id]+1];
-        MSX.H = new float[MSX.Nobjects[ObjectTypes.NODE.id]+1];
-        MSX.Q = new float[MSX.Nobjects[ObjectTypes.LINK.id]+1];
+        MSX.D = new float[MSX.Nobjects[ObjectTypes.NODE.id] + 1];
+        MSX.H = new float[MSX.Nobjects[ObjectTypes.NODE.id] + 1];
+        MSX.Q = new float[MSX.Nobjects[ObjectTypes.LINK.id] + 1];
 
         // create arrays for current & initial concen. of each species for each node
-        MSX.C0 = new double[MSX.Nobjects[ObjectTypes.SPECIES.id]+1];
-        for (int i=1; i<=MSX.Nobjects[ObjectTypes.NODE.id]; i++)
-        {
-            MSX.Node[i] = new Node(MSX.Nobjects[ObjectTypes.SPECIES.id]+1);
+        MSX.C0 = new double[MSX.Nobjects[ObjectTypes.SPECIES.id] + 1];
+        for (int i = 1; i <= MSX.Nobjects[ObjectTypes.NODE.id]; i++) {
+            MSX.Node[i] = new Node(MSX.Nobjects[ObjectTypes.SPECIES.id] + 1);
 
             //MSX.Node[i].c =  new double[MSX.Nobjects[SPECIES]+1, sizeof(double));
             //MSX.Node[i].c0 = new double[MSX.Nobjects[SPECIES]+1, sizeof(double));
@@ -290,9 +281,8 @@ public class Project {
 
         // Create arrays for init. concen. & kinetic parameter values for each link
 
-        for (int i=1; i<=MSX.Nobjects[ObjectTypes.LINK.id]; i++)
-        {
-            MSX.Link[i] = new Link(MSX.Nobjects[ObjectTypes.SPECIES.id]+1,MSX.Nobjects[ObjectTypes.PARAMETER.id]+1);
+        for (int i = 1; i <= MSX.Nobjects[ObjectTypes.LINK.id]; i++) {
+            MSX.Link[i] = new Link(MSX.Nobjects[ObjectTypes.SPECIES.id] + 1, MSX.Nobjects[ObjectTypes.PARAMETER.id] + 1);
             //MSX.Link[i].c0 = (double *)
             //calloc(MSX.Nobjects[SPECIES]+1, sizeof(double));
             //MSX.Link[i].param = (double *)
@@ -302,9 +292,8 @@ public class Project {
 
         // Create arrays for kinetic parameter values & current concen. for each tank
 
-        for (int i=1; i<=MSX.Nobjects[ObjectTypes.TANK.id]; i++)
-        {
-            MSX.Tank[i] = new Tank(MSX.Nobjects[ObjectTypes.PARAMETER.id]+1,MSX.Nobjects[ObjectTypes.SPECIES.id]+1);
+        for (int i = 1; i <= MSX.Nobjects[ObjectTypes.TANK.id]; i++) {
+            MSX.Tank[i] = new Tank(MSX.Nobjects[ObjectTypes.PARAMETER.id] + 1, MSX.Nobjects[ObjectTypes.SPECIES.id] + 1);
 
             //MSX.Tank[i].param = (double *)
             //calloc(MSX.Nobjects[PARAMETER]+1, sizeof(double));
@@ -314,8 +303,7 @@ public class Project {
 
         // Initialize contents of each time pattern object
 
-        for (int i=1; i<=MSX.Nobjects[ObjectTypes.PATTERN.id]; i++)
-        {
+        for (int i = 1; i <= MSX.Nobjects[ObjectTypes.PATTERN.id]; i++) {
             MSX.Pattern[i] = new Pattern();
             //MSX.Pattern[i].length = 0;
             //MSX.Pattern[i].first = null;
@@ -324,8 +312,7 @@ public class Project {
 
         // Initialize reaction rate & equil. formulas for each species
 
-        for (int i=1; i<=MSX.Nobjects[ObjectTypes.SPECIES.id]; i++)
-        {
+        for (int i = 1; i <= MSX.Nobjects[ObjectTypes.SPECIES.id]; i++) {
             MSX.Species[i] = new Species();
             //MSX.Species[i].pipeExpr     = null;
             //MSX.Species[i].tankExpr     = null;
@@ -337,7 +324,7 @@ public class Project {
 
         // Initialize math expressions for each intermediate term
 
-        for (int i=1; i<=MSX.Nobjects[ObjectTypes.TERM.id]; i++){
+        for (int i = 1; i <= MSX.Nobjects[ObjectTypes.TERM.id]; i++) {
             MSX.Term[i] = new Term();
             //MSX.Term[i].expr = null;
         }
@@ -346,8 +333,7 @@ public class Project {
 
     //=============================================================================
     // Deletes multi-species data objects.
-    void deleteObjects()
-    {
+    void deleteObjects() {
         //int i;
         ////SnumList *listItem;
         //
@@ -423,14 +409,13 @@ public class Project {
     }
 
     // allocates memory for object ID hash tables.
-    int createHashTables()
-    {
+    int createHashTables() {
         int j;
 
         // create a hash table for each type of object
         Htable = new Map[ObjectTypes.MAX_OBJECTS.id];
 
-        for (j = 0; j < ObjectTypes.MAX_OBJECTS.id ; j++){
+        for (j = 0; j < ObjectTypes.MAX_OBJECTS.id; j++) {
             Htable[j] = new Hashtable<String, Integer>();
         }
 
@@ -439,8 +424,7 @@ public class Project {
 
     //=============================================================================
     // frees memory allocated for object ID hash tables.
-    void deleteHashTables()
-    {
+    void deleteHashTables() {
         //int j;
         //
 // --- f//ree the hash tables
@@ -460,19 +444,18 @@ public class Project {
     }
 
     // New function added (LR-11/20/07, to fix bug 08)
-   //int openRptFile()
-   //{
-   //    if( MSX.RptFile.getFilename().equals(""))
-   //        return 0;
-   //
-   //    //if ( MSX.RptFile.file ) fclose(MSX.RptFile.file);
-   //    MSX.RptFile.close();
-   //    //MSX.RptFile.file = fopen(MSX.RptFile.name, "wt");
-   //    if(!MSX.RptFile.openAsTextWriter())
-   //        return ErrorCodeType.ERR_OPEN_RPT_FILE.id;
-   //    //if ( MSX.RptFile.file == null ) return ErrorCodeType.ERR_OPEN_RPT_FILE.id;
-   //    return 0;
-   //}
-
+    //int openRptFile()
+    //{
+    //    if( MSX.RptFile.getFilename().equals(""))
+    //        return 0;
+    //
+    //    //if ( MSX.RptFile.file ) fclose(MSX.RptFile.file);
+    //    MSX.RptFile.close();
+    //    //MSX.RptFile.file = fopen(MSX.RptFile.name, "wt");
+    //    if(!MSX.RptFile.openAsTextWriter())
+    //        return ErrorCodeType.ERR_OPEN_RPT_FILE.id;
+    //    //if ( MSX.RptFile.file == null ) return ErrorCodeType.ERR_OPEN_RPT_FILE.id;
+    //    return 0;
+    //}
 
 }

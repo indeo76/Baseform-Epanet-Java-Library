@@ -19,8 +19,8 @@ package org.addition.epanet.msx.Structures;
 
 // MATH EXPRESSION CONSTANT OBJECT
 public class Const {
-    private String  id;      // name
-    private double  value;   // value
+    private String id;      // name
+    private double value;   // value
 
     public Const() {
     }

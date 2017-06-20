@@ -24,7 +24,7 @@ import java.util.logging.Level;
  */
 public class ENLevels extends Level {
 
-    public static final ENLevels ERROR = new ENLevels("ERROR",950);
+    public static final ENLevels ERROR = new ENLevels("ERROR", 950);
 
     public ENLevels(String name, int value) {
         super(name, value);

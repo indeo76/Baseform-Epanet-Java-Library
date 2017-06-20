@@ -25,8 +25,8 @@ import org.addition.epanet.Constants;
 public class Field {
     /**
      * Range limits.
-      */
-    static public enum RangeType{
+     */
+    static public enum RangeType {
         /**
          * upper limit
          */
@@ -42,32 +42,35 @@ public class Field {
 
         public final int id;
 
-        private RangeType(int id) {this.id = id;}
+        private RangeType(int id) {
+            this.id = id;
+        }
     }
 
     /**
      * Enabled if in table.
      */
-    private boolean  enabled;
+    private boolean enabled;
     /**
      * Name of reported variable.
      */
-    private String   name;
+    private String name;
     /**
      * Number of decimal places.
      */
-    private int      precision;
+    private int precision;
     /**
-     *  Lower/upper report limits.
+     * Lower/upper report limits.
      */
-    private double   rptLim[]={0d,0d,0d};
+    private double rptLim[] = {0d, 0d, 0d};
     /**
      * Units of reported variable.
      */
-    private String   units;
+    private String units;
 
     /**
      * Init field name, precision, report limit and state.
+     *
      * @param name Field name.
      */
     public Field(String name) {

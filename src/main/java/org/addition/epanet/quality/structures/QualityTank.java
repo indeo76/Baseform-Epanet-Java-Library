@@ -19,13 +19,13 @@ package org.addition.epanet.quality.structures;
 
 import org.addition.epanet.network.structures.Node;
 import org.addition.epanet.network.structures.Tank;
+
 import java.util.LinkedList;
 
 /**
  * Wrapper class for the Tank in the water quality simulation.
  */
-public class QualityTank extends QualityNode
-{
+public class QualityTank extends QualityNode {
     /**
      * Current species concentration [user units].
      */
@@ -47,8 +47,8 @@ public class QualityTank extends QualityNode
     public QualityTank(Node node) {
         super(node);
         segments = new LinkedList<QualitySegment>();
-        volume = ((Tank)node).getV0();
-        concentration =node.getC0()[0];
+        volume = ((Tank) node).getV0();
+        concentration = node.getC0()[0];
     }
 
     /**
@@ -64,6 +64,7 @@ public class QualityTank extends QualityNode
 
     /**
      * Get tank water volume.
+     *
      * @return Water volume [Feet^3].
      */
     public double getVolume() {
@@ -79,6 +80,7 @@ public class QualityTank extends QualityNode
 
     /**
      * Set water tank volume.
+     *
      * @param volume Water volume [Feet^3].
      */
     public void setVolume(double volume) {

@@ -17,33 +17,30 @@
 
 package org.addition.epanet.msx.Solvers;
 
-
 import org.addition.epanet.msx.Utilities;
 
 public class Newton {
 
-    int      Nmax;      // max. number of equations
-    int      []Indx;    // permutation vector of row indexes
-    double   []F;       // function & adjustment vector
-    double   []W;       // work vector
-    double   [][]J;     // Jacobian matrix
+    int Nmax;      // max. number of equations
+    int[] Indx;    // permutation vector of row indexes
+    double[] F;       // function & adjustment vector
+    double[] W;       // work vector
+    double[][] J;     // Jacobian matrix
 
     /**
      * opens the algebraic solver to handle a system of n equations.
-      */
-    public void newton_open(int n)
-    {
-        Nmax    = 0;
-        Indx    = null;
-        F       = null;
-        W       = null;
-        Indx	= new int[n+1];
-        F   	= new double[n+1];
-        W		= new double[n+1];
-        J       = Utilities.createMatrix(n+1, n+1);
+     */
+    public void newton_open(int n) {
+        Nmax = 0;
+        Indx = null;
+        F = null;
+        W = null;
+        Indx = new int[n + 1];
+        F = new double[n + 1];
+        W = new double[n + 1];
+        J = Utilities.createMatrix(n + 1, n + 1);
         Nmax = n;
     }
-
 
     //=============================================================================
     // uses newton-raphson iterations to solve n nonlinear eqns.
@@ -97,41 +94,38 @@ public class Newton {
      * uses newton-raphson iterations to solve n nonlinear eqns.
      */
     public int newton_solve(double x[], int n, int maxit, int numsig,
-                     JacobianInterface jint, JacobianInterface.Operation op)
-    {
+                            JacobianInterface jint, JacobianInterface.Operation op) {
         int i, k;
         double errx, errmax, cscal, relconvg = Math.pow(10.0, -numsig);
 
         // check that system was sized adequetely
 
-        if ( n > Nmax ) return -3;
+        if (n > Nmax) return -3;
 
         // use up to maxit iterations to find a solution
 
-        for (k=1; k<=maxit; k++)
-        {
+        for (k = 1; k <= maxit; k++) {
             // evaluate the Jacobian matrix
 
-            Utilities.jacobian(x, n, F, W, J, jint,op);
+            Utilities.jacobian(x, n, F, W, J, jint, op);
 
             // factorize the Jacobian
 
-            if ( Utilities.factorize(J, n, W, Indx) ==0 ) return -1;
+            if (Utilities.factorize(J, n, W, Indx) == 0) return -1;
 
             // solve for the updates to x (returned in F)
 
-            for (i=1; i<=n; i++) F[i] = -F[i];
+            for (i = 1; i <= n; i++) F[i] = -F[i];
             Utilities.solve(J, n, Indx, F);
 
             // update solution x & check for convergence
 
             errmax = 0.0;
-            for (i=1; i<=n; i++)
-            {
+            for (i = 1; i <= n; i++) {
                 cscal = x[i];
                 if (cscal < relconvg) cscal = relconvg;
                 x[i] += F[i];
-                errx = Math.abs(F[i]/cscal);
+                errx = Math.abs(F[i] / cscal);
                 if (errx > errmax) errmax = errx;
             }
             if (errmax <= relconvg) return k;

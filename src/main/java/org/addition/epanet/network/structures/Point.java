@@ -31,8 +31,8 @@ public class Point {
     private double y;
 
     public Point() {
-        x =0;
-        y =0;
+        x = 0;
+        y = 0;
     }
 
     public Point(double x, double y) {

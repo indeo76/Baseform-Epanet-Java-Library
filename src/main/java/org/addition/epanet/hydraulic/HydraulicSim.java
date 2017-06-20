@@ -17,7 +17,6 @@
 
 package org.addition.epanet.hydraulic;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.hydraulic.io.AwareStep;
 import org.addition.epanet.hydraulic.models.CMModelCalculator;
@@ -49,14 +48,12 @@ import java.util.logging.Logger;
  */
 public class HydraulicSim {
 
-
     public static final int BUFFER_SIZE = 512 * 1024; //512kb
     protected transient boolean running;
     protected transient Thread runningThread;
 
     protected HydraulicSim() {
     }
-
 
     public ByteBuffer getStepSavingByteBuffer() {
         return stepSavingByteBuffer;
@@ -67,7 +64,6 @@ public class HydraulicSim {
     }
 
     public ByteBuffer stepSavingByteBuffer = null;
-
 
     /**
      * Step solving result
@@ -87,7 +83,6 @@ public class HydraulicSim {
      */
     protected Logger logger;
 
-
     protected List<SimulationNode> nNodes;
     protected List<SimulationLink> nLinks;
     protected List<SimulationPump> nPumps;
@@ -95,11 +90,9 @@ public class HydraulicSim {
     protected List<SimulationNode> nJunctions;
     protected List<SimulationValve> nValves;
 
-
     protected List<SimulationControl> nControls;
     protected List<SimulationRule> nRules;
     protected Curve[] nCurves;
-
 
     /**
      * Simulation conversion units.
@@ -169,7 +162,6 @@ public class HydraulicSim {
         return Rtime;
     }
 
-
     /**
      * Init hydraulic simulation, preparing the linear solver and the hydraulic structures wrappers.
      *
@@ -194,7 +186,6 @@ public class HydraulicSim {
         nJunctions = new ArrayList<SimulationNode>();
         nValves = new ArrayList<SimulationValve>();
         nRules = new ArrayList<SimulationRule>();
-
 
         Map<String, SimulationNode> nodesById = new HashMap<String, SimulationNode>();
         for (Node n : tmpNodes) {
@@ -229,7 +220,6 @@ public class HydraulicSim {
         for (Control ctr : net.getControls())
             nControls.add(new SimulationControl(nNodes, nLinks, ctr));
 
-
         fMap = net.getFieldsMap();
         pMap = net.getPropertiesMap();
         Epat = net.getPattern(pMap.getEpatId());
@@ -251,11 +241,9 @@ public class HydraulicSim {
                 break;
         }
 
-
         for (SimulationLink link : nLinks) {
             link.initLinkFlow();
         }
-
 
         for (SimulationNode node : nJunctions) {
             if (node.getKe() > 0.0)
@@ -270,7 +258,6 @@ public class HydraulicSim {
                     &&
                     (link.getRoughness() != Constants.MISSING))
                 link.setSimStatus(StatType.ACTIVE);
-
 
             if (link.getSimStatus().id <= StatType.CLOSED.id)
                 link.setSimFlow(Constants.QZERO);
@@ -304,7 +291,6 @@ public class HydraulicSim {
             throw new ENException(305);
         }
     }
-
 
     /**
      * Run hydraulic simuation.
@@ -396,7 +382,6 @@ public class HydraulicSim {
             throw new ENException(1000);
 
     }
-
 
     /**
      * Halt hydraulic simulation.
@@ -540,7 +525,6 @@ public class HydraulicSim {
             ret.iter++;
         }
 
-
         for (SimulationNode node : nJunctions)
             node.setSimDemand(node.getSimDemand() + node.getSimEmitter());
 
@@ -555,7 +539,6 @@ public class HydraulicSim {
 
         return ret;
     }
-
 
     /**
      * Computes coefficients of linearized network eqns.
@@ -740,7 +723,6 @@ public class HydraulicSim {
         return (tstep);
     }
 
-
     /**
      * Save current step simulation results in the temp hydfile.
      */
@@ -776,7 +758,6 @@ public class HydraulicSim {
             throw new ENException(308);
         }
     }
-
 
     // Report hydraulic warning.
     // Note: Warning conditions checked in following order:
@@ -906,7 +887,6 @@ public class HydraulicSim {
         } catch (ENException e) {
         }
     }
-
 
     private void logRelErr(NetSolveStep ret) {
         if (ret.iter == 0) {

@@ -18,28 +18,25 @@
 package org.addition.epanet.network.io.input;
 
 import org.addition.epanet.Constants;
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.FieldsMap;
-import org.addition.epanet.network.FieldsMap.*;
+import org.addition.epanet.network.FieldsMap.Type;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.PropertiesMap;
+import org.addition.epanet.network.structures.*;
+import org.addition.epanet.network.structures.Link.LinkType;
+import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.ENLevels;
 import org.addition.epanet.util.Utilities;
-import org.addition.epanet.network.structures.Link.*;
-
-import java.util.logging.Logger;
-
-import org.addition.epanet.network.structures.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Abstract input file parser.
  */
 public abstract class InputParser {
-
 
     /**
      * Reference to the error logger.
@@ -57,9 +54,9 @@ public abstract class InputParser {
             case EXCEL_FILE:
                 return new ExcelParser(log);
             case XML_FILE:
-                return new XMLParser(log,false);
+                return new XMLParser(log, false);
             case XML_GZ_FILE:
-                return new XMLParser(log,true);
+                return new XMLParser(log, true);
             case NULL_FILE:
                 return new NullParser(log);
         }
@@ -70,6 +67,7 @@ public abstract class InputParser {
 
     /**
      * Prepare the hydraulic network for simulation.
+     *
      * @param net
      * @throws ENException
      */
@@ -83,6 +81,7 @@ public abstract class InputParser {
 
     /**
      * Adjust simulation configurations.
+     *
      * @param net
      * @throws ENException
      */
@@ -92,6 +91,7 @@ public abstract class InputParser {
 
     /**
      * Adjust simulation configurations.
+     *
      * @param net
      * @throws ENException
      */
@@ -132,7 +132,6 @@ public abstract class InputParser {
                 m.setUnitsflag(PropertiesMap.UnitsType.US);
         }
 
-
         if (m.getUnitsflag() != PropertiesMap.UnitsType.SI)
             m.setPressflag(PropertiesMap.PressUnitsType.PSI);
         else if (m.getPressflag() == PropertiesMap.PressUnitsType.PSI)
@@ -172,8 +171,7 @@ public abstract class InputParser {
             if (link.getKb() == Constants.MISSING)
                 link.setKb(Kbulk);
 
-            if (link.getKw() == Constants.MISSING)
-            {
+            if (link.getKw() == Constants.MISSING) {
                 if (Rfactor == 0.0)
                     link.setKw(m.getKwall());
                 else if ((link.getRoughness() > 0.0) && (link.getDiameter() > 0.0)) {
@@ -183,8 +181,7 @@ public abstract class InputParser {
                         link.setKw(Rfactor / Math.abs(Math.log(link.getRoughness() / link.getDiameter())));
                     if (formFlag == PropertiesMap.FormType.CM)
                         link.setKw(Rfactor * link.getRoughness());
-                }
-                else
+                } else
                     link.setKw(0.0);
             }
         }
@@ -214,6 +211,7 @@ public abstract class InputParser {
 
     /**
      * Initialize tank properties.
+     *
      * @param net Hydraulic network reference.
      * @throws ENException
      */
@@ -260,6 +258,7 @@ public abstract class InputParser {
 
     /**
      * Convert hydraulic structures values from user units to simulation system units.
+     *
      * @param net Hydraulic network reference.
      * @throws ENException
      */
@@ -275,7 +274,6 @@ public abstract class InputParser {
             node.setC0(new double[]{node.getC0()[0] / fMap.getUnits(Type.QUALITY)});
         }
 
-
         for (Node node : net.getNodes()) {
             if (node instanceof Tank)
                 continue;
@@ -284,7 +282,6 @@ public abstract class InputParser {
                 d.setBase(d.getBase() / fMap.getUnits(Type.DEMAND));
             }
         }
-
 
         ucf = Math.pow(fMap.getUnits(Type.FLOW), pMap.getQexp()) / fMap.getUnits(Type.PRESSURE);
 
@@ -310,13 +307,11 @@ public abstract class InputParser {
             tk.setV1max(tk.getV1max() * tk.getVmax());
         }
 
-
         pMap.setClimit(pMap.getClimit() / fMap.getUnits(Type.QUALITY));
         pMap.setCtol(pMap.getCtol() / fMap.getUnits(Type.QUALITY));
 
         pMap.setKbulk(pMap.getKbulk() / Constants.SECperDAY);
         pMap.setKwall(pMap.getKwall() / Constants.SECperDAY);
-
 
         for (Link lk : net.getLinks()) {
 
@@ -361,11 +356,10 @@ public abstract class InputParser {
                     }
             }
 
-            lk.initResistance(net.getPropertiesMap().getFormflag(),net.getPropertiesMap().getHexp());
+            lk.initResistance(net.getPropertiesMap().getFormflag(), net.getPropertiesMap().getHexp());
         }
 
         for (Control c_i : net.getControls()) {
-
 
             if (c_i.getLink() == null) continue;
             if (c_i.getNode() != null) {
@@ -390,10 +384,9 @@ public abstract class InputParser {
         }
     }
 
-
-
     /**
      * Initialize pump properties.
+     *
      * @param net Hydraulic network reference.
      * @throws ENException
      */
@@ -442,7 +435,6 @@ public abstract class InputParser {
                     if (!Utilities.getPowerCurve(h0, h1, h2, q1, q2, a, b, c))
                         throw new ENException(227, pump.getId());
 
-
                     pump.setH0(-a[0]);
                     pump.setFlowCoefficient(-b[0]);
                     pump.setN(c[0]);
@@ -471,6 +463,7 @@ public abstract class InputParser {
 
     /**
      * Initialize patterns.
+     *
      * @param net Hydraulic network reference.
      * @throws ENException
      */
@@ -482,9 +475,9 @@ public abstract class InputParser {
         }
     }
 
-
     /**
      * Check for unlinked nodes.
+     *
      * @param net Hydraulic network reference.
      * @throws ENException
      */

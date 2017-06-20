@@ -17,10 +17,9 @@
 
 package org.addition.epanet.hydraulic.models;
 
-
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.hydraulic.structures.SimulationLink;
 import org.addition.epanet.network.PropertiesMap;
+import org.addition.epanet.util.ENException;
 
 /**
  * Pipe head loss model calculator.
@@ -30,7 +29,7 @@ public interface PipeHeadModel {
     /**
      * Link coefficients.
      */
-    public static class LinkCoeffs{
+    public static class LinkCoeffs {
         public LinkCoeffs(double invHeadLoss, double flowCorrection) {
             this.invHeadLoss = invHeadLoss;
             this.flowCorrection = flowCorrection;
@@ -51,10 +50,11 @@ public interface PipeHeadModel {
 
     /**
      * Compute link coefficients through the implemented pipe headloss model.
+     *
      * @param pMap Network properties map.
-     * @param sL Simulation link.
+     * @param sL   Simulation link.
      * @return Computed link coefficients.
      * @throws ENException
      */
-    public LinkCoeffs compute(PropertiesMap pMap,SimulationLink sL) throws ENException;
+    public LinkCoeffs compute(PropertiesMap pMap, SimulationLink sL) throws ENException;
 }

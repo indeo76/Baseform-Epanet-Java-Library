@@ -17,9 +17,8 @@
 
 package org.addition.epanet.msx;
 
-
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.msx.Structures.Species;
+import org.addition.epanet.util.ENException;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +36,6 @@ public class EpanetMSX {
     Output mOutput;
     private transient boolean running;
     private transient Thread runningThread;
-
 
     public Network getNetwork() {
         return mNetwork;
@@ -64,7 +62,6 @@ public class EpanetMSX {
         return ret;
     }
 
-
     public EpanetMSX(ENToolkit2 toolkit) {
         mReader = new InpReader();
         mProject = new Project();
@@ -87,7 +84,6 @@ public class EpanetMSX {
         mOutput.loadDependencies(this);
     }
 
-
     InpReader getReader() {
         return mReader;
     }
@@ -95,7 +91,6 @@ public class EpanetMSX {
     Project getProject() {
         return mProject;
     }
-
 
     public Report getReport() {
         return mReport;
@@ -132,7 +127,6 @@ public class EpanetMSX {
         return err;
     }
 
-
     public int run(File outFile) throws IOException, ENException {
         int err = 0;
         boolean halted = false;
@@ -156,22 +150,20 @@ public class EpanetMSX {
                 }
                 err = mQuality.MSXqual_step(t_temp, t_left);
                 newHour = t_temp[0] / 3600;
-                if(!running && t_left[0]>0)
+                if (!running && t_left[0] > 0)
                     halted = true;
             } while (running && err == 0 && t_left[0] > 0);
-
 
         } finally {
             running = false;
             runningThread = null;
         }
 
-        if(halted)
+        if (halted)
             throw new ENException(1000);
 
         return err;
     }
-
 
     private void writeCon(String str) {
         System.out.print(str);

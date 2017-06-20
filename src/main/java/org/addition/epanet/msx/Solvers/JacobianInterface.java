@@ -17,14 +17,13 @@
 
 package org.addition.epanet.msx.Solvers;
 
-
 public interface JacobianInterface {
-    public static enum Operation{
+    public static enum Operation {
         PIPES_DC_DT_CONCENTRATIONS,
         TANKS_DC_DT_CONCENTRATIONS,
         PIPES_EQUIL,
         TANKS_EQUIL,
     }
 
-    public void solve(double t, double[] y, int n, double[] f, int off,Operation op);
+    public void solve(double t, double[] y, int n, double[] f, int off, Operation op);
 }

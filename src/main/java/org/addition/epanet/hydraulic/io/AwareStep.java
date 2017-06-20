@@ -17,14 +17,11 @@
 
 package org.addition.epanet.hydraulic.io;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.hydraulic.HydraulicSim;
 import org.addition.epanet.hydraulic.structures.SimulationLink;
 import org.addition.epanet.hydraulic.structures.SimulationNode;
 import org.addition.epanet.network.FieldsMap;
-import org.addition.epanet.network.PropertiesMap;
-import org.addition.epanet.network.structures.Field;
 import org.addition.epanet.network.structures.Link;
 import org.addition.epanet.network.structures.Node;
 import org.addition.epanet.network.structures.Pump;
@@ -37,7 +34,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
 import java.util.List;
 
 /**
@@ -52,7 +48,6 @@ public class AwareStep {
     private double[] DH;
     private long hydTime;
     private long hydStep;
-
 
     public static final int FORMAT_VERSION = 1;
 
@@ -85,7 +80,6 @@ public class AwareStep {
         return headerInfo;
     }
 
-
     public static void write(DataOutput outStream, HydraulicSim hydraulicSim, long hydStep) throws IOException, ENException {
 
         List<SimulationNode> nodes = hydraulicSim.getnNodes();
@@ -98,7 +92,6 @@ public class AwareStep {
         int baSize = (nNodes * 3 + nLinks * 3) * Double.SIZE / 8 +
                 Long.SIZE * 2 / 8;
         ByteBuffer buf = ByteBuffer.allocate(baSize);
-
 
         for (SimulationNode node : nodes) {
             buf.putDouble(node.getSimDemand());
@@ -219,7 +212,6 @@ public class AwareStep {
         hydTime = buf.getLong();
     }
 
-
     public double getNodeDemand(int id, Node node, FieldsMap fMap) {
         try {
             return fMap != null ? fMap.revertUnit(FieldsMap.Type.DEMAND, D[id]) : D[id];
@@ -253,7 +245,6 @@ public class AwareStep {
             return 0;
         }
     }
-
 
     public double getLinkVelocity(int id, Link link, FieldsMap fMap) {
         try {
@@ -289,14 +280,12 @@ public class AwareStep {
         }
     }
 
-
     public double getLinkFriction(int id, Link link, FieldsMap fMap) {
         try {
             double F;
 
             double flow = getLinkFlow(id, link, null);
             if (link.getType().id <= Link.LinkType.PIPE.id && Math.abs(flow) > Constants.TINY) {
-
 
                 double h = Math.abs(DH[id]);
                 F = 39.725 * h * Math.pow(link.getDiameter(), 5) / link.getLenght() /
@@ -325,6 +314,5 @@ public class AwareStep {
     public long getTime() {
         return hydTime;
     }
-
 
 }

@@ -38,7 +38,7 @@ public class QualityLink {
     /**
      * Current water flow[Feet^3/Second].
      */
-    private double  flow;
+    private double flow;
 
     /**
      * Current flow direction.
@@ -48,7 +48,7 @@ public class QualityLink {
     /**
      * Current flow resistance[Feet/Second].
      */
-    private double  flowResistance;
+    private double flowResistance;
 
     /**
      * Reference to the original link.
@@ -67,12 +67,12 @@ public class QualityLink {
 
     /**
      * Initialize a new water quality Link wrapper from the original Link.
+     *
      * @param oNodes
      * @param qNodes
      * @param link
      */
-    public QualityLink(List<Node> oNodes,List<QualityNode> qNodes, Link link)
-    {
+    public QualityLink(List<Node> oNodes, List<QualityNode> qNodes, Link link) {
         int n1 = oNodes.indexOf(link.getFirst());
         int n2 = oNodes.indexOf(link.getSecond());
         first = qNodes.get(n1);
@@ -83,6 +83,7 @@ public class QualityLink {
 
     /**
      * Get first node reference.
+     *
      * @return Reference to the water quality simulation node.
      */
     public QualityNode getFirst() {
@@ -91,6 +92,7 @@ public class QualityLink {
 
     /**
      * Get the water flow.
+     *
      * @return
      */
     public double getFlow() {
@@ -99,6 +101,7 @@ public class QualityLink {
 
     /**
      * Get the water flow direction.
+     *
      * @return
      */
     public boolean getFlowDir() {
@@ -120,6 +123,7 @@ public class QualityLink {
 
     /**
      * Get the link flow resistance.
+     *
      * @return [Feet/Second]
      */
     public double getFlowResistance() {
@@ -128,6 +132,7 @@ public class QualityLink {
 
     /**
      * Get the original link.
+     *
      * @return Reference to the hydraulic network link.
      */
     public Link getLink() {
@@ -136,6 +141,7 @@ public class QualityLink {
 
     /**
      * Get the second node reference
+     *
      * @return Reference to the water quality simulation node.
      */
     public QualityNode getSecond() {
@@ -144,6 +150,7 @@ public class QualityLink {
 
     /**
      * Get the water quality segments in this link.
+     *
      * @return
      */
     public LinkedList<QualitySegment> getSegments() {
@@ -152,6 +159,7 @@ public class QualityLink {
 
     /**
      * Set the water flow.
+     *
      * @param hydFlow
      */
     public void setFlow(double hydFlow) {
@@ -160,6 +168,7 @@ public class QualityLink {
 
     /**
      * Set the water flow direction.
+     *
      * @param flowDir
      */
     public void setFlowDir(boolean flowDir) {
@@ -168,6 +177,7 @@ public class QualityLink {
 
     /**
      * Set the link flow resistance.
+     *
      * @param kw [Feet/Second]
      */
     public void setFlowResistance(double kw) {
@@ -176,35 +186,39 @@ public class QualityLink {
 
     /**
      * Get the upstream node.
+     *
      * @return
      */
-    public QualityNode getUpStreamNode(){
+    public QualityNode getUpStreamNode() {
         return ((flowDir) ? first : second);
     }
 
     /**
      * Get the downstream node.
+     *
      * @return
      */
-    public QualityNode getDownStreamNode(){
+    public QualityNode getDownStreamNode() {
         return ((flowDir) ? second : first);
     }
 
     /**
      * Get link volume.
+     *
      * @return
      */
-    public double getLinkVolume(){
-        return ( 0.785398*link.getLenght()*(link.getDiameter()*link.getDiameter()) );
+    public double getLinkVolume() {
+        return (0.785398 * link.getLenght() * (link.getDiameter() * link.getDiameter()));
     }
 
     /**
      * Get link average quality.
+     *
      * @param pMap
      * @return
      */
     public double getAverageQuality(PropertiesMap pMap) {
-         double vsum = 0.0,
+        double vsum = 0.0,
                 msum = 0.0;
 
         try {

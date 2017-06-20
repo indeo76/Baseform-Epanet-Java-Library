@@ -20,7 +20,7 @@ package org.addition.epanet.network.structures;
 /**
  * Hydraulic valve structure.
  */
-public class Valve extends Link{
+public class Valve extends Link {
 
     /**
      * Settings curve.

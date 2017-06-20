@@ -17,7 +17,6 @@
 
 package org.addition.epanet.util;
 
-
 import org.apache.poi.util.IOUtils;
 
 import java.io.*;
@@ -51,7 +50,6 @@ public class XLSXWriter {
 
     static private char[] chars = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-
     public class Spreadsheet {
 
         private static final int CELL_RECORD_WIDTH = 75;
@@ -63,7 +61,6 @@ public class XLSXWriter {
 
         private int maxColumns;
         private RandomAccessFile rndWriter;
-
 
         public void prepareTranspose(int rows, int columns) throws IOException {
             tmpWriter.close();
@@ -149,12 +146,10 @@ public class XLSXWriter {
                 addRowNormal(row);
         }
 
-
         private void addRowTranspose2(Object... row) throws IOException {
             int newRowId = 1;
             int newColumnId = rowNo;
             long pos1 = CELL_RECORD_WIDTH + CELL_RECORD_WIDTH * (rowNo - 1);
-
 
             for (Object o : row) {
                 rndWriter.seek(pos1 + CELL_RECORD_WIDTH * (2 + maxColumns) * (newRowId - 1));//50*(maxColumns+2)*(newRowId-1));
@@ -172,7 +167,6 @@ public class XLSXWriter {
                     wordCount++;
                     byte[] buff = String.format("<c r=\"%s%d\" t=\"s\"><v>%d</v></c>", ColumnName(newColumnId), newRowId, idx).getBytes("UTF-8");
                     rndWriter.write(buff);
-
 
                 }
 
@@ -221,7 +215,6 @@ public class XLSXWriter {
         sheets = new ArrayList<Spreadsheet>();
     }
 
-
     private void createWorksheet(Spreadsheet sheet, int pos) throws IOException {
         sheet.close();
 
@@ -232,7 +225,6 @@ public class XLSXWriter {
                 "<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">\n" +
                 "<sheetData>\n").getBytes("UTF-8"));
 
-
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(sheet.getTmpFile()));
         IOUtils.copy(bis, zos);
         bis.close();
@@ -242,7 +234,6 @@ public class XLSXWriter {
 
         zos.closeEntry();
     }
-
 
     private void createSharedStringsXML() throws IOException {
         ZipEntry entry = new ZipEntry("xl/sharedStrings.xml");
@@ -275,7 +266,6 @@ public class XLSXWriter {
         zos.closeEntry();
     }
 
-
     private void createWorkbookXML() throws IOException {
         ZipEntry entry = new ZipEntry("xl/workbook.xml");
         zos.putNextEntry(entry);
@@ -299,7 +289,6 @@ public class XLSXWriter {
         writer.flush();
         zos.closeEntry();
     }
-
 
     private void createXL_rel() throws IOException {
         ZipEntry entry = new ZipEntry("xl/_rels/workbook.xml.rels");
@@ -387,7 +376,6 @@ public class XLSXWriter {
         }
     }
 
-
     private List<Spreadsheet> sheets;
     private ZipOutputStream zos;
     private BufferedWriter writer;
@@ -405,6 +393,5 @@ public class XLSXWriter {
         }
         zos.close();
     }
-
 
 }

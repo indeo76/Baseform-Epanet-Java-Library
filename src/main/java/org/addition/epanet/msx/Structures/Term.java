@@ -19,11 +19,11 @@ package org.addition.epanet.msx.Structures;
 
 // Intermediate term object
 public class Term {
-    String    id;       // name
-    MathExpr  expr;     // math expression for term
+    String id;       // name
+    MathExpr expr;     // math expression for term
 
     public Term() {
-        id="";
+        id = "";
         expr = null;
     }
 

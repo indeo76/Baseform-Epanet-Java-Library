@@ -17,9 +17,8 @@
 
 package org.addition.epanet.network.io.output;
 
-import org.addition.epanet.util.ENException;
-
 import org.addition.epanet.network.Network;
+import org.addition.epanet.util.ENException;
 
 import java.io.File;
 
@@ -30,10 +29,11 @@ public abstract class OutputComposer {
 
     /**
      * Composer creation method.
+     *
      * @param type Composer type.
      * @return Composer reference.
      */
-    public static OutputComposer create(Network.FileType type){
+    public static OutputComposer create(Network.FileType type) {
         switch (type) {
             case INP_FILE:
                 return new InpComposer();
@@ -49,8 +49,9 @@ public abstract class OutputComposer {
 
     /**
      * Abstract method to implement the output file creation.
+     *
      * @param net Hydraulic network reference.
-     * @param f Abstract file reference.
+     * @param f   Abstract file reference.
      * @throws ENException
      */
     public abstract void composer(Network net, File f) throws ENException;

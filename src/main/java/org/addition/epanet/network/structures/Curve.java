@@ -17,10 +17,11 @@
 
 package org.addition.epanet.network.structures;
 
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.FieldsMap;
+import org.addition.epanet.network.FieldsMap.Type;
 import org.addition.epanet.util.DblList;
-import org.addition.epanet.network.FieldsMap.*;
+import org.addition.epanet.util.ENException;
+
 import java.util.List;
 
 /**
@@ -31,10 +32,11 @@ public class Curve {
     /**
      * Computed curve coefficients.
      */
-    public static class Coeffs{
+    public static class Coeffs {
         public double h0;       // head at zero flow (y-intercept)
 
         public double r;        // dHead/dFlow (slope)
+
         public Coeffs(double h0, double r) {
             this.h0 = h0;
             this.r = r;
@@ -42,34 +44,36 @@ public class Curve {
     }
 
     // Type of curve
-    static public enum CurveType{
-        E_CURVE     (2),    // volume curve
-        H_CURVE     (3),    // pump curve
-        P_CURVE     (1),    // efficiency curve
-        V_CURVE     (0);    // head loss curve
+    static public enum CurveType {
+        E_CURVE(2),    // volume curve
+        H_CURVE(3),    // pump curve
+        P_CURVE(1),    // efficiency curve
+        V_CURVE(0);    // head loss curve
 
         public final int id;
 
-        private CurveType(int val){id = val;}
+        private CurveType(int val) {
+            id = val;
+        }
     }
+
     /**
      * Curve name.
      */
-    private String      id;
+    private String id;
     /**
      * Curve type.
      */
-    private CurveType   type;
+    private CurveType type;
     /**
      * Curve abscissa values.
      */
-    private DblList     x;
-
+    private DblList x;
 
     /**
      * Curve ordinate values.
      */
-    private DblList     y;
+    private DblList y;
 
     public Curve() {
         this.id = "";
@@ -79,10 +83,11 @@ public class Curve {
 
     /**
      * Computes intercept and slope of head v. flow curve at current flow.
+     *
      * @param q Flow value.
      * @return
      */
-    public Coeffs getCoeff(FieldsMap fMap,double q) throws ENException {
+    public Coeffs getCoeff(FieldsMap fMap, double q) throws ENException {
         double h0;
         double r;
         int k1, k2, npts;
@@ -112,11 +117,12 @@ public class Curve {
 
     /**
      * Get the number of points.
+     *
      * @return If the abscissa points count differ from the ordinate it returns -1, otherwise,
      * it returns the abscissa point count.
      */
     public int getNpts() {
-        if(x.size()!=y.size()){
+        if (x.size() != y.size()) {
             return -1;
         }
         return x.size();
@@ -126,11 +132,11 @@ public class Curve {
         return type;
     }
 
-    public List<Double> getX(){
+    public List<Double> getX() {
         return x;
     }
 
-    public List<Double> getY(){
+    public List<Double> getY() {
         return y;
     }
 

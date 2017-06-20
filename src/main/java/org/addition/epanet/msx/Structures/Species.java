@@ -18,30 +18,31 @@
 package org.addition.epanet.msx.Structures;
 
 import org.addition.epanet.msx.Constants;
-import org.addition.epanet.msx.EnumTypes.*;
+import org.addition.epanet.msx.EnumTypes.ExpressionType;
+import org.addition.epanet.msx.EnumTypes.SpeciesType;
 
 // Chemical species object
 public class Species {
-    String          id;                 // name
-    String          units;              // mass units code [MAXUNITS]
-    double          aTol;               // absolute tolerance
-    double          rTol;               // relative tolerance
-    SpeciesType     type;               // BULK or WALL
-    ExpressionType  pipeExprType;       // type of pipe chemistry
-    ExpressionType  tankExprType;       // type of tank chemistry
-    int             precision;          // reporting precision
-    char            rpt;                // reporting flag
-    MathExpr        pipeExpr;           // pipe chemistry expression
-    MathExpr        tankExpr;           // tank chemistry expression
+    String id;                 // name
+    String units;              // mass units code [MAXUNITS]
+    double aTol;               // absolute tolerance
+    double rTol;               // relative tolerance
+    SpeciesType type;               // BULK or WALL
+    ExpressionType pipeExprType;       // type of pipe chemistry
+    ExpressionType tankExprType;       // type of tank chemistry
+    int precision;          // reporting precision
+    char rpt;                // reporting flag
+    MathExpr pipeExpr;           // pipe chemistry expression
+    MathExpr tankExpr;           // tank chemistry expression
 
     public Species() {
-        id="";
-        units="";
-        pipeExpr     = null;
-        tankExpr     = null;
+        id = "";
+        units = "";
+        pipeExpr = null;
+        tankExpr = null;
         pipeExprType = ExpressionType.NO_EXPR;
         tankExprType = ExpressionType.NO_EXPR;
-        precision    = 2;
+        precision = 2;
         rpt = 0;
     }
 
@@ -59,8 +60,8 @@ public class Species {
 
     public void setUnits(String units) {
         this.units = units;
-        if(this.units.length()> Constants.MAXUNITS)
-            this.units = this.units.substring(0,Constants.MAXUNITS);
+        if (this.units.length() > Constants.MAXUNITS)
+            this.units = this.units.substring(0, Constants.MAXUNITS);
     }
 
     public double getaTol() {

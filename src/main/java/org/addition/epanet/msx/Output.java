@@ -17,8 +17,7 @@
 
 package org.addition.epanet.msx;
 
-import org.addition.epanet.msx.EnumTypes.*;
-
+import org.addition.epanet.msx.EnumTypes.ObjectTypes;
 
 import java.io.*;
 
@@ -29,16 +28,14 @@ public class Output {
         quality = epa.getQuality();
     }
 
-    Network  MSX;                       // MSX project data
+    Network MSX;                       // MSX project data
 
-    long  ResultsOffset;                // Offset byte where results begin
-    long  NodeBytesPerPeriod;           // Bytes per time period used by all nodes
-    static long  LinkBytesPerPeriod;    // Bytes per time period used by all links
+    long ResultsOffset;                // Offset byte where results begin
+    long NodeBytesPerPeriod;           // Bytes per time period used by all nodes
+    static long LinkBytesPerPeriod;    // Bytes per time period used by all links
     private Quality quality;
 
     DataOutputStream outStream;
-
-
 
     // opens an MSX binary output file.
     int MSXout_open(File output) throws IOException {
@@ -65,15 +62,13 @@ public class Output {
         return 0;
     }
 
-    void writeString(DataOutputStream stream,String str, int size )
-    {
+    void writeString(DataOutputStream stream, String str, int size) {
         char[] buff = null;
-        if(str!=null)
+        if (str != null)
             buff = str.toCharArray();
-        for(int i = 0;i<size;i++)
-        {
+        for (int i = 0; i < size; i++) {
             try {
-                if(buff!=null && i<buff.length)
+                if (buff != null && i < buff.length)
                     stream.writeByte(buff[i]);
                 else
                     stream.writeByte('\0');
@@ -90,35 +85,34 @@ public class Output {
 
         //DataOutputStream dout = (DataOutputStream)MSX.OutFile.getFileIO();
 
-       //try {
-       //    outStream.writeInt(Constants.MAGICNUMBER);               //Magic number
-       //    outStream.writeInt(Constants.VERSION);                   //Version number
-       //    outStream.writeInt(MSX.Nobjects[ObjectTypes.NODE.id]);   //Number of nodes
-       //    outStream.writeInt(MSX.Nobjects[ObjectTypes.LINK.id]);   //Number of links
-       //    outStream.writeInt(MSX.Nobjects[ObjectTypes.SPECIES.id]);//Number of species
-       //    outStream.writeInt((int)MSX.Rstep);                      //Reporting step size
-       //
-       //    for (int m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++){
-       //        int n = MSX.Species[m].getId().length();
-       //        outStream.writeInt(n);                               //Length of species ID
-       //        writeString(outStream,MSX.Species[m].getId(),n);     //Species ID string
-       //    }
-       //
-       //    for (int m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++){
-       //        writeString(outStream,MSX.Species[m].getUnits(),Constants.MAXUNITS); //Species mass units
-       //    }
-       //
-       //} catch (IOException e) {
-       //    return 0;
-       //}
+        //try {
+        //    outStream.writeInt(Constants.MAGICNUMBER);               //Magic number
+        //    outStream.writeInt(Constants.VERSION);                   //Version number
+        //    outStream.writeInt(MSX.Nobjects[ObjectTypes.NODE.id]);   //Number of nodes
+        //    outStream.writeInt(MSX.Nobjects[ObjectTypes.LINK.id]);   //Number of links
+        //    outStream.writeInt(MSX.Nobjects[ObjectTypes.SPECIES.id]);//Number of species
+        //    outStream.writeInt((int)MSX.Rstep);                      //Reporting step size
+        //
+        //    for (int m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++){
+        //        int n = MSX.Species[m].getId().length();
+        //        outStream.writeInt(n);                               //Length of species ID
+        //        writeString(outStream,MSX.Species[m].getId(),n);     //Species ID string
+        //    }
+        //
+        //    for (int m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++){
+        //        writeString(outStream,MSX.Species[m].getUnits(),Constants.MAXUNITS); //Species mass units
+        //    }
+        //
+        //} catch (IOException e) {
+        //    return 0;
+        //}
 
         //outStream.close();
         ResultsOffset = 0;// output.length();
-        outStream = new DataOutputStream(new FileOutputStream(output,true));
+        outStream = new DataOutputStream(new FileOutputStream(output, true));
 
-
-        NodeBytesPerPeriod = MSX.Nobjects[ObjectTypes.NODE.id]*MSX.Nobjects[ObjectTypes.SPECIES.id]*4;
-        LinkBytesPerPeriod = MSX.Nobjects[ObjectTypes.LINK.id]*MSX.Nobjects[ObjectTypes.SPECIES.id]*4;
+        NodeBytesPerPeriod = MSX.Nobjects[ObjectTypes.NODE.id] * MSX.Nobjects[ObjectTypes.SPECIES.id] * 4;
+        LinkBytesPerPeriod = MSX.Nobjects[ObjectTypes.LINK.id] * MSX.Nobjects[ObjectTypes.SPECIES.id] * 4;
 
         return 0;
     }
@@ -128,15 +122,12 @@ public class Output {
     // will be the same as the permanent MSX binary file if time series
     // values were specified as the reported statistic, which is the
     // default case).
-    int MSXout_saveResults()
-    {
-        int   m, j;
-        double  x;
+    int MSXout_saveResults() {
+        int m, j;
+        double x;
         //DataOutputStream dout = (DataOutputStream)MSX.TmpOutFile.getFileIO();
-        for (m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++)
-        {
-            for (j=1; j<=MSX.Nobjects[ObjectTypes.NODE.id]; j++)
-            {
+        for (m = 1; m <= MSX.Nobjects[ObjectTypes.SPECIES.id]; m++) {
+            for (j = 1; j <= MSX.Nobjects[ObjectTypes.NODE.id]; j++) {
                 x = quality.MSXqual_getNodeQual(j, m);
                 //if(j==462){
                 //    System.out.println("462 : " + x);
@@ -145,24 +136,22 @@ public class Output {
                 //    System.out.println("79 : " + x);
                 //}
                 try {
-                    outStream.writeFloat((float)x);//fwrite(&x, sizeof(REAL4), 1, MSX.TmpOutFile.file);
-                } catch (IOException e) {}
+                    outStream.writeFloat((float) x);//fwrite(&x, sizeof(REAL4), 1, MSX.TmpOutFile.file);
+                } catch (IOException e) {
+                }
             }
         }
-        for (m=1; m<=MSX.Nobjects[ObjectTypes.SPECIES.id]; m++)
-        {
-            for (j=1; j<=MSX.Nobjects[ObjectTypes.LINK.id]; j++)
-            {
+        for (m = 1; m <= MSX.Nobjects[ObjectTypes.SPECIES.id]; m++) {
+            for (j = 1; j <= MSX.Nobjects[ObjectTypes.LINK.id]; j++) {
                 x = quality.MSXqual_getLinkQual(j, m);
-                try{
-                    outStream.writeFloat((float)x);//fwrite(&x, sizeof(REAL4), 1, MSX.TmpOutFile.file);
+                try {
+                    outStream.writeFloat((float) x);//fwrite(&x, sizeof(REAL4), 1, MSX.TmpOutFile.file);
+                } catch (IOException e) {
                 }
-                catch (IOException e){}
             }
         }
         return 0;
     }
-
 
     // Saves any statistical results plus the following information to the end
     //    of the MSX binary output file:
@@ -170,62 +159,60 @@ public class Output {
     //    - total number of time periods written to the file,
     //    - any error code generated by the analysis (0 if there were no errors),
     //    - the Magic Number to indicate that the file is complete.
-    int MSXout_saveFinalResults()
-    {
-        int  n;
-        int  magic = Constants.MAGICNUMBER;
-        int   err = 0;
+    int MSXout_saveFinalResults() {
+        int n;
+        int magic = Constants.MAGICNUMBER;
+        int err = 0;
 
         // Save statistical results to the file
         //if ( MSX.Statflag != TstatType.SERIES )
         //    err = saveStatResults(out);
 
-        if ( err > 0 )
+        if (err > 0)
             return err;
 
         // Write closing records to the file
-        try{
-            n = (int)ResultsOffset;
+        try {
+            n = (int) ResultsOffset;
             outStream.writeInt(n);
-            n = (int)MSX.Nperiods;
+            n = (int) MSX.Nperiods;
             outStream.writeInt(n);
             n = MSX.ErrCode;
             outStream.writeInt(n);
             outStream.writeInt(magic);
+        } catch (IOException e) {
         }
-        catch (IOException e){}
         return 0;
     }
 
     //  retrieves a result for a specific node from the MSX binary output file.
-    public float MSXout_getNodeQual(RandomAccessFile raf,int k, int j, int m)
-    {
-        float c=0.0f;
+    public float MSXout_getNodeQual(RandomAccessFile raf, int k, int j, int m) {
+        float c = 0.0f;
         long bp = ResultsOffset + k * (NodeBytesPerPeriod + LinkBytesPerPeriod);
-        bp += ((m-1)*MSX.Nobjects[ObjectTypes.NODE.id] + (j-1)) * 4;
+        bp += ((m - 1) * MSX.Nobjects[ObjectTypes.NODE.id] + (j - 1)) * 4;
 
         try {
             raf.seek(bp);
             c = raf.readFloat();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
 
         return c;
     }
 
     // retrieves a result for a specific link from the MSX binary output file.
-    public float MSXout_getLinkQual(RandomAccessFile raf,int k, int j, int m)
-    {
-        float c=0.0f;
-        long bp = ResultsOffset + ((k+1)*NodeBytesPerPeriod) + (k*LinkBytesPerPeriod);
-        bp += ((m-1)*MSX.Nobjects[ObjectTypes.LINK.id] + (j-1)) * 4;
+    public float MSXout_getLinkQual(RandomAccessFile raf, int k, int j, int m) {
+        float c = 0.0f;
+        long bp = ResultsOffset + ((k + 1) * NodeBytesPerPeriod) + (k * LinkBytesPerPeriod);
+        bp += ((m - 1) * MSX.Nobjects[ObjectTypes.LINK.id] + (j - 1)) * 4;
 
         try {
             raf.seek(bp);
             c = raf.readFloat();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         return c;
     }
-
 
     // Saves time statistic results (average, min., max., or range) for each
     // node and link to the permanent binary output file.

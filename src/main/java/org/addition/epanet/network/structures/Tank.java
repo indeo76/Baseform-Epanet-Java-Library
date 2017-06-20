@@ -17,7 +17,6 @@
 
 package org.addition.epanet.network.structures;
 
-import org.addition.epanet.Constants;
 import org.addition.epanet.network.PropertiesMap;
 import org.addition.epanet.network.io.Keywords;
 import org.addition.epanet.util.Utilities;
@@ -25,20 +24,20 @@ import org.addition.epanet.util.Utilities;
 /**
  * Hydraulic tank structure.
  */
-public class Tank extends Node{
+public class Tank extends Node {
 
     /**
      * Tank mixing regimes.
-      */
-    static public enum MixType{
+     */
+    static public enum MixType {
         /**
          * First in, first out model
          */
-        FIFO(2,Keywords.w_FIFO),
+        FIFO(2, Keywords.w_FIFO),
         /**
-         *  Last in, first out model
+         * Last in, first out model
          */
-        LIFO(3,Keywords.w_LIFO),
+        LIFO(3, Keywords.w_LIFO),
         /**
          * 1-compartment model
          */
@@ -46,9 +45,9 @@ public class Tank extends Node{
         /**
          * 2-compartment model
          */
-        MIX2(1,Keywords.w_2COMP);
+        MIX2(1, Keywords.w_2COMP);
 
-        public static MixType parse(String text){
+        public static MixType parse(String text) {
             for (MixType type : MixType.values())
                 if (Utilities.match(text, type.parseStr)) return type;
             return null;
@@ -64,7 +63,10 @@ public class Tank extends Node{
          */
         public final String parseStr;
 
-        private MixType(int val, String pStr){id = val;parseStr=pStr;}
+        private MixType(int val, String pStr) {
+            id = val;
+            parseStr = pStr;
+        }
     }
 
     /**
@@ -78,7 +80,7 @@ public class Tank extends Node{
     /**
      * Species concentration.
      */
-    private double  [] c;
+    private double[] c;
     /**
      * Initial water elev.
      */
@@ -110,7 +112,7 @@ public class Tank extends Node{
     /**
      * Mixing compartment size
      */
-    private double  v1max;
+    private double v1max;
     /**
      * Fixed grade time pattern
      */
@@ -124,7 +126,6 @@ public class Tank extends Node{
      */
     private double vMin;
 
-
     public Tank() {
         super();
     }
@@ -133,7 +134,7 @@ public class Tank extends Node{
         return area;
     }
 
-    public double [] getConcentration() {
+    public double[] getConcentration() {
         return c;
     }
 
@@ -157,43 +158,41 @@ public class Tank extends Node{
         return mixModel;
     }
 
-    public double getNUArea(PropertiesMap.UnitsType type){
-        return NUConvert.revertArea(type,area);
+    public double getNUArea(PropertiesMap.UnitsType type) {
+        return NUConvert.revertArea(type, area);
     }
 
-    public double getNUInitHead(PropertiesMap.UnitsType type){
-        return NUConvert.revertDistance(type,h0);
+    public double getNUInitHead(PropertiesMap.UnitsType type) {
+        return NUConvert.revertDistance(type, h0);
     }
 
-    public double getNUInitVolume(PropertiesMap.UnitsType type){
-        return NUConvert.revertVolume(type,v0);
+    public double getNUInitVolume(PropertiesMap.UnitsType type) {
+        return NUConvert.revertVolume(type, v0);
     }
 
-    public double getNUMaximumHead(PropertiesMap.UnitsType type){
-        return NUConvert.revertDistance(type,hMax);
+    public double getNUMaximumHead(PropertiesMap.UnitsType type) {
+        return NUConvert.revertDistance(type, hMax);
     }
 
-    public double getNUMaxVolume(PropertiesMap.UnitsType type){
-        return NUConvert.revertVolume(type,vMax);
+    public double getNUMaxVolume(PropertiesMap.UnitsType type) {
+        return NUConvert.revertVolume(type, vMax);
     }
 
-    public double getNUMinimumHead(PropertiesMap.UnitsType type){
-        return NUConvert.revertDistance(type,hMin);
+    public double getNUMinimumHead(PropertiesMap.UnitsType type) {
+        return NUConvert.revertDistance(type, hMin);
     }
 
-    public double getNUMinVolume(PropertiesMap.UnitsType type){
-        return NUConvert.revertVolume(type,vMin);
+    public double getNUMinVolume(PropertiesMap.UnitsType type) {
+        return NUConvert.revertVolume(type, vMin);
     }
 
-    public void setNUMinVolume(PropertiesMap.UnitsType type, double value){
-        vMin = NUConvert.convertVolume(type,value);
+    public void setNUMinVolume(PropertiesMap.UnitsType type, double value) {
+        vMin = NUConvert.convertVolume(type, value);
     }
 
-
-    public double getNUMixCompartimentSize(PropertiesMap.UnitsType type){
-        return NUConvert.revertVolume(type,v1max);
+    public double getNUMixCompartimentSize(PropertiesMap.UnitsType type) {
+        return NUConvert.revertVolume(type, v1max);
     }
-
 
     public Pattern getPattern() {
         return pattern;
@@ -223,7 +222,7 @@ public class Tank extends Node{
         area = a;
     }
 
-    public void setConcentration(double [] c) {
+    public void setConcentration(double[] c) {
         this.c = c;
     }
 
@@ -247,16 +246,16 @@ public class Tank extends Node{
         this.mixModel = mixModel;
     }
 
-    public void setNUArea(PropertiesMap.UnitsType type, double value){
-        area = NUConvert.convertArea(type,value);
+    public void setNUArea(PropertiesMap.UnitsType type, double value) {
+        area = NUConvert.convertArea(type, value);
     }
 
-    public void setNUInitHead(PropertiesMap.UnitsType type, double value){
-        h0 = NUConvert.revertDistance(type,value);
+    public void setNUInitHead(PropertiesMap.UnitsType type, double value) {
+        h0 = NUConvert.revertDistance(type, value);
     }
 
-    public void setNUInitVolume(PropertiesMap.UnitsType type, double value){
-        v0 = NUConvert.convertVolume(type,value);
+    public void setNUInitVolume(PropertiesMap.UnitsType type, double value) {
+        v0 = NUConvert.convertVolume(type, value);
     }
 
     //public double getVolume() {
@@ -267,20 +266,20 @@ public class Tank extends Node{
     //    this.v = v;
     //}
 
-    public void setNUMaximumHead(PropertiesMap.UnitsType type, double value){
-        hMax = NUConvert.revertDistance(type,value);
+    public void setNUMaximumHead(PropertiesMap.UnitsType type, double value) {
+        hMax = NUConvert.revertDistance(type, value);
     }
 
-    public void setNUMaxVolume(PropertiesMap.UnitsType type, double value){
-        vMax = NUConvert.convertVolume(type,value);
+    public void setNUMaxVolume(PropertiesMap.UnitsType type, double value) {
+        vMax = NUConvert.convertVolume(type, value);
     }
 
-    public void setNUMinimumHead(PropertiesMap.UnitsType type, double value){
-        hMin = NUConvert.convertArea(type,value);
+    public void setNUMinimumHead(PropertiesMap.UnitsType type, double value) {
+        hMin = NUConvert.convertArea(type, value);
     }
 
-    public void setNUMixCompartimentSize(PropertiesMap.UnitsType type, double value){
-        v1max = NUConvert.convertVolume(type,value);
+    public void setNUMixCompartimentSize(PropertiesMap.UnitsType type, double value) {
+        v1max = NUConvert.convertVolume(type, value);
     }
 
     public void setPattern(Pattern pattern) {

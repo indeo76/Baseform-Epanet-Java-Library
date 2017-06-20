@@ -23,12 +23,12 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.PropertiesMap;
 import org.addition.epanet.network.structures.*;
 import org.addition.epanet.util.DblList;
+import org.addition.epanet.util.ENException;
 
 import java.io.*;
 import java.util.logging.Logger;
@@ -109,7 +109,6 @@ public class XMLParser extends InputParser {
         X_STREAM.alias("StatFlag", PropertiesMap.StatFlag.class);
         X_STREAM.alias("TstatType", PropertiesMap.TstatType.class);
         X_STREAM.alias("UnitsType", PropertiesMap.UnitsType.class);
-
 
     }
 

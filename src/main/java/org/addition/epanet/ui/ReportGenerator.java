@@ -17,7 +17,6 @@
 
 package org.addition.epanet.ui;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.hydraulic.io.AwareStep;
 import org.addition.epanet.hydraulic.io.HydraulicReader;
@@ -111,7 +110,6 @@ public class ReportGenerator {
      */
     private long Rtime;
 
-
     public ReportGenerator(File xlsxFile) {
         this.xlsxFile = xlsxFile;
         sheet = new XLSXWriter();
@@ -144,7 +142,6 @@ public class ReportGenerator {
      * @param values     Variables report flag.
      * @throws IOException
      * @throws org.addition.epanet.util.ENException
-     *
      */
     public void createHydReport(File hydBinFile, Network net, boolean[] values) throws IOException, ENException {
         Rtime = 0;
@@ -196,7 +193,6 @@ public class ReportGenerator {
 
         Object nodeRow[] = new Object[dseek.getNodes() + 1];
         Object linkRow[] = new Object[dseek.getLinks() + 1];
-
 
         for (long time = net.getPropertiesMap().getRstart();
              time <= net.getPropertiesMap().getDuration();
@@ -269,7 +265,6 @@ public class ReportGenerator {
             }
             Rtime = time;
         }
-
 
         dseek.close();
     }
@@ -346,13 +341,11 @@ public class ReportGenerator {
                 nodeRow[0] = Utilities.getClockTime(time);
                 linkRow[0] = Utilities.getClockTime(time);
 
-
                 if (resultSheets[QualVariable.QUAL_VARIABLE_NODES.id] != null) {
                     for (int i = 0; i < dseek.getNodes(); i++)
                         nodeRow[i + 1] = (double) step.getNodeQuality(i);
                     resultSheets[HydVariable.HYDR_VARIABLE_HEAD.id].addRow(nodeRow);
                 }
-
 
                 if (resultSheets[QualVariable.QUAL_VARIABLE_LINKS.id] != null) {
                     for (int i = 0; i < dseek.getLinks(); i++)
@@ -363,7 +356,6 @@ public class ReportGenerator {
 
             }
         }
-
 
         dseek.close();
     }
@@ -400,7 +392,6 @@ public class ReportGenerator {
             totalSpecies = nSpecies.length;
 
         reader.open(msxBin);
-
 
         Object[] nodesHead = new String[nSpecies.length + 1];
         if (sheet.getTransposedMode())
@@ -569,6 +560,5 @@ public class ReportGenerator {
             e.printStackTrace();
         }
     }
-
 
 }

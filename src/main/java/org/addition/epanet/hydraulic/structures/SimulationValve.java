@@ -41,7 +41,6 @@ public class SimulationValve extends SimulationLink {
         super(indexedNodes, ref, idx);
     }
 
-
     // Computes solution matrix coeffs. for a completely open, closed, or throttled control valve.
     protected void valveCoeff(PropertiesMap pMap) throws ENException {
         double p;
@@ -136,7 +135,6 @@ public class SimulationValve extends SimulationLink {
         return (status);
     }
 
-
     // Computes solution matrix coeffs. for pressure reducing valves
     void prvCoeff(PropertiesMap pMap, LSVariables ls, SparseMatrix smat) throws ENException {
         int k = getIndex();
@@ -164,7 +162,6 @@ public class SimulationValve extends SimulationLink {
         ls.addRHSCoeff(i, +(flowCorrection - flow));
         ls.addRHSCoeff(j, -(flowCorrection - flow));
     }
-
 
     // Computes solution matrix coeffs. for pressure sustaining valve
     void psvCoeff(PropertiesMap pMap, LSVariables ls, SparseMatrix smat) throws ENException {
@@ -398,7 +395,6 @@ public class SimulationValve extends SimulationLink {
         }
         return (change);
     }
-
 
     // Computes solution matrix coeffs. for PRVs, PSVs & FCVs whose status is not fixed to OPEN/CLOSED
     public static void computeMatrixCoeffs(PropertiesMap pMap, LSVariables ls, SparseMatrix smat, List<SimulationValve> valves) throws ENException {

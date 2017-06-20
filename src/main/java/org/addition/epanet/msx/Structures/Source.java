@@ -20,11 +20,11 @@ package org.addition.epanet.msx.Structures;
 import org.addition.epanet.msx.EnumTypes;
 
 public class Source {
-    private EnumTypes.SourceType    type;               // sourceType
-    private int                     species;            // species index
-    private double                  c0;                 // base concentration
-    private int                     pattern;            // time pattern index
-    private double                  massRate;           // actual mass flow rate
+    private EnumTypes.SourceType type;               // sourceType
+    private int species;            // species index
+    private double c0;                 // base concentration
+    private int pattern;            // time pattern index
+    private double massRate;           // actual mass flow rate
 
     public int getSpecies() {
         return species;

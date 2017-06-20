@@ -17,7 +17,6 @@
 
 package org.addition.epanet.hydraulic.structures;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.network.FieldsMap.Type;
@@ -35,8 +34,8 @@ import java.util.logging.Logger;
 
 public class SimulationControl {
     private final Control control;
-    private  SimulationLink link;
-    private SimulationNode node=null;
+    private SimulationLink link;
+    private SimulationNode node = null;
 
     public SimulationControl(List<SimulationNode> nodes, List<SimulationLink> links, Control ref) {
         if (ref.getNode() != null) {
@@ -49,13 +48,12 @@ public class SimulationControl {
             }
         }
 
-        if (ref.getLink() != null)
-        {
+        if (ref.getLink() != null) {
             String linkId = ref.getLink().getId();
             for (SimulationLink simulationLink : links) {
-                if(simulationLink.getLink().getId().equals(linkId))
-                {
-                    link = simulationLink;break;
+                if (simulationLink.getLink().getId().equals(linkId)) {
+                    link = simulationLink;
+                    break;
                 }
             }
         }
@@ -71,21 +69,17 @@ public class SimulationControl {
         return node;
     }
 
-
     public long getTime() {
         return control.getTime();
     }
-
 
     public double getGrade() {
         return control.getGrade();
     }
 
-
     public double getSetting() {
         return control.getSetting();
     }
-
 
     public StatType getStatus() {
         return control.getStatus();
@@ -166,7 +160,6 @@ public class SimulationControl {
         return newTStep;
     }
 
-
     // Implements simple controls based on time or tank levels
     public static int stepActions(Logger log,
                                   FieldsMap fMap,
@@ -242,7 +235,6 @@ public class SimulationControl {
 
         return (setsum);
     }
-
 
     // Adjusts settings of links controlled by junction pressures after a hydraulic solution is found
     public static boolean pSwitch(Logger log, PropertiesMap pMap, FieldsMap fMap, List<SimulationControl> controls) throws ENException {

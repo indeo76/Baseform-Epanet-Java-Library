@@ -20,13 +20,13 @@ package org.addition.epanet.msx.Structures;
 // Link  Object
 public class Link {
 
-    int    n1;           // start node index
-    int    n2;           // end node index
+    int n1;           // start node index
+    int n2;           // end node index
     double diam;         // diameter
     double len;          // length
-    boolean   rpt;          // reporting flag
-    double [] c0;        // initial species concentrations
-    double [] param;     // kinetic parameter values
+    boolean rpt;          // reporting flag
+    double[] c0;        // initial species concentrations
+    double[] param;     // kinetic parameter values
     double roughness;    //roughness
 
     public Link(int species, int parameter) {

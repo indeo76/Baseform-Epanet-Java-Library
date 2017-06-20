@@ -17,18 +17,16 @@
 
 package org.addition.epanet.network.structures;
 
-import org.addition.epanet.Constants;
 import org.addition.epanet.network.PropertiesMap;
 
 /**
  * Hydraulic pump structure.
  */
-public class Pump extends Link
-{
+public class Pump extends Link {
     /**
      * Type of pump curve.
-      */
-    static public enum Type{
+     */
+    static public enum Type {
         /**
          * Constant horsepower.
          */
@@ -49,7 +47,9 @@ public class Pump extends Link
          */
         public final int id;
 
-        private Type(int val){id = val;}
+        private Type(int val) {
+            id = val;
+        }
     }
 
     /**
@@ -63,7 +63,7 @@ public class Pump extends Link
     /**
      * Energy usage statistics.
      */
-    private double  energy[] = {0,0,0,0,0,0};
+    private double energy[] = {0, 0, 0, 0, 0, 0};
     /**
      * Energy cost pattern.
      */
@@ -109,7 +109,6 @@ public class Pump extends Link
         super();
     }
 
-
     public double getEcost() {
         return eCost;
     }
@@ -146,25 +145,24 @@ public class Pump extends Link
         return n;
     }
 
-    public double getNUFlowCoefficient(PropertiesMap.UnitsType type){
-        return NUConvert.revertPower(type,r);
+    public double getNUFlowCoefficient(PropertiesMap.UnitsType type) {
+        return NUConvert.revertPower(type, r);
     }
 
-
-    public double getNUInitialFlow(PropertiesMap.FlowUnitsType type){
-        return NUConvert.revertFlow(type,q0);
+    public double getNUInitialFlow(PropertiesMap.FlowUnitsType type) {
+        return NUConvert.revertFlow(type, q0);
     }
 
-    public double getNUMaxFlow(PropertiesMap.FlowUnitsType type){
-        return NUConvert.revertFlow(type,qMax);
+    public double getNUMaxFlow(PropertiesMap.FlowUnitsType type) {
+        return NUConvert.revertFlow(type, qMax);
     }
 
-    public double getNUMaxHead(PropertiesMap.UnitsType type){
-        return NUConvert.revertDistance(type,hMax);
+    public double getNUMaxHead(PropertiesMap.UnitsType type) {
+        return NUConvert.revertDistance(type, hMax);
     }
 
-    public double getNUShutoffHead(PropertiesMap.UnitsType type){
-        return NUConvert.revertDistance(type,hMax);
+    public double getNUShutoffHead(PropertiesMap.UnitsType type) {
+        return NUConvert.revertDistance(type, hMax);
     }
 
     public Type getPtype() {
@@ -192,7 +190,7 @@ public class Pump extends Link
     }
 
     public void setEnergy(int id, double energy) {
-        this.energy[id]=energy;
+        this.energy[id] = energy;
     }
 
     public void setEpat(Pattern epat) {
@@ -219,24 +217,24 @@ public class Pump extends Link
         this.n = n;
     }
 
-    public void setNUFlowCoefficient(PropertiesMap.UnitsType type, double value){
-        r = NUConvert.convertPower(type,value);
+    public void setNUFlowCoefficient(PropertiesMap.UnitsType type, double value) {
+        r = NUConvert.convertPower(type, value);
     }
 
-    public void setNUInitialFlow(PropertiesMap.FlowUnitsType type, double value){
-        q0 = NUConvert.convertFlow(type,value);
+    public void setNUInitialFlow(PropertiesMap.FlowUnitsType type, double value) {
+        q0 = NUConvert.convertFlow(type, value);
     }
 
-    public void setNUMaxFlow(PropertiesMap.FlowUnitsType type, double value){
-        qMax = NUConvert.convertFlow(type,value);
+    public void setNUMaxFlow(PropertiesMap.FlowUnitsType type, double value) {
+        qMax = NUConvert.convertFlow(type, value);
     }
 
-    public void setNUMaxHead(PropertiesMap.UnitsType type, double value){
-        hMax = NUConvert.convertDistance(type,value);
+    public void setNUMaxHead(PropertiesMap.UnitsType type, double value) {
+        hMax = NUConvert.convertDistance(type, value);
     }
 
-    public void setNUShutoffHead(PropertiesMap.UnitsType type, double value){
-        h0 = NUConvert.convertDistance(type,value);
+    public void setNUShutoffHead(PropertiesMap.UnitsType type, double value) {
+        h0 = NUConvert.convertDistance(type, value);
     }
 
     public void setPtype(Type ptype) {

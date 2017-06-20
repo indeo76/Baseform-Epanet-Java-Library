@@ -17,26 +17,25 @@
 
 package org.addition.epanet.network.structures;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.network.PropertiesMap;
 
 public class NUConvert {
-    public static double convertArea(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double convertArea(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value / (Constants.MperFT * Constants.MperFT);
 
         return value;
     }
 
-    public static double convertDistance(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double convertDistance(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value / Constants.MperFT;
 
         return value;
     }
 
-    public static double convertFlow(PropertiesMap.FlowUnitsType flow,double value){
+    public static double convertFlow(PropertiesMap.FlowUnitsType flow, double value) {
         switch (flow) {
             case CFS:
                 return value / Constants.LPSperCFS;
@@ -62,54 +61,53 @@ public class NUConvert {
         return value;
     }
 
-    public static double convertPower(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double convertPower(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value / Constants.KWperHP;
 
         return value;
     }
 
-    public static double convertPressure(PropertiesMap.PressUnitsType type, double SpGrav,double value){
+    public static double convertPressure(PropertiesMap.PressUnitsType type, double SpGrav, double value) {
         switch (type) {
             case PSI:
                 return value;
             case KPA:
-                return value / (Constants.KPAperPSI*Constants.PSIperFT*SpGrav);
+                return value / (Constants.KPAperPSI * Constants.PSIperFT * SpGrav);
             case METERS:
-                return value / (Constants.MperFT*SpGrav);
+                return value / (Constants.MperFT * SpGrav);
         }
         return value;
     }
 
-    public static double convertVolume(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double convertVolume(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value / (Constants.M3perFT3);
 
         return value;
     }
 
-    public static double revertArea(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double revertArea(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value * (Constants.MperFT * Constants.MperFT);
 
         return value;
     }
 
-    public static double revertDistance(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double revertDistance(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value * Constants.MperFT;
 
         return value;
     }
 
-    public static double revertDiameter(PropertiesMap.UnitsType type,double value)
-    {
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double revertDiameter(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value * Constants.MMperFT;
         return value * Constants.INperFT;
     }
 
-    public static double revertFlow( PropertiesMap.FlowUnitsType flow,double value){
+    public static double revertFlow(PropertiesMap.FlowUnitsType flow, double value) {
         switch (flow) {
             case CFS:
                 return value * Constants.LPSperCFS;
@@ -135,31 +133,30 @@ public class NUConvert {
         return value;
     }
 
-    public static double revertPower(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double revertPower(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value * Constants.KWperHP;
 
         return value;
     }
 
-    public static double revertPressure(PropertiesMap.PressUnitsType type,double SpGrav,double value){
-         switch (type) {
+    public static double revertPressure(PropertiesMap.PressUnitsType type, double SpGrav, double value) {
+        switch (type) {
             case PSI:
                 return value;
             case KPA:
-                return value * (Constants.KPAperPSI*Constants.PSIperFT*SpGrav);
+                return value * (Constants.KPAperPSI * Constants.PSIperFT * SpGrav);
             case METERS:
-                return value * (Constants.MperFT*SpGrav);
+                return value * (Constants.MperFT * SpGrav);
         }
         return value;
     }
 
-    public static double revertVolume(PropertiesMap.UnitsType type,double value){
-        if(type == PropertiesMap.UnitsType.SI)
+    public static double revertVolume(PropertiesMap.UnitsType type, double value) {
+        if (type == PropertiesMap.UnitsType.SI)
             return value * (Constants.M3perFT3);
 
         return value;
     }
-
 
 }

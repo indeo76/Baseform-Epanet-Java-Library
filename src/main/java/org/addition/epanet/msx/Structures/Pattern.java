@@ -22,16 +22,16 @@ import java.util.List;
 
 // Time Pattern object
 public strictfp class Pattern {
-    private String          id;             // pattern ID
-    private long            interval;       // current time interval
-    private int             current;        // current multiplier
-    private List<Double>    multipliers;    // list of multipliers
+    private String id;             // pattern ID
+    private long interval;       // current time interval
+    private int current;        // current multiplier
+    private List<Double> multipliers;    // list of multipliers
 
-    public int getLength(){
+    public int getLength() {
         return multipliers.size();
     }
 
-    public void setId(String text){
+    public void setId(String text) {
         id = text;
     }
 
@@ -39,7 +39,7 @@ public strictfp class Pattern {
         return id;
     }
 
-    public List<Double> getMultipliers(){
+    public List<Double> getMultipliers() {
         return multipliers;
     }
 
@@ -66,12 +66,12 @@ public strictfp class Pattern {
         interval = 0;
     }
 
-    public Pattern clone(){
+    public Pattern clone() {
         Pattern pat = new Pattern();
         pat.id = id;
         pat.current = current;
         pat.multipliers = new ArrayList<Double>(multipliers);
         pat.interval = interval;
-        return  pat;
+        return pat;
     }
 }

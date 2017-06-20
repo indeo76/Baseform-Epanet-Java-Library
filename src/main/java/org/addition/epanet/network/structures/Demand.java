@@ -17,7 +17,6 @@
 
 package org.addition.epanet.network.structures;
 
-import org.addition.epanet.Constants;
 import org.addition.epanet.network.PropertiesMap;
 
 /**
@@ -33,7 +32,6 @@ public class Demand {
      */
     private Pattern pattern;
 
-
     public Demand(double base, Pattern pattern) {
         this.base = base;
         this.pattern = pattern;
@@ -44,7 +42,7 @@ public class Demand {
     }
 
     public double getBaseNU(PropertiesMap.FlowUnitsType units) {
-        return NUConvert.revertFlow(units,base);
+        return NUConvert.revertFlow(units, base);
     }
 
     public Pattern getPattern() {
@@ -55,9 +53,8 @@ public class Demand {
         this.base = base;
     }
 
-
-    public void setBaseNU(PropertiesMap.FlowUnitsType units,double value) {
-        base = NUConvert.convertFlow(units,value);
+    public void setBaseNU(PropertiesMap.FlowUnitsType units, double value) {
+        base = NUConvert.convertFlow(units, value);
     }
 
     public void setPattern(Pattern pattern) {

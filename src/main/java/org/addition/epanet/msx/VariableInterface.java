@@ -17,8 +17,8 @@
 
 package org.addition.epanet.msx;
 
-
 public interface VariableInterface {
     public double getValue(int id);
+
     public int getIndex(String id);
 }

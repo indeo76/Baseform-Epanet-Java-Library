@@ -18,9 +18,9 @@
 package org.addition.epanet.network.io.output;
 
 import com.thoughtworks.xstream.XStream;
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.io.input.XMLParser;
+import org.addition.epanet.util.ENException;
 
 import java.io.*;
 import java.util.zip.GZIPOutputStream;
@@ -38,8 +38,8 @@ public class XMLComposer extends OutputComposer {
         XStream xStream = XMLParser.X_STREAM;
         try {
             OutputStream os = !gzip ? new FileOutputStream(f) : new GZIPOutputStream(new FileOutputStream(f));
-            Writer w = new OutputStreamWriter(os,"UTF-8");
-            xStream.toXML(net,w);
+            Writer w = new OutputStreamWriter(os, "UTF-8");
+            xStream.toXML(net, w);
             w.close();
             os.close();
         } catch (IOException e) {

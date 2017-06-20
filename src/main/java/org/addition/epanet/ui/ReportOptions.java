@@ -17,14 +17,14 @@
 
 package org.addition.epanet.ui;
 
-import org.addition.epanet.msx.ENToolkit2;
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.hydraulic.HydraulicSim;
+import org.addition.epanet.msx.ENToolkit2;
 import org.addition.epanet.msx.EpanetMSX;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.PropertiesMap;
 import org.addition.epanet.network.io.input.InputParser;
 import org.addition.epanet.quality.QualitySim;
+import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.Utilities;
 
 import javax.swing.*;
@@ -72,9 +72,17 @@ public class ReportOptions implements ActionListener {
      * Custom logger messages formater.
      */
     private class HydLogFormater extends Formatter {
-        public String format(LogRecord rec) {return formatMessage(rec)+"\n";}
-        public String getHead(Handler h) {return "";}
-        public String getTail(Handler h) {return "";}
+        public String format(LogRecord rec) {
+            return formatMessage(rec) + "\n";
+        }
+
+        public String getHead(Handler h) {
+            return "";
+        }
+
+        public String getTail(Handler h) {
+            return "";
+        }
     }
 
     Logger log;
@@ -113,24 +121,23 @@ public class ReportOptions implements ActionListener {
      */
     HydraulicSim hydSim = null;
 
-
     /**
      * Public enum to set the simulation time step duration.
      */
     public enum TimeSteps {
-        STEP_1_MIN(0,60,"1 minute"),
-        STEP_2_MIN(1,120,"2 minutes"),
-        STEP_3_MIN(2,180,"3 minutes"),
-        STEP_4_MIN(3,240,"4 minutes"),
-        STEP_5_MIN(4,300,"5 minutes"),
-        STEP_10_MIN(5,600,"10 minutes"),
-        STEP_15_MIN(6,900,"15 minutes"),
-        STEP_30_MIN(7,1800,"30 minutes"),
-        STEP_1_HOUR(8,3600,"1 hour"),
-        STEP_2_HOUR(9,7200,"2 hours"),
-        STEP_4_HOUR(10,14400,"4 hours"),
-        STEP_6_HOURS(11,21600,"6 hours"),
-        STEP_12_HOURS(12,43200,"12 hours");
+        STEP_1_MIN(0, 60, "1 minute"),
+        STEP_2_MIN(1, 120, "2 minutes"),
+        STEP_3_MIN(2, 180, "3 minutes"),
+        STEP_4_MIN(3, 240, "4 minutes"),
+        STEP_5_MIN(4, 300, "5 minutes"),
+        STEP_10_MIN(5, 600, "10 minutes"),
+        STEP_15_MIN(6, 900, "15 minutes"),
+        STEP_30_MIN(7, 1800, "30 minutes"),
+        STEP_1_HOUR(8, 3600, "1 hour"),
+        STEP_2_HOUR(9, 7200, "2 hours"),
+        STEP_4_HOUR(10, 14400, "4 hours"),
+        STEP_6_HOURS(11, 21600, "6 hours"),
+        STEP_12_HOURS(12, 43200, "12 hours");
 
         /**
          * Entry sequencial ID
@@ -145,7 +152,7 @@ public class ReportOptions implements ActionListener {
          */
         public final int time;
 
-        private TimeSteps(int id,int time, String name) {
+        private TimeSteps(int id, int time, String name) {
             this.id = id;
             this.name = name;
             this.time = time;
@@ -153,23 +160,25 @@ public class ReportOptions implements ActionListener {
 
         /**
          * Get available timestep periods.
+         *
          * @return Array of timesteps names to the UI.
          */
-        public static String [] getPeriodsText(){
-            String [] vec = new String[values().length];
-            for(TimeSteps step : values())
+        public static String[] getPeriodsText() {
+            String[] vec = new String[values().length];
+            for (TimeSteps step : values())
                 vec[step.id] = step.name;
             return vec;
         }
 
         /**
          * Get the nearest timestep period.
+         *
          * @param time
          * @return Nearest timestep, if the time is bigger than any timestep returns STEP_12_HOURS.
          */
-        public static TimeSteps getNearestStep(long time){
-            for(TimeSteps step : values()){
-                if(step.time>=time)
+        public static TimeSteps getNearestStep(long time) {
+            for (TimeSteps step : values()) {
+                if (step.time >= time)
                     return step;
 
             }
@@ -177,19 +186,18 @@ public class ReportOptions implements ActionListener {
         }
     }
 
-
     /**
      * Report options dialog constructor.
+     *
      * @param inpFile
      * @param msxFile
      */
-    public ReportOptions(File inpFile,File msxFile, Logger log) {
+    public ReportOptions(File inpFile, File msxFile, Logger log) {
         this.log = log;
 
-        if(inpFile!=null){
+        if (inpFile != null) {
             fileINP = inpFile;
             netINP = new Network();
-
 
             //Logger log = Logger.getAnonymousLogger();//Logger.getLogger(this.getClass().toString());
             //log.setUseParentHandlers(false);
@@ -205,19 +213,18 @@ public class ReportOptions implements ActionListener {
                 Network.FileType netType = Network.FileType.INP_FILE;
 
                 int lastDot = inpFile.getName().lastIndexOf(".");
-                if(lastDot>0 && lastDot+1 < inpFile.getName().length()){
-                    String extension = inpFile.getName().substring(lastDot+1).toLowerCase();
-                    if(extension.equals("xlsx"))
+                if (lastDot > 0 && lastDot + 1 < inpFile.getName().length()) {
+                    String extension = inpFile.getName().substring(lastDot + 1).toLowerCase();
+                    if (extension.equals("xlsx"))
                         netType = Network.FileType.EXCEL_FILE;
-                    else if(extension.equals("inp"))
+                    else if (extension.equals("inp"))
                         netType = Network.FileType.INP_FILE;
                 }
 
-                InputParser inpParser = InputParser.create(netType,log);
-                inpParser.parse(netINP,inpFile);
+                InputParser inpParser = InputParser.create(netType, log);
+                inpParser.parse(netINP, inpFile);
 
-            }
-            catch (ENException en_ex){
+            } catch (ENException en_ex) {
                 JOptionPane.showMessageDialog(root, Utilities.getError(Integer.toString(en_ex.getCodeID())) + "\nCheck epanet.log for detailed error description", "Error", JOptionPane.OK_OPTION);
                 inpFile = null;
                 return;
@@ -228,13 +235,13 @@ public class ReportOptions implements ActionListener {
             //    return;
             //}
 
-            if(msxFile!=null){
+            if (msxFile != null) {
                 fileMSX = msxFile;
                 epanetTK = new ENToolkit2(netINP);
                 netMSX = new EpanetMSX(epanetTK);
                 try {
                     int ret = netMSX.load(fileMSX);
-                    if(ret !=0){
+                    if (ret != 0) {
                         JOptionPane.showMessageDialog(root, "MSX parsing error " + ret, "Error", JOptionPane.OK_OPTION);
                         fileMSX = null;
                         netMSX = null;
@@ -256,16 +263,17 @@ public class ReportOptions implements ActionListener {
 
     /**
      * Create and show the window.
+     *
      * @param owner
      */
-    public void showWindow(JFrame owner, boolean reset){
+    public void showWindow(JFrame owner, boolean reset) {
 
-        if(reset){
+        if (reset) {
             // Adjust widgets before showing the window.
-            if(netINP!=null){
+            if (netINP != null) {
                 try {
                     PropertiesMap pMap = netINP.getPropertiesMap();
-                    if(pMap.getUnitsflag()== PropertiesMap.UnitsType.SI)
+                    if (pMap.getUnitsflag() == PropertiesMap.UnitsType.SI)
                         unitsBox.setSelectedIndex(0);
                     else
                         unitsBox.setSelectedIndex(1);
@@ -275,7 +283,7 @@ public class ReportOptions implements ActionListener {
                     textSimulationDuration.setText(Utilities.getClockTime(pMap.getDuration()));
                     textReportStart.setText(Utilities.getClockTime(pMap.getRstart()));
 
-                    if(netINP.getPropertiesMap().getQualflag() != PropertiesMap.QualType.NONE)
+                    if (netINP.getPropertiesMap().getQualflag() != PropertiesMap.QualType.NONE)
                         qualityCheckBox.setEnabled(true);
                     else
                         qualityCheckBox.setEnabled(false);
@@ -284,8 +292,8 @@ public class ReportOptions implements ActionListener {
                 }
             }
 
-            if(netMSX !=null && netMSX.getSpeciesNames().length>0 ){
-                String [] speciesNames = netMSX.getSpeciesNames();
+            if (netMSX != null && netMSX.getSpeciesNames().length > 0) {
+                String[] speciesNames = netMSX.getSpeciesNames();
 
                 speciesCheckList.setListData(createData(speciesNames));
 
@@ -294,20 +302,19 @@ public class ReportOptions implements ActionListener {
 
                 speciesCheckList.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
-                        if(!speciesCheckList.isEnabled())
+                        if (!speciesCheckList.isEnabled())
                             return;
                         int index = speciesCheckList.locationToIndex(e.getPoint());
-                        CheckableItem item = (CheckableItem)speciesCheckList.getModel().getElementAt(index);
-                        item.setSelected(! item.isSelected());
+                        CheckableItem item = (CheckableItem) speciesCheckList.getModel().getElementAt(index);
+                        item.setSelected(!item.isSelected());
                         Rectangle rect = speciesCheckList.getCellBounds(index, index);
                         speciesCheckList.repaint(rect);
                     }
                 });
-            }
-            else
+            } else
                 qualityMSXCheckBox.setEnabled(false);
 
-            mainFrame = new JDialog(owner,true);
+            mainFrame = new JDialog(owner, true);
             mainFrame.add(root);
             mainFrame.setTitle("Reporting options");
             mainFrame.setResizable(false);
@@ -326,16 +333,18 @@ public class ReportOptions implements ActionListener {
             textReportStart.addActionListener(this);
 
             mainFrame.addWindowListener(new WindowListener() {
-                public void windowOpened(WindowEvent e){}
+                public void windowOpened(WindowEvent e) {
+                }
+
                 public void windowClosing(WindowEvent e) {
-                    if(hydSim!=null){
+                    if (hydSim != null) {
                         try {
                             hydSim.stopRunning();
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
                     }
-                    if(netMSX!=null){
+                    if (netMSX != null) {
                         try {
                             netMSX.stopRunning();
                         } catch (InterruptedException e1) {
@@ -343,11 +352,21 @@ public class ReportOptions implements ActionListener {
                         }
                     }
                 }
-                public void windowClosed(WindowEvent e){}
-                public void windowIconified(WindowEvent e){}
-                public void windowDeiconified(WindowEvent e){}
-                public void windowActivated(WindowEvent e){}
-                public void windowDeactivated(WindowEvent e){}
+
+                public void windowClosed(WindowEvent e) {
+                }
+
+                public void windowIconified(WindowEvent e) {
+                }
+
+                public void windowDeiconified(WindowEvent e) {
+                }
+
+                public void windowActivated(WindowEvent e) {
+                }
+
+                public void windowDeactivated(WindowEvent e) {
+                }
             });
         }
 
@@ -362,7 +381,7 @@ public class ReportOptions implements ActionListener {
      * Custom components creation.
      */
     private void createUIComponents() {
-        String[] unitsString = { "SI", "US"};
+        String[] unitsString = {"SI", "US"};
         unitsBox = new JComboBox(unitsString);
 
         reportPeriodBox = new JComboBox(TimeSteps.getPeriodsText());
@@ -374,16 +393,16 @@ public class ReportOptions implements ActionListener {
         hydVariables.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         hydVariables.setCellRenderer(new CheckListRenderer());
 
-        for(int i = 0;i< ReportGenerator.HydVariable.values().length;i++)
-            ((CheckableItem)hydVariables.getModel().getElementAt(i)).setSelected(true);
+        for (int i = 0; i < ReportGenerator.HydVariable.values().length; i++)
+            ((CheckableItem) hydVariables.getModel().getElementAt(i)).setSelected(true);
 
         hydVariables.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!hydVariables.isEnabled())
+                if (!hydVariables.isEnabled())
                     return;
                 int index = hydVariables.locationToIndex(e.getPoint());
-                CheckableItem item = (CheckableItem)hydVariables.getModel().getElementAt(index);
-                item.setSelected(! item.isSelected());
+                CheckableItem item = (CheckableItem) hydVariables.getModel().getElementAt(index);
+                item.setSelected(!item.isSelected());
                 Rectangle rect = hydVariables.getCellBounds(index, index);
                 hydVariables.repaint(rect);
             }
@@ -393,79 +412,67 @@ public class ReportOptions implements ActionListener {
         qualityVariables.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         qualityVariables.setCellRenderer(new CheckListRenderer());
 
-        for(int i = 0;i<ReportGenerator.QualVariable.values().length;i++)
-            ((CheckableItem)qualityVariables.getModel().getElementAt(i)).setSelected(true);
+        for (int i = 0; i < ReportGenerator.QualVariable.values().length; i++)
+            ((CheckableItem) qualityVariables.getModel().getElementAt(i)).setSelected(true);
 
         qualityVariables.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!qualityVariables.isEnabled())
+                if (!qualityVariables.isEnabled())
                     return;
                 int index = qualityVariables.locationToIndex(e.getPoint());
-                CheckableItem item = (CheckableItem)qualityVariables.getModel().getElementAt(index);
-                item.setSelected(! item.isSelected());
+                CheckableItem item = (CheckableItem) qualityVariables.getModel().getElementAt(index);
+                item.setSelected(!item.isSelected());
                 Rectangle rect = qualityVariables.getCellBounds(index, index);
                 qualityVariables.repaint(rect);
             }
         });
     }
 
-
     /**
      * Handle ui components events.
+     *
      * @param e
      */
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(hydraulicsCheckBox)){
-            if(hydraulicsCheckBox.isSelected()){
+        if (e.getSource().equals(hydraulicsCheckBox)) {
+            if (hydraulicsCheckBox.isSelected()) {
                 hydVariables.setEnabled(true);
-            }
-            else{
+            } else {
                 hydVariables.setEnabled(false);
             }
-        }
-        else if(e.getSource().equals(qualityCheckBox)){
-            if(qualityCheckBox.isSelected()){
+        } else if (e.getSource().equals(qualityCheckBox)) {
+            if (qualityCheckBox.isSelected()) {
                 qualityVariables.setEnabled(true);
-            }
-            else{
+            } else {
                 qualityVariables.setEnabled(false);
             }
-        }
-        else if(e.getSource().equals(qualityMSXCheckBox)){
-            if(qualityMSXCheckBox.isSelected()){
+        } else if (e.getSource().equals(qualityMSXCheckBox)) {
+            if (qualityMSXCheckBox.isSelected()) {
                 speciesCheckList.setEnabled(true);
-            }
-            else
+            } else
                 speciesCheckList.setEnabled(false);
-        }
-        else if(e.getSource().equals(cancelButton)){
+        } else if (e.getSource().equals(cancelButton)) {
             mainFrame.setVisible(false);
-        }
-        else if(e.getSource().equals(hydComboBox)){
-            if(reportPeriodBox.getSelectedIndex()< hydComboBox.getSelectedIndex() )
+        } else if (e.getSource().equals(hydComboBox)) {
+            if (reportPeriodBox.getSelectedIndex() < hydComboBox.getSelectedIndex())
                 reportPeriodBox.setSelectedIndex(hydComboBox.getSelectedIndex());
-        }
-        else if(e.getSource().equals(reportPeriodBox)){
-            if(reportPeriodBox.getSelectedIndex()< hydComboBox.getSelectedIndex() )
+        } else if (e.getSource().equals(reportPeriodBox)) {
+            if (reportPeriodBox.getSelectedIndex() < hydComboBox.getSelectedIndex())
                 reportPeriodBox.setSelectedIndex(hydComboBox.getSelectedIndex());
-        }
-        else if(e.getSource().equals(textReportStart)){
-            double val = Utilities.getHour(textReportStart.getText(), "") ;
+        } else if (e.getSource().equals(textReportStart)) {
+            double val = Utilities.getHour(textReportStart.getText(), "");
             System.out.println(val);
-        }
-        else if(e.getSource().equals(textSimulationDuration)){
-            double val = Utilities.getHour(textSimulationDuration.getText(), "") ;
+        } else if (e.getSource().equals(textSimulationDuration)) {
+            double val = Utilities.getHour(textSimulationDuration.getText(), "");
             System.out.println(val);
-        }
-        else if(e.getSource().equals(runButton))
-        {
+        } else if (e.getSource().equals(runButton)) {
             double tmpValue;
-            if( (tmpValue=Utilities.getHour(textSimulationDuration.getText(),"") ) < 0){
+            if ((tmpValue = Utilities.getHour(textSimulationDuration.getText(), "")) < 0) {
                 JOptionPane.showMessageDialog(mainFrame, "Invalid time expression for simulation duration", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if( (tmpValue=Utilities.getHour(textReportStart.getText(),"") ) < 0){
+            if ((tmpValue = Utilities.getHour(textReportStart.getText(), "")) < 0) {
                 JOptionPane.showMessageDialog(mainFrame, "Invalid time expression for report start time", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -479,26 +486,25 @@ public class ReportOptions implements ActionListener {
 
                     StreamHandler simHandler = null;
 
-                    try{
+                    try {
                         // File save dialog
-                        FileDialog fdialog = new FileDialog(mainFrame,"Save xlsx file",FileDialog.SAVE);
+                        FileDialog fdialog = new FileDialog(mainFrame, "Save xlsx file", FileDialog.SAVE);
                         fdialog.setFilenameFilter(new XLSXFilterAWT());
 
                         String fileTitle = fileINP.getName();
-                        if(fileTitle.lastIndexOf(".")!=-1)
-                            fileTitle = fileTitle.substring(0,fileTitle.lastIndexOf("."));
+                        if (fileTitle.lastIndexOf(".") != -1)
+                            fileTitle = fileTitle.substring(0, fileTitle.lastIndexOf("."));
 
-                        fdialog.setFile("report_"+fileTitle);
+                        fdialog.setFile("report_" + fileTitle);
                         fdialog.setVisible(true);
 
                         File xlsxFile = null;
 
-                        if(fdialog.getFile()==null){
+                        if (fdialog.getFile() == null) {
                             mainFrame.setVisible(false);
                             return;
-                        }
-                        else
-                            xlsxFile = new File(fdialog.getDirectory()+fdialog.getFile()+".xlsx");
+                        } else
+                            xlsxFile = new File(fdialog.getDirectory() + fdialog.getFile() + ".xlsx");
 
                         lockInterface();
                         progressPanel.setVisible(true);
@@ -506,21 +512,20 @@ public class ReportOptions implements ActionListener {
                         progressBar.setMaximum(100);
                         progressBar.setMinimum(0);
 
-                        long reportPeriod       = (long)TimeSteps.values()[reportPeriodBox.getSelectedIndex()].time;
-                        long reportStartTime    = (long)(Utilities.getHour(textReportStart.getText(),"")*3600);
-                        long hydTStep           = TimeSteps.values()[hydComboBox.getSelectedIndex()].time;
-                        long qualTStep          = TimeSteps.values()[qualComboBox.getSelectedIndex()].time;
-                        long durationTime       = (long)(Utilities.getHour(textSimulationDuration.getText(),"")*3600);
-
+                        long reportPeriod = (long) TimeSteps.values()[reportPeriodBox.getSelectedIndex()].time;
+                        long reportStartTime = (long) (Utilities.getHour(textReportStart.getText(), "") * 3600);
+                        long hydTStep = TimeSteps.values()[hydComboBox.getSelectedIndex()].time;
+                        long qualTStep = TimeSteps.values()[qualComboBox.getSelectedIndex()].time;
+                        long durationTime = (long) (Utilities.getHour(textSimulationDuration.getText(), "") * 3600);
 
                         final PropertiesMap pMap = netINP.getPropertiesMap();
 
-                        if(showHydraulicSolverEventsCheckBox.isSelected()){
+                        if (showHydraulicSolverEventsCheckBox.isSelected()) {
                             try {
-                                simHandler = new StreamHandler(new FileOutputStream(fdialog.getDirectory() + "hydEvents.log"), new SimpleFormatter()){
+                                simHandler = new StreamHandler(new FileOutputStream(fdialog.getDirectory() + "hydEvents.log"), new SimpleFormatter()) {
                                     @Override
                                     public boolean isLoggable(LogRecord record) {
-                                        return record.getLevel()==Level.WARNING;
+                                        return record.getLevel() == Level.WARNING;
                                     }
                                 };
                             } catch (FileNotFoundException e1) {
@@ -531,7 +536,6 @@ public class ReportOptions implements ActionListener {
                             log.addHandler(simHandler);
                         }
 
-
                         statusLabel.setText("Simulating hydraulics");
 
                         try {
@@ -540,7 +544,7 @@ public class ReportOptions implements ActionListener {
                             pMap.setHstep(hydTStep);
                             pMap.setDuration(durationTime);
 
-                            hydSim = new HydraulicSim(netINP,log);
+                            hydSim = new HydraulicSim(netINP, log);
 
                             creatSPThread(10, 30, new SPInterface() {
                                 @Override
@@ -559,19 +563,15 @@ public class ReportOptions implements ActionListener {
 
                             hydSim.simulate(new File("hydFile.bin"));
 
-                        }
-                        catch (ENException e1)
-                        {
-                            if(e1.getCodeID()==1000)
+                        } catch (ENException e1) {
+                            if (e1.getCodeID() == 1000)
                                 throw new InterruptedException();
 
                             JOptionPane.showMessageDialog(root, Utilities.getError(Integer.toString(e1.getCodeID())) + "\nCheck epanet.log for detailed error description", "Error", JOptionPane.OK_OPTION);
                             return;
                         }
 
-
-
-                        if(fileMSX!=null && qualityMSXCheckBox.isSelected()){
+                        if (fileMSX != null && qualityMSXCheckBox.isSelected()) {
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException e1) {
@@ -590,7 +590,7 @@ public class ReportOptions implements ActionListener {
                                 netMSX.getNetwork().setDur(durationTime);
 
                                 epanetTK.open(new File("hydFile.bin"));
-                                creatSPThread(30,50, new SPInterface() {
+                                creatSPThread(30, 50, new SPInterface() {
                                     @Override
                                     public long getTime() {
                                         return netMSX.getQTime();
@@ -598,7 +598,7 @@ public class ReportOptions implements ActionListener {
 
                                     public double getValue() {
                                         try {
-                                            return (float)netMSX.getQTime()/(float)pMap.getDuration();
+                                            return (float) netMSX.getQTime() / (float) pMap.getDuration();
                                         } catch (ENException e1) {
                                             return 0;
                                         }
@@ -614,12 +614,11 @@ public class ReportOptions implements ActionListener {
                             //netMSX.getReport().MSXrpt_write(new File("msxFile.bin"));
                         }
 
-                        if(qualityCheckBox.isSelected())
-                        {
+                        if (qualityCheckBox.isSelected()) {
                             try {
-                                final QualitySim qSim = new QualitySim(netINP,log);
+                                final QualitySim qSim = new QualitySim(netINP, log);
                                 statusLabel.setText("Simulating Quality");
-                                creatSPThread(30,50, new SPInterface() {
+                                creatSPThread(30, 50, new SPInterface() {
                                     @Override
                                     public long getTime() {
                                         return qSim.getQtime();
@@ -627,13 +626,13 @@ public class ReportOptions implements ActionListener {
 
                                     public double getValue() {
                                         try {
-                                            return (float)qSim.getQtime()/(float)pMap.getDuration();
+                                            return (float) qSim.getQtime() / (float) pMap.getDuration();
                                         } catch (ENException e1) {
                                             return 0;
                                         }
                                     }
                                 });
-                                qSim.simulate(new File("hydFile.bin"),new File("qualFile.bin"));
+                                qSim.simulate(new File("hydFile.bin"), new File("qualFile.bin"));
                             } catch (ENException e1) {
                                 JOptionPane.showMessageDialog(root, Utilities.getError(Integer.toString(e1.getCodeID())) + "\nCheck epanet.log for detailed error description", "Error", JOptionPane.OK_OPTION);
                             } catch (IOException e1) {
@@ -649,20 +648,20 @@ public class ReportOptions implements ActionListener {
                         //log
                         try {
                             log.fine("Starting xlsx write");
-                            if(showSummaryCheckBox.isSelected())
-                                gen.writeSummary(fileINP, netINP, fileMSX,netMSX);
+                            if (showSummaryCheckBox.isSelected())
+                                gen.writeSummary(fileINP, netINP, fileMSX, netMSX);
 
-                            if(transposeResultsCheckBox.isSelected())
+                            if (transposeResultsCheckBox.isSelected())
                                 gen.setTransposedMode(true);
 
                             // Write hydraulic spreadsheets
-                            boolean [] values = new boolean[ReportGenerator.HydVariable.values().length];
-                            for(int i = 0;i< ReportGenerator.HydVariable.values().length;i++)
-                                values[i] = ((CheckableItem)hydVariables.getModel().getElementAt(i)).isSelected();
+                            boolean[] values = new boolean[ReportGenerator.HydVariable.values().length];
+                            for (int i = 0; i < ReportGenerator.HydVariable.values().length; i++)
+                                values[i] = ((CheckableItem) hydVariables.getModel().getElementAt(i)).isSelected();
 
                             statusLabel.setText("Writing hydraulic report");
                             haltSPPeekThread();
-                            creatSPThread(50,60, new SPInterface() {
+                            creatSPThread(50, 60, new SPInterface() {
                                 @Override
                                 public long getTime() {
                                     return gen.getRtime();
@@ -670,19 +669,19 @@ public class ReportOptions implements ActionListener {
 
                                 public double getValue() {
                                     try {
-                                        return (float)(gen.getRtime()-pMap.getRstart())/(float)pMap.getDuration();
+                                        return (float) (gen.getRtime() - pMap.getRstart()) / (float) pMap.getDuration();
                                     } catch (ENException e1) {
                                         return 0;
                                     }
                                 }
                             });
 
-                            gen.createHydReport(new File("hydFile.bin"),netINP,values);
+                            gen.createHydReport(new File("hydFile.bin"), netINP, values);
 
-                            if(qualityCheckBox.isSelected()){
+                            if (qualityCheckBox.isSelected()) {
                                 statusLabel.setText("Writing quality report");
                                 haltSPPeekThread();
-                                creatSPThread(60,70, new SPInterface() {
+                                creatSPThread(60, 70, new SPInterface() {
                                     @Override
                                     public long getTime() {
                                         return gen.getRtime();
@@ -690,24 +689,24 @@ public class ReportOptions implements ActionListener {
 
                                     public double getValue() {
                                         try {
-                                            return (float)(gen.getRtime()-pMap.getRstart())/(float)pMap.getDuration();
+                                            return (float) (gen.getRtime() - pMap.getRstart()) / (float) pMap.getDuration();
                                         } catch (ENException e1) {
                                             return 0;
                                         }
                                     }
                                 });
-                                boolean nodes = ((CheckableItem)qualityVariables.getModel().getElementAt(0)).isSelected();
-                                boolean links = ((CheckableItem)qualityVariables.getModel().getElementAt(1)).isSelected();
+                                boolean nodes = ((CheckableItem) qualityVariables.getModel().getElementAt(0)).isSelected();
+                                boolean links = ((CheckableItem) qualityVariables.getModel().getElementAt(1)).isSelected();
                                 gen.createQualReport(new File("qualFile.bin"), netINP, nodes, links);
                             }
 
                             // Write MSX quality spreadsheets
-                            if(fileMSX!=null && qualityMSXCheckBox.isSelected()){
-                                boolean [] valuesMSX = new boolean[speciesCheckList.getModel().getSize()];
-                                for(int i = 0;i<speciesCheckList.getModel().getSize();i++)
-                                    valuesMSX[i] = ((CheckableItem)speciesCheckList.getModel().getElementAt(i)).isSelected();
+                            if (fileMSX != null && qualityMSXCheckBox.isSelected()) {
+                                boolean[] valuesMSX = new boolean[speciesCheckList.getModel().getSize()];
+                                for (int i = 0; i < speciesCheckList.getModel().getSize(); i++)
+                                    valuesMSX[i] = ((CheckableItem) speciesCheckList.getModel().getElementAt(i)).isSelected();
 
-                                gen.createMSXReport(new File("msxFile.bin"), netINP, netMSX, epanetTK,valuesMSX);
+                                gen.createMSXReport(new File("msxFile.bin"), netINP, netMSX, epanetTK, valuesMSX);
                             }
                             statusLabel.setText("Writing workbook");
                             gen.writeWorksheet();
@@ -717,13 +716,12 @@ public class ReportOptions implements ActionListener {
                         } catch (ENException e1) {
                             e1.printStackTrace();
                         }
-                    }
-                    catch (InterruptedException e){
+                    } catch (InterruptedException e) {
                         System.out.println("Simulation aborted !");
                         //JOptionPane.showMessageDialog(root, "Simulation aborted !", "Error", JOptionPane.OK_OPTION);
                     }
 
-                    if(simHandler!=null)
+                    if (simHandler != null)
                         log.removeHandler(simHandler);
 
                     haltSPPeekThread();
@@ -741,7 +739,7 @@ public class ReportOptions implements ActionListener {
     /**
      * Lock the interface during the simulation.
      */
-    private void lockInterface(){
+    private void lockInterface() {
         hydraulicsCheckBox.setEnabled(false);
         qualityCheckBox.setEnabled(false);
         qualityMSXCheckBox.setEnabled(false);
@@ -762,20 +760,20 @@ public class ReportOptions implements ActionListener {
     /**
      * Unlock the interface during the simulation.
      */
-    private void unlockInterface(){
+    private void unlockInterface() {
         hydraulicsCheckBox.setEnabled(true);
-         transposeResultsCheckBox.setEnabled(true);
+        transposeResultsCheckBox.setEnabled(true);
 
-        if(netMSX!=null && netMSX.getSpeciesNames().length>0){
+        if (netMSX != null && netMSX.getSpeciesNames().length > 0) {
             qualityMSXCheckBox.setEnabled(true);
-            if(qualityMSXCheckBox.isSelected())
+            if (qualityMSXCheckBox.isSelected())
                 speciesCheckList.setEnabled(true);
         }
 
         hydVariables.setEnabled(true);
         try {
-            if(netINP.getPropertiesMap().getQualflag()!=PropertiesMap.QualType.NONE){
-                if(qualityCheckBox.isSelected()){
+            if (netINP.getPropertiesMap().getQualflag() != PropertiesMap.QualType.NONE) {
+                if (qualityCheckBox.isSelected()) {
                     qualityVariables.setEnabled(true);
                     qualityCheckBox.setEnabled(true);
                 }
@@ -794,7 +792,7 @@ public class ReportOptions implements ActionListener {
         textReportStart.setEnabled(true);
     }
 
-    private void haltSPPeekThread(){
+    private void haltSPPeekThread() {
         SPThreadState = false;
         try {
             Thread.sleep(200);
@@ -806,35 +804,41 @@ public class ReportOptions implements ActionListener {
     /**
      * Simple state variable to help terminate the progress peek thread.
      */
-    private transient boolean SPThreadState  = false;
+    private transient boolean SPThreadState = false;
 
     /**
      * Simple abstract class used to peek the simulation progress into the progress bar.
      */
-    private abstract class SPInterface{
+    private abstract class SPInterface {
         public abstract double getValue();
-        public long getTime(){return 0;};
+
+        public long getTime() {
+            return 0;
+        }
+
+        ;
     }
 
     /**
      * This method with the SPInterface class peeks the progress of the simulation.
+     *
      * @param start Progress bar start value
-     * @param end Progress bar end value
-     * @param var New instance of a child class of SPInterface to peek the progress.
+     * @param end   Progress bar end value
+     * @param var   New instance of a child class of SPInterface to peek the progress.
      */
-    private Thread creatSPThread(final int start,final int end, final SPInterface var){
+    private Thread creatSPThread(final int start, final int end, final SPInterface var) {
         SPThreadState = true;
         final Thread repThread = new Thread() {
             @Override
             public void run() {
                 String initName = statusLabel.getText();
-                while(true){
-                    if(var.getTime()!=0)
-                        statusLabel.setText(initName+ " (" + Utilities.getClockTime(var.getTime()) + ")");
-                    progressBar.setValue((int)(start*(1.0f-var.getValue()) + end*var.getValue()));
-                    if(var.getValue()>0.9)
+                while (true) {
+                    if (var.getTime() != 0)
+                        statusLabel.setText(initName + " (" + Utilities.getClockTime(var.getTime()) + ")");
+                    progressBar.setValue((int) (start * (1.0f - var.getValue()) + end * var.getValue()));
+                    if (var.getValue() > 0.9)
                         return;
-                    if(!SPThreadState)
+                    if (!SPThreadState)
                         return;
                 }
             }
@@ -881,7 +885,7 @@ public class ReportOptions implements ActionListener {
         public Component getListCellRendererComponent(JList list, Object value,
                                                       int index, boolean isSelected, boolean hasFocus) {
             setEnabled(list.isEnabled());
-            setSelected(((CheckableItem)value).isSelected());
+            setSelected(((CheckableItem) value).isSelected());
             setFont(list.getFont());
             setText(value.toString());
             return this;
@@ -890,18 +894,18 @@ public class ReportOptions implements ActionListener {
 
     /**
      * Create checkbox entries from string array.
+     *
      * @param strs Entries strings.
      * @return CheckableItem array.
      */
     private CheckableItem[] createData(String[] strs) {
         int n = strs.length;
         CheckableItem[] items = new CheckableItem[n];
-        for (int i=0;i<n;i++) {
+        for (int i = 0; i < n; i++) {
             items[i] = new CheckableItem(strs[i]);
         }
         return items;
     }
-
 
     /**
      * XLSX File filter for the file dialog.
@@ -917,7 +921,6 @@ public class ReportOptions implements ActionListener {
             return false;
         }
     }
-
 
 }
 

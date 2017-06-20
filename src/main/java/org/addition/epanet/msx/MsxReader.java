@@ -17,7 +17,6 @@
 
 package org.addition.epanet.msx;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,38 +40,39 @@ public class MsxReader {
     }
 
     public void open(File output) throws FileNotFoundException {
-        ouputRaf = new RandomAccessFile(output,"r");
+        ouputRaf = new RandomAccessFile(output, "r");
 
     }
 
     public void close() throws IOException {
         ouputRaf.close();
     }
-    public float getNodeQual(int period, int node, int specie)
-    {
-        float c=0.0f;
+
+    public float getNodeQual(int period, int node, int specie) {
+        float c = 0.0f;
         long bp = resultsOffset + period * (nodeBytesPerPeriod + linkBytesPerPeriod);
-        bp += ((specie-1)*nNodes + (node-1)) * 4;
+        bp += ((specie - 1) * nNodes + (node - 1)) * 4;
 
         try {
             ouputRaf.seek(bp);
             c = ouputRaf.readFloat();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
 
         return c;
     }
 
     // retrieves a result for a specific link from the MSX binary output file.
-    public float getLinkQual(int period, int node, int specie)
-    {
-        float c=0.0f;
-        long bp = resultsOffset + ((period+1)* nodeBytesPerPeriod) + (period* linkBytesPerPeriod);
-        bp += ((specie-1)*nLinks + (node-1)) * 4;
+    public float getLinkQual(int period, int node, int specie) {
+        float c = 0.0f;
+        long bp = resultsOffset + ((period + 1) * nodeBytesPerPeriod) + (period * linkBytesPerPeriod);
+        bp += ((specie - 1) * nLinks + (node - 1)) * 4;
 
         try {
             ouputRaf.seek(bp);
             c = ouputRaf.readFloat();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
 
         return c;
     }

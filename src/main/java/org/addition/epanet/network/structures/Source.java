@@ -23,30 +23,29 @@ import org.addition.epanet.util.Utilities;
 /**
  * Water quality object, source quality.
  */
-public class Source
-{
+public class Source {
     /**
      * Source type
-      */
-    static public enum Type{
+     */
+    static public enum Type {
         /**
          * Inflow concentration.
          */
-        CONCEN      (0,Keywords.w_CONCEN),
+        CONCEN(0, Keywords.w_CONCEN),
         /**
          * Flow paced booster.
          */
-        FLOWPACED   (3,Keywords.w_FLOWPACED),
+        FLOWPACED(3, Keywords.w_FLOWPACED),
         /**
          * Mass inflow booster.
          */
-        MASS        (1,Keywords.w_MASS),
+        MASS(1, Keywords.w_MASS),
         /**
          * Setpoint booster.
          */
-        SETPOINT    (2,Keywords.w_SETPOINT);
+        SETPOINT(2, Keywords.w_SETPOINT);
 
-        public static Type parse(String text){
+        public static Type parse(String text) {
             for (Type type : Type.values())
                 if (Utilities.match(text, type.parseStr)) return type;
             return null;
@@ -62,7 +61,10 @@ public class Source
          */
         public final String parseStr;
 
-        private Type(int val, String str){id = val;parseStr = str;}
+        private Type(int val, String str) {
+            id = val;
+            parseStr = str;
+        }
     }
 
     /**
@@ -70,7 +72,7 @@ public class Source
      */
     private double C0;
     /**
-     *  Time pattern reference.
+     * Time pattern reference.
      */
     private Pattern pattern;
 
@@ -79,7 +81,7 @@ public class Source
      */
     private Type type;
 
-    public double getC0(){
+    public double getC0() {
         return C0;
     }
 
@@ -94,7 +96,6 @@ public class Source
     public void setC0(double c0) {
         C0 = c0;
     }
-
 
     public void setPattern(Pattern pattern) {
         this.pattern = pattern;

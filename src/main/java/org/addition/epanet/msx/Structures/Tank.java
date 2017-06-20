@@ -18,15 +18,15 @@
 package org.addition.epanet.msx.Structures;
 
 public class Tank {
-    int    node;        // node index of tank
+    int node;        // node index of tank
     double hstep;       // integration time step
     double a;           // tank area
     double v0;          // initial volume
     double v;           // tank volume
-    int    mixModel;    // type of mixing model
+    int mixModel;    // type of mixing model
     double vMix;        // mixing compartment size
-    double [] param;    // kinetic parameter values
-    double [] c;        // current species concentrations
+    double[] param;    // kinetic parameter values
+    double[] c;        // current species concentrations
 
     public Tank(int params, int species) {
         param = new double[params];

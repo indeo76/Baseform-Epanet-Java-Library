@@ -17,13 +17,14 @@
 
 package org.addition.epanet.hydraulic.structures;
 
-
 import org.addition.epanet.Constants;
-import org.addition.epanet.util.ENException;
-import org.addition.epanet.util.Utilities;
 import org.addition.epanet.hydraulic.SparseMatrix;
 import org.addition.epanet.network.PropertiesMap;
-import org.addition.epanet.network.structures.*;
+import org.addition.epanet.network.structures.Demand;
+import org.addition.epanet.network.structures.Node;
+import org.addition.epanet.network.structures.Tank;
+import org.addition.epanet.util.ENException;
+import org.addition.epanet.util.Utilities;
 
 import java.util.List;
 
@@ -35,17 +36,18 @@ public class SimulationNode {
     protected double demand; // Epanet 'D[n]' variable, node demand.
     protected double emitter;// Epanet 'E[n]' variable, emitter flows
 
-    public static SimulationNode createIndexedNode(Node _node, int idx){
+    public static SimulationNode createIndexedNode(Node _node, int idx) {
         SimulationNode ret;
-        if(_node instanceof Tank)
-            ret = new SimulationTank(_node,idx);
+        if (_node instanceof Tank)
+            ret = new SimulationTank(_node, idx);
         else
-            ret = new SimulationNode(_node,idx);
+            ret = new SimulationNode(_node, idx);
 
         return ret;
     }
+
     public SimulationNode(Node ref, int idx) {
-        this.node =ref;
+        this.node = ref;
         index = idx;
     }
 
@@ -57,10 +59,7 @@ public class SimulationNode {
         return node;
     }
 
-
-
-
-    public String getId(){
+    public String getId() {
         return node.getId();
     }
 
@@ -80,11 +79,9 @@ public class SimulationNode {
     //    return node.getSource();
     //}
 
-
-    public double [] getC0() {
+    public double[] getC0() {
         return node.getC0();
     }
-
 
     public double getKe() {
         return node.getKe();
@@ -104,30 +101,29 @@ public class SimulationNode {
         this.head = head;
     }
 
-    public double getSimDemand(){
+    public double getSimDemand() {
         return demand;
     }
 
-    public void setSimDemand(double value){
+    public void setSimDemand(double value) {
         demand = value;
     }
 
-    public double getSimEmitter(){
+    public double getSimEmitter() {
         return emitter;
     }
 
-    public void setSimEmitter(double value){
+    public void setSimEmitter(double value) {
         emitter = value;
     }
 
     ////
 
     // Completes calculation of nodal flow imbalance (X) flow correction (F) arrays
-    public static void computeNodeCoeffs(List<SimulationNode> junctions, SparseMatrix smat, LSVariables ls){
-        for(SimulationNode node : junctions)
-        {
-            ls.addNodalInFlow(node, - node.demand);
-            ls.addRHSCoeff(smat.getRow(node.getIndex()),+ls.getNodalInFlow(node));
+    public static void computeNodeCoeffs(List<SimulationNode> junctions, SparseMatrix smat, LSVariables ls) {
+        for (SimulationNode node : junctions) {
+            ls.addNodalInFlow(node, -node.demand);
+            ls.addRHSCoeff(smat.getRow(node.getIndex()), +ls.getNodalInFlow(node));
         }
     }
 
@@ -146,7 +142,7 @@ public class SimulationNode {
             double ke = Math.max(Constants.CSMALL, node.getNode().getKe());
             double q = node.emitter;
             double z = ke * Math.pow(Math.abs(q), pMap.getQexp());
-            double p = pMap.getQexp()* z / Math.abs(q);
+            double p = pMap.getQexp() * z / Math.abs(q);
 
             if (p < pMap.getRQtol())
                 p = 1.0 / pMap.getRQtol();
@@ -154,9 +150,9 @@ public class SimulationNode {
                 p = 1.0 / p;
 
             double y = Utilities.getSignal(q) * z * p;
-            ls.addAii(smat.getRow(node.getIndex()),+ p);
-            ls.addRHSCoeff(smat.getRow(node.getIndex()), + (y + p * node.getNode().getElevation()));
-            ls.addNodalInFlow(node, - q);
+            ls.addAii(smat.getRow(node.getIndex()), +p);
+            ls.addRHSCoeff(smat.getRow(node.getIndex()), +(y + p * node.getNode().getElevation()));
+            ls.addNodalInFlow(node, -q);
         }
     }
 
@@ -168,7 +164,7 @@ public class SimulationNode {
             p = 1.0d / pMap.getRQtol();
         else
             p = 1.0d / p;
-        return (emitter / pMap.getQexp() - p * (head-getElevation()));
+        return (emitter / pMap.getQexp() - p * (head - getElevation()));
     }
 
 }

@@ -24,12 +24,12 @@ public class QualitySegment {
     /**
      * Segment concentration.
      */
-    public double  c;
+    public double c;
 
     /**
      * Segment volume.
      */
-    public double  v;
+    public double v;
 
     public QualitySegment(double v, double c) {
         this.v = v;

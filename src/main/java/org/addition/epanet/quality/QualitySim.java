@@ -17,7 +17,6 @@
 
 package org.addition.epanet.quality;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.hydraulic.io.AwareStep;
 import org.addition.epanet.hydraulic.io.HydraulicReader;
@@ -109,7 +108,6 @@ public class QualitySim {
     private transient final Double elevUnits;
     private transient final PropertiesMap.QualType qualflag;
 
-
     /**
      * Initializes WQ solver system
      */
@@ -167,7 +165,6 @@ public class QualitySim {
             Reactflag = getReactflag();
         }
 
-
         Wbulk = 0.0;
         Wwall = 0.0;
         Wtank = 0.0;
@@ -221,7 +218,6 @@ public class QualitySim {
         for (QualityLink qL : links) {
             QualityNode j = qL.getDownStreamNode();
             double v = Math.abs(qL.getFlow()) * dt;
-
 
             while (v > 0.0) {
                 if (qL.getSegments().size() == 0)
@@ -303,17 +299,15 @@ public class QualitySim {
                 c = c1 * Math.pow(Math.max(0.0, c), order - 1.0);
         }
 
-
         if (c < 0) c = 0;
         return (kb * c);
     }
-
 
     /**
      * Retrieves hydraulic solution and hydraulic time step for next hydraulic event.
      */
     private void gethyd(DataOutputStream outStream, HydraulicReader hydSeek) throws ENException, IOException {
-        AwareStep step =  hydSeek.getStep((int) Htime);
+        AwareStep step = hydSeek.getStep((int) Htime);
         loadHydValues(step);
 
         Htime += step.getStep();
@@ -323,7 +317,6 @@ public class QualitySim {
             Nperiods++;
             Rtime += pMap.getRstep();
         }
-
 
         if (qualflag != PropertiesMap.QualType.NONE && Qtime < pMap.getDuration()) {
             if (Reactflag && qualflag != PropertiesMap.QualType.AGE)
@@ -335,7 +328,6 @@ public class QualitySim {
                 reorientsegs();
         }
     }
-
 
     public long getQtime() {
         return Qtime;
@@ -427,15 +419,13 @@ public class QualitySim {
         }
     }
 
-
-
     /**
      * Load hydraulic simulation data to the water quality structures.
      */
     private void loadHydValues(AwareStep step) {
         int count = 0;
         for (QualityNode qN : nodes) {
-            qN.setDemand(step.getNodeDemand(count++,qN.getNode(), null));
+            qN.setDemand(step.getNodeDemand(count++, qN.getNode(), null));
         }
 
         count = 0;
@@ -465,7 +455,7 @@ public class QualitySim {
         return (tstep);
     }
 
-    private long nextqual() throws ENException{
+    private long nextqual() throws ENException {
         long hydstep;
         long tstep;
 
@@ -509,12 +499,9 @@ public class QualitySim {
             Sh = 3.65 + 0.0668 * y / (1.0 + 0.04 * Math.pow(y, 0.667));
         }
 
-
         kf = Sh * pMap.getDiffus() / d;
 
-
         if (pMap.getWallOrder() == 0.0) return (kf);
-
 
         kw = ql.getLink().getKw() / elevUnits;
         kw = (4.0 / d) * kw * kf / (kf + Math.abs(kw));
@@ -527,23 +514,18 @@ public class QualitySim {
     private double pipereact(QualityLink ql, double c, double v, long dt) throws ENException {
         double cnew, dc, dcbulk, dcwall, rbulk, rwall;
 
-
         if (qualflag == PropertiesMap.QualType.AGE) return (c + (double) dt / 3600.0);
-
 
         rbulk = bulkrate(c, ql.getLink().getKb(), pMap.getBulkOrder()) * Bucf;
         rwall = wallrate(c, ql.getLink().getDiameter(), ql.getLink().getKw(), ql.getFlowResistance());
 
-
         dcbulk = rbulk * (double) dt;
         dcwall = rwall * (double) dt;
-
 
         if (Htime >= pMap.getRstart()) {
             Wbulk += Math.abs(dcbulk) * v;
             Wwall += Math.abs(dcwall) * v;
         }
-
 
         dc = dcbulk + dcwall;
         cnew = c + dc;
@@ -677,8 +659,7 @@ public class QualitySim {
      * @throws IOException
      * @throws ENException
      */
-    void simulate(File hydFile, OutputStream out) throws IOException, ENException
-    {
+    void simulate(File hydFile, OutputStream out) throws IOException, ENException {
         DataOutputStream outStream = new DataOutputStream(out);
         outStream.writeInt(net.getNodes().size());
         outStream.writeInt(net.getLinks().size());
@@ -688,7 +669,6 @@ public class QualitySim {
             if (Qtime == Htime)
                 gethyd(outStream, hydraulicReader);
 
-
             tstep = nextqual(outStream);
         } while (tstep > 0);
 
@@ -697,13 +677,13 @@ public class QualitySim {
 
     /**
      * Simulate water quality during one hydraulic step.
+     *
      * @param hydNodes
      * @param hydLinks
      * @return
      * @throws ENException
      */
-    public Boolean simulateSingleStep(List<SimulationNode> hydNodes, List<SimulationLink> hydLinks, long hydStep) throws ENException
-    {
+    public Boolean simulateSingleStep(List<SimulationNode> hydNodes, List<SimulationLink> hydLinks, long hydStep) throws ENException {
         int count = 0;
         for (QualityNode qN : nodes) {
             qN.setDemand(hydNodes.get(count++).getSimDemand());
@@ -717,7 +697,7 @@ public class QualitySim {
 
         Htime += hydStep;
 
-        if (qualflag != PropertiesMap.QualType.NONE && Qtime < pMap.getDuration()){
+        if (qualflag != PropertiesMap.QualType.NONE && Qtime < pMap.getDuration()) {
             if (Reactflag && qualflag != PropertiesMap.QualType.AGE)
                 ratecoeffs();
 
@@ -745,7 +725,6 @@ public class QualitySim {
 
         for (QualityNode qN : nodes)
             qN.setSourceContribution(0);
-
 
         if (qualflag != PropertiesMap.QualType.CHEM)
             return;
@@ -840,7 +819,6 @@ public class QualitySim {
             c /= 60.0;
         else
             c /= fMap.getUnits(FieldsMap.Type.QUALITY);
-
 
         Pattern pat = source.getPattern();
         if (pat == null)
@@ -1160,8 +1138,6 @@ public class QualitySim {
         updatesourcenodes(tstep);
     }
 
-
-
     /**
      * Updates concentration at all nodes to mixture of accumulated inflow from connecting pipes.
      *
@@ -1224,14 +1200,12 @@ public class QualitySim {
 
         if (qualflag != PropertiesMap.QualType.CHEM) return;
 
-
         for (QualityNode qN : nodes) {
             source = qN.getNode().getSource();
             if (source == null)
                 continue;
 
             qN.setQuality(qN.getQuality() + qN.getSourceContribution());
-
 
             if (qN.getNode() instanceof Tank) {
                 if (((Tank) qN.getNode()).getArea() > 0.0)
@@ -1290,11 +1264,11 @@ public class QualitySim {
             return (c * kf);
     }
 
-    public List<QualityNode> getnNodes(){
+    public List<QualityNode> getnNodes() {
         return nodes;
     }
 
-    public List<QualityLink> getnLinks(){
+    public List<QualityLink> getnLinks() {
         return links;
     }
 }

@@ -20,6 +20,6 @@ package org.addition.epanet.hydraulic.models;
 /**
  * Chezy-Manning model calculator, which is implemented through the Hazen-Williams model.
  */
-public class CMModelCalculator extends HWModelCalculator{
+public class CMModelCalculator extends HWModelCalculator {
 
 }

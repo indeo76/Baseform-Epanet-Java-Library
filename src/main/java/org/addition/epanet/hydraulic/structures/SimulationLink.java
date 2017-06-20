@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 
 public class SimulationLink {
 
-
     protected SimulationNode first = null;
     protected SimulationNode second = null;
     protected final Link link;
@@ -51,7 +50,6 @@ public class SimulationLink {
     protected double flowCorrection; // Epanet 'Y[k]', Flow correction factors
     protected double setting;        // Epanet 'K[k]', Link setting
     protected StatType oldStatus;
-
 
     public static SimulationLink createIndexedLink(Map<String, SimulationNode> byId, Link ref, int idx) {
         SimulationLink ret = null;
@@ -174,7 +172,6 @@ public class SimulationLink {
     //public boolean getRptFlag() {
     //    return node.isRptFlag();
     //}
-
 
     // Simulation getters & setters
 
@@ -359,7 +356,6 @@ public class SimulationLink {
         invHeadLoss = coeffs.getInvHeadLoss();
         flowCorrection = coeffs.getFlowCorrection();
     }
-
 
     // Closes link flowing into full or out of empty tank
     private void tankStatus(PropertiesMap pMap) throws ENException {

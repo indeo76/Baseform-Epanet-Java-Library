@@ -17,33 +17,29 @@
 
 package org.addition.epanet.network.io.input;
 
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
-
 import org.addition.epanet.Constants;
+import org.addition.epanet.network.FieldsMap;
+import org.addition.epanet.network.FieldsMap.Type;
+import org.addition.epanet.network.Network;
+import org.addition.epanet.network.PropertiesMap;
 import org.addition.epanet.network.io.Keywords;
+import org.addition.epanet.network.structures.*;
+import org.addition.epanet.network.structures.Control.ControlType;
+import org.addition.epanet.network.structures.Link.LinkType;
+import org.addition.epanet.network.structures.Link.StatType;
 import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.ENLevels;
 import org.addition.epanet.util.Utilities;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-
-import org.addition.epanet.network.FieldsMap;
-import org.addition.epanet.network.Network;
-import org.addition.epanet.network.PropertiesMap;
-import org.addition.epanet.network.structures.*;
-import org.addition.epanet.network.FieldsMap.*;
-import org.addition.epanet.network.structures.Control.*;
-import org.addition.epanet.network.structures.Link.*;
 
 /**
  * INP parser class.
  */
 public class InpParser extends InputParser {
-
 
     private Rule.Rulewords ruleState;    // Last rule op
     private Rule currentRule;       // Current rule
@@ -154,7 +150,6 @@ public class InpParser extends InputParser {
 
                     line = line.substring(0, index);
                 }
-
 
                 //lineCount++;
                 line = line.trim();
@@ -337,7 +332,6 @@ public class InpParser extends InputParser {
             nodeRef.setInitDemand(Constants.MISSING);
     }
 
-
     protected void parseTank(Network net, String[] Tok, String comment) throws ENException {
         int n = Tok.length;
         Pattern p = null;
@@ -423,7 +417,6 @@ public class InpParser extends InputParser {
         tank.setV1max(1.0);
     }
 
-
     protected void parsePipe(Network net, String[] Tok, String comment) throws ENException {
         Node j1, j2;
         int n = Tok.length;
@@ -445,14 +438,12 @@ public class InpParser extends InputParser {
                 (j2 = net.getNode(Tok[2])) == null
                 ) throw new ENException(203);
 
-
         if (j1 == j2) throw new ENException(222);
 
         if ((length = Utilities.getDouble(Tok[3])) == null ||
                 (diam = Utilities.getDouble(Tok[4])) == null ||
                 (rcoeff = Utilities.getDouble(Tok[5])) == null
                 ) throw new ENException(202);
-
 
         if (length <= 0.0 || diam <= 0.0 || rcoeff <= 0.0) throw new ENException(202);
 
@@ -488,7 +479,6 @@ public class InpParser extends InputParser {
         if (comment.length() > 0)
             link.setComment(comment);
     }
-
 
     protected void parsePump(Network net, String[] Tok, String comment) throws ENException {
         int j, m, n = Tok.length;
@@ -568,7 +558,6 @@ public class InpParser extends InputParser {
         }
     }
 
-
     protected void parseValve(Network net, String[] Tok, String comment) throws ENException {
         Node j1, j2;
         int n = Tok.length;
@@ -632,14 +621,12 @@ public class InpParser extends InputParser {
                 throw new ENException(202);
             }
 
-
         if ((j1 instanceof Tank || j2 instanceof Tank) &&
                 (type == LinkType.PRV || type == LinkType.PSV || type == LinkType.FCV))
             throw new ENException(219);
 
         if (!valvecheck(net, type, j1, j2))
             throw new ENException(220);
-
 
         valve.setFirst(j1);
         valve.setSecond(j2);
@@ -746,7 +733,6 @@ public class InpParser extends InputParser {
                 throw new ENException(202);
         }
     }
-
 
     protected void parseCurve(Network net, String[] tok) throws ENException {
         Curve cur;
@@ -868,7 +854,6 @@ public class InpParser extends InputParser {
                 throw new ENException(202);
             }
 
-
         if (ltype == LinkType.PUMP || ltype == LinkType.PIPE) {
             if (setting != Constants.MISSING) {
                 if (setting < 0.0) throw new ENException(202);
@@ -925,7 +910,6 @@ public class InpParser extends InputParser {
         net.addControl(cntr);
     }
 
-
     protected void parseSource(Network net, String[] Tok) throws ENException {
         int n = Tok.length;
         Source.Type type = Source.Type.CONCEN;
@@ -966,7 +950,6 @@ public class InpParser extends InputParser {
         nodeRef.setSource(src);
     }
 
-
     protected void parseEmitter(Network net, String[] Tok) throws ENException {
         int n = Tok.length;
         Node nodeRef;
@@ -986,7 +969,6 @@ public class InpParser extends InputParser {
         nodeRef.setKe(k);
 
     }
-
 
     protected void parseQuality(Network net, String[] Tok) throws ENException {
         int n = Tok.length;
@@ -1009,7 +991,6 @@ public class InpParser extends InputParser {
             } catch (NumberFormatException ex) {
                 throw new ENException(209);
             }
-
 
             try {
                 i0 = Long.parseLong(Tok[0]);
@@ -1040,7 +1021,6 @@ public class InpParser extends InputParser {
         double y;
 
         if (n < 3) return;
-
 
         if (Utilities.match(Tok[0], Keywords.w_ORDER)) {
             try {
@@ -1179,7 +1159,6 @@ public class InpParser extends InputParser {
         }
     }
 
-
     protected void parseMixing(Network net, String[] Tok) throws ENException {
         int n = Tok.length;
         Tank.MixType i;
@@ -1215,7 +1194,6 @@ public class InpParser extends InputParser {
         tankRef.setMixModel(i);
         tankRef.setV1max(v);
     }
-
 
     protected void parseStatus(Network net, String[] Tok) throws ENException {
         int n = Tok.length - 1;
@@ -1313,7 +1291,6 @@ public class InpParser extends InputParser {
             pumpRef = (Pump) linkRef;
         } else throw new ENException(201);
 
-
         if (Utilities.match(Tok[n - 2], Keywords.w_PRICE)) {
             if ((y = Utilities.getDouble(Tok[n - 1])) == null) {
                 if (pumpRef == null)
@@ -1356,7 +1333,6 @@ public class InpParser extends InputParser {
         throw new ENException(201);
     }
 
-
     protected void parseReport(Network net, String[] Tok) throws ENException {
         int n = Tok.length - 1;
         //FieldType i;
@@ -1370,7 +1346,6 @@ public class InpParser extends InputParser {
             net.getPropertiesMap().setPageSize(y.intValue());
             return;
         }
-
 
         if (Utilities.match(Tok[0], Keywords.w_STATUS)) {
             net.getPropertiesMap().setStatflag(PropertiesMap.StatFlag.parse(Tok[n]));
@@ -1485,7 +1460,7 @@ public class InpParser extends InputParser {
             return;
         }
 
-        log.info("Unknow section keyword "+Tok[0]+" value "+Tok[1]);
+        log.info("Unknow section keyword " + Tok[0] + " value " + Tok[1]);
 //        throw new ENException(201);
     }
 
@@ -1604,14 +1579,12 @@ public class InpParser extends InputParser {
         return false;
     }
 
-
     protected boolean optionValue(Network net, String[] Tok, int n) throws ENException {
         int nvalue = 1;
         Double y;
         PropertiesMap map = net.getPropertiesMap();
 
         String name = Tok[0];
-
 
         if (Utilities.match(name, Keywords.w_SPECGRAV) || Utilities.match(name, Keywords.w_EMITTER)
                 || Utilities.match(name, Keywords.w_DEMAND)) nvalue = 2;
@@ -2064,6 +2037,5 @@ public class InpParser extends InputParser {
             throw new ENException(202);
         currentRule.setPriority(x);
     }  */
-
 
 }

@@ -23,11 +23,10 @@ import java.util.List;
 // Node object
 public class Node {
     private List<Source> sources;        // ptr. to WQ source list
-    private double  [] c;                // current species concentrations
-    private double  [] c0;               // initial species concentrations
-    private int     tank;                // tank index
-    private boolean    rpt;                 // reporting flag
-
+    private double[] c;                // current species concentrations
+    private double[] c0;               // initial species concentrations
+    private int tank;                // tank index
+    private boolean rpt;                 // reporting flag
 
     public Node(int species) {
         sources = new ArrayList<Source>();
@@ -72,6 +71,5 @@ public class Node {
     public void setRpt(boolean rpt) {
         this.rpt = rpt;
     }
-
 
 }

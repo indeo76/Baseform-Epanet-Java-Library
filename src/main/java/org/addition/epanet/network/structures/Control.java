@@ -17,58 +17,59 @@
 
 package org.addition.epanet.network.structures;
 
-import org.addition.epanet.network.structures.Link.*;
 import org.addition.epanet.network.io.Keywords;
+import org.addition.epanet.network.structures.Link.StatType;
 
 /**
  * Control statement
  */
-public class Control
-{
+public class Control {
     /**
      * Control condition type
      */
-    static public enum ControlType{
-        HILEVEL     (1,Keywords.w_ABOVE),       // act when grade below set level
-        LOWLEVEL    (0, Keywords.w_BELOW),       // act when grade above set level
-        TIMEOFDAY   (3,Keywords.w_CLOCKTIME),        // act when set time reached
-        TIMER       (2,Keywords.w_TIME);   // act when time of day occurs
+    static public enum ControlType {
+        HILEVEL(1, Keywords.w_ABOVE),       // act when grade below set level
+        LOWLEVEL(0, Keywords.w_BELOW),       // act when grade above set level
+        TIMEOFDAY(3, Keywords.w_CLOCKTIME),        // act when set time reached
+        TIMER(2, Keywords.w_TIME);   // act when time of day occurs
 
-        public final int    id;
+        public final int id;
         public final String parseStr;
 
-        private ControlType(int val, String str){id = val;parseStr=str;}
+        private ControlType(int val, String str) {
+            id = val;
+            parseStr = str;
+        }
     }
 
     /**
      * Control grade.
      */
-    private double      Grade;
+    private double Grade;
     /**
      * Assigned link reference.
      */
-    private Link        Link;
+    private Link Link;
     /**
      * Assigned node reference.
      */
-    private Node        Node;
+    private Node Node;
     /**
      * New link setting.
      */
-    private double      Setting;
+    private double Setting;
     /**
      * New link status.
      */
-    private StatType    Status;
+    private StatType Status;
     /**
      * Control time (in seconds).
      */
-    private long        Time;
+    private long Time;
     /**
      * Control type
      */
     private ControlType Type;
-
 
     public double getGrade() {
         return Grade;

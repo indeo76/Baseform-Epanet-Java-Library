@@ -17,16 +17,16 @@
 
 package org.addition.epanet.hydraulic.models;
 
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.hydraulic.structures.SimulationLink;
 import org.addition.epanet.network.PropertiesMap;
+import org.addition.epanet.util.ENException;
 
 /**
  * Hazen-Williams model calculator.
  */
-public class HWModelCalculator implements PipeHeadModel{
+public class HWModelCalculator implements PipeHeadModel {
 
-    public LinkCoeffs compute(PropertiesMap pMap,SimulationLink sL) throws ENException {
+    public LinkCoeffs compute(PropertiesMap pMap, SimulationLink sL) throws ENException {
         // Evaluate headloss coefficients
         double q = Math.abs(sL.getSimFlow());      // Absolute flow
         double ml = sL.getLink().getKm();          // Minor loss coeff.
@@ -35,8 +35,8 @@ public class HWModelCalculator implements PipeHeadModel{
         double r1 = 1.0 * r + ml;
 
         // Use large P coefficient for small flow resistance product
-        if (r1 * q < pMap.getRQtol()){
-            return new LinkCoeffs(1d / pMap.getRQtol(),sL.getSimFlow() / pMap.getHexp());
+        if (r1 * q < pMap.getRQtol()) {
+            return new LinkCoeffs(1d / pMap.getRQtol(), sL.getSimFlow() / pMap.getHexp());
         }
 
         double hpipe = r * Math.pow(q, pMap.getHexp());     // Friction head loss
@@ -49,6 +49,6 @@ public class HWModelCalculator implements PipeHeadModel{
             hml = 0d;
 
         p = sL.getSimFlow() / p;  // 1 / (dh/dQ)
-        return new LinkCoeffs(Math.abs(p),p * (hpipe + hml));
+        return new LinkCoeffs(Math.abs(p), p * (hpipe + hml));
     }
 }

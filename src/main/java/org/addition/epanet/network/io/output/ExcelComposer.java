@@ -17,9 +17,7 @@
 
 package org.addition.epanet.network.io.output;
 
-
 import org.addition.epanet.Constants;
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.network.FieldsMap.Type;
 import org.addition.epanet.network.Network;
@@ -29,15 +27,10 @@ import org.addition.epanet.network.structures.*;
 import org.addition.epanet.network.structures.Control.ControlType;
 import org.addition.epanet.network.structures.Link.LinkType;
 import org.addition.epanet.network.structures.Link.StatType;
+import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.Utilities;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,7 +44,6 @@ import java.util.List;
  * EXCEL XLSX composer class.
  */
 public class ExcelComposer extends OutputComposer {
-
 
     class ExcelWriter {
         Row activeRow = null;
@@ -69,7 +61,7 @@ public class ExcelComposer extends OutputComposer {
             topBold.setFont(newFont);
 
             timeStyle = workbook.createCellStyle();
-            timeStyle.setDataFormat((short)0x2e);
+            timeStyle.setDataFormat((short) 0x2e);
         }
 
         public void newLine() throws IOException {
@@ -77,14 +69,12 @@ public class ExcelComposer extends OutputComposer {
             cellCount = 0;
         }
 
-
         private void newSpreadsheet(String name) {
             rowCount = 0;
             cellCount = 0;
             activeSheet = workbook.createSheet(name);
             activeRow = null;
         }
-
 
         public void write(Object... args) {
             if (activeRow == null) {
@@ -101,18 +91,17 @@ public class ExcelComposer extends OutputComposer {
 
                 Cell c = activeRow.createCell(cellCount++);
 
-                if(obj==null)
+                if (obj == null)
                     c.setCellType(Cell.CELL_TYPE_BLANK);
-                else if(obj instanceof Date){
-                    c.setCellValue( ((double)((Date)obj).getTime()) /86400.0d  );
+                else if (obj instanceof Date) {
+                    c.setCellValue(((double) ((Date) obj).getTime()) / 86400.0d);
                     c.setCellStyle(timeStyle);
-                }
-                else if (obj instanceof Boolean)
+                } else if (obj instanceof Boolean)
                     c.setCellValue(((Boolean) obj));
                 else if (obj instanceof Number)
                     c.setCellValue(((Number) obj).doubleValue());
                 else
-                    c.setCellValue( obj.toString());
+                    c.setCellValue(obj.toString());
             }
         }
 
@@ -132,7 +121,7 @@ public class ExcelComposer extends OutputComposer {
             for (String obj : sections) {
                 Cell c = activeRow.createCell(cellCount++);
                 c.setCellStyle(topBold);
-                c.setCellValue( obj.toString());
+                c.setCellValue(obj.toString());
             }
 
             newLine();
@@ -156,7 +145,7 @@ public class ExcelComposer extends OutputComposer {
     private static final String SOURCE_SUBTITLE = "Node\tType\tQuality\tPattern";
     private static final String STATUS_SUBTITLE = "ID\tStatus/Setting";
     private static final String TANK_SUBTITLE = "ID\tElevation\tInitLevel\tMinLevel\tMaxLevel\tDiameter\tMinVol\tVolCurve\tComment";
-    private static final String TITLE_SUBTITLE  = "Text";
+    private static final String TITLE_SUBTITLE = "Text";
     private static final String VALVES_SUBTITLE = "ID\tNode1\tNode2\tDiameter\tType\tSetting\tMinorLoss\tComment";
 
     //private static final String TITLE_TAG       = "[TITLE]";
@@ -185,7 +174,6 @@ public class ExcelComposer extends OutputComposer {
     //private static final String VERTICES_TAG    = "[VERTICES]";
     //private static final String LABELS_TAG      = "[LABELS]";
 
-
     private static final String VERTICES_SUBTITLE = "Link\tX-Coord\tY-Coord";
 
     Workbook workbook;
@@ -199,7 +187,7 @@ public class ExcelComposer extends OutputComposer {
         Control[] controls = net.getControls();
         FieldsMap fmap = net.getFieldsMap();
 
-        writer.write(Network.SectType.CONTROLS.parseStr,NEWLINE);
+        writer.write(Network.SectType.CONTROLS.parseStr, NEWLINE);
         writer.writeHeader("Code");
 
         for (Control control : controls) {
@@ -223,7 +211,6 @@ public class ExcelComposer extends OutputComposer {
                 }
                 writer.write("LINK", control.getLink().getId(), kc);
             }
-
 
             switch (control.getType()) {
                 // Print level control
@@ -253,7 +240,7 @@ public class ExcelComposer extends OutputComposer {
     }
 
     private void composeCoordinates(Network net) throws IOException {
-        writer.write(Network.SectType.COORDS.parseStr,NEWLINE);
+        writer.write(Network.SectType.COORDS.parseStr, NEWLINE);
         writer.writeHeader(COORDINATES_SUBTITLE);
 
         for (Node node : net.getNodes()) {
@@ -264,12 +251,11 @@ public class ExcelComposer extends OutputComposer {
         writer.newLine();
     }
 
-
     private void composeCurves(Network net) throws IOException, ENException {
 
         List<Curve> curves = new ArrayList<Curve>(net.getCurves());
 
-        writer.write(Network.SectType.CURVES.parseStr,NEWLINE);
+        writer.write(Network.SectType.CURVES.parseStr, NEWLINE);
         writer.writeHeader(CURVE_SUBTITLE);
 
         for (Curve c : curves) {
@@ -285,7 +271,7 @@ public class ExcelComposer extends OutputComposer {
     private void composeDemands(Network net) throws IOException, ENException {
         FieldsMap fMap = net.getFieldsMap();
 
-        writer.write(Network.SectType.DEMANDS.parseStr,NEWLINE);
+        writer.write(Network.SectType.DEMANDS.parseStr, NEWLINE);
         writer.writeHeader(DEMANDS_SUBTITLE);
 
         double ucf = fMap.getUnits(FieldsMap.Type.DEMAND);
@@ -293,7 +279,7 @@ public class ExcelComposer extends OutputComposer {
         for (Node node : net.getJunctions()) {
 
             if (node.getDemand().size() > 1)
-                for(int i = 1;i<node.getDemand().size();i++){
+                for (int i = 1; i < node.getDemand().size(); i++) {
                     Demand demand = node.getDemand().get(i);
                     writer.write(node.getId(), ucf * demand.getBase());
                     if (demand.getPattern() != null && !demand.getPattern().getId().equals(""))
@@ -306,7 +292,7 @@ public class ExcelComposer extends OutputComposer {
     }
 
     private void composeEmitters(Network net) throws IOException, ENException {
-        writer.write(Network.SectType.EMITTERS.parseStr,NEWLINE);
+        writer.write(Network.SectType.EMITTERS.parseStr, NEWLINE);
         writer.writeHeader(EMITTERS_SUBTITLE);
 
         double uflow = net.getFieldsMap().getUnits(Type.FLOW);
@@ -326,7 +312,7 @@ public class ExcelComposer extends OutputComposer {
     private void composeEnergy(Network net) throws IOException, ENException {
         PropertiesMap pMap = net.getPropertiesMap();
 
-        writer.write(Network.SectType.ENERGY.parseStr,NEWLINE);
+        writer.write(Network.SectType.ENERGY.parseStr, NEWLINE);
 
         if (pMap.getEcost() != 0.0)
             writer.write("GLOBAL", "PRICE", pMap.getEcost(), NEWLINE);
@@ -353,7 +339,7 @@ public class ExcelComposer extends OutputComposer {
         if (net.getTitleText().size() == 0)
             return;
 
-        writer.write(Network.SectType.TITLE.parseStr,NEWLINE);
+        writer.write(Network.SectType.TITLE.parseStr, NEWLINE);
         writer.writeHeader(TITLE_SUBTITLE);
 
         for (String str : net.getTitleText()) {
@@ -368,13 +354,13 @@ public class ExcelComposer extends OutputComposer {
         FieldsMap fMap = net.getFieldsMap();
         PropertiesMap pMap = net.getPropertiesMap();
 
-        writer.write(Network.SectType.JUNCTIONS.parseStr,NEWLINE);
+        writer.write(Network.SectType.JUNCTIONS.parseStr, NEWLINE);
         writer.writeHeader(JUNCS_SUBTITLE);
 
         for (Node node : net.getJunctions()) {
             writer.write(node.getId(), fMap.revertUnit(Type.ELEV, node.getElevation()));
 
-            if( node.getDemand().size()>0){
+            if (node.getDemand().size() > 0) {
                 Demand d = node.getDemand().get(0);
                 writer.write(fMap.revertUnit(FieldsMap.Type.DEMAND, d.getBase()));
 
@@ -388,23 +374,21 @@ public class ExcelComposer extends OutputComposer {
             writer.newLine();
         }
 
-
         writer.newLine();
     }
 
     private void composeLabels(Network net) throws IOException {
-        writer.write(Network.SectType.LABELS.parseStr,NEWLINE);
+        writer.write(Network.SectType.LABELS.parseStr, NEWLINE);
         writer.writeHeader(LABELS_SUBTITLE);
 
         for (Label label : net.getLabels()) {
-            writer.write(label.getPosition().getX(), label.getPosition().getY(),label.getText(), NEWLINE);
+            writer.write(label.getPosition().getX(), label.getPosition().getY(), label.getText(), NEWLINE);
         }
         writer.newLine();
     }
 
-    private void composeMixing(Network net) throws IOException
-    {
-        writer.write(Network.SectType.MIXING.parseStr,NEWLINE);
+    private void composeMixing(Network net) throws IOException {
+        writer.write(Network.SectType.MIXING.parseStr, NEWLINE);
         writer.writeHeader(MIXING_SUBTITLE);
 
         for (Tank tank : net.getTanks()) {
@@ -417,7 +401,7 @@ public class ExcelComposer extends OutputComposer {
     }
 
     private void composeOptions(Network net) throws IOException, ENException {
-        writer.write(Network.SectType.OPTIONS.parseStr,NEWLINE);
+        writer.write(Network.SectType.OPTIONS.parseStr, NEWLINE);
 
         PropertiesMap pMap = net.getPropertiesMap();
         FieldsMap fMap = net.getFieldsMap();
@@ -482,7 +466,7 @@ public class ExcelComposer extends OutputComposer {
 
         List<Pattern> pats = new ArrayList<Pattern>(net.getPatterns());
 
-        writer.write(Network.SectType.PATTERNS.parseStr,NEWLINE);
+        writer.write(Network.SectType.PATTERNS.parseStr, NEWLINE);
         writer.writeHeader(PATTERNS_SUBTITLE);
 
         for (int i = 1; i < pats.size(); i++) {
@@ -511,7 +495,7 @@ public class ExcelComposer extends OutputComposer {
             if (link.getType().id <= LinkType.PIPE.id)
                 pipes.add(link);
 
-        writer.write(Network.SectType.PIPES.parseStr,NEWLINE);
+        writer.write(Network.SectType.PIPES.parseStr, NEWLINE);
         writer.writeHeader(PIPES_SUBTITLE);
 
         for (Link link : pipes) {
@@ -550,13 +534,12 @@ public class ExcelComposer extends OutputComposer {
         FieldsMap fMap = net.getFieldsMap();
         List<Pump> pumps = new ArrayList<Pump>(net.getPumps());
 
-        writer.write(Network.SectType.PUMPS.parseStr,NEWLINE);
+        writer.write(Network.SectType.PUMPS.parseStr, NEWLINE);
         writer.writeHeader(PUMPS_SUBTITLE);
 
         for (Pump pump : pumps) {
             writer.write(pump.getId(),
                     pump.getFirst().getId(), pump.getSecond().getId());
-
 
             // Pump has constant power
             if (pump.getPtype() == Pump.Type.CONST_HP)
@@ -594,7 +577,7 @@ public class ExcelComposer extends OutputComposer {
         Collection<Node> nodes = net.getNodes();
         FieldsMap fmap = net.getFieldsMap();
 
-        writer.write(Network.SectType.QUALITY.parseStr,NEWLINE);
+        writer.write(Network.SectType.QUALITY.parseStr, NEWLINE);
         writer.writeHeader(QUALITY_SUBTITLE);
 
         for (Node node : nodes) {
@@ -614,7 +597,6 @@ public class ExcelComposer extends OutputComposer {
         writer = new ExcelWriter();
 
         try {
-
 
             writer.newSpreadsheet("Junctions");
             composeJunctions(net);
@@ -651,7 +633,6 @@ public class ExcelComposer extends OutputComposer {
             composeMixing(net);
             composeReaction(net);
 
-
             writer.newSpreadsheet("Config");
             composeHeader(net);
             composeTimes(net);
@@ -665,19 +646,16 @@ public class ExcelComposer extends OutputComposer {
             composeCoordinates(net);
             composeVertices(net);
 
-
-
             workbook.write(new FileOutputStream(f));
         } catch (IOException e) {
 
         }
     }
 
-
     private void composeReaction(Network net) throws IOException, ENException {
         PropertiesMap pMap = net.getPropertiesMap();
 
-        writer.write(Network.SectType.REACTIONS.parseStr,NEWLINE);
+        writer.write(Network.SectType.REACTIONS.parseStr, NEWLINE);
         writer.writeHeader(REACTIONS_SUBTITLE);
 
         writer.write("ORDER", "BULK", pMap.getBulkOrder(), NEWLINE);
@@ -690,7 +668,6 @@ public class ExcelComposer extends OutputComposer {
 
         //if (pMap.getRfactor() != Constants.MISSING && pMap.getRfactor() != 0.0)
         writer.write("ROUGHNESS", "CORRELATION", pMap.getRfactor(), NEWLINE);
-
 
         for (Link link : net.getLinks()) {
             if (link.getType().id > LinkType.PIPE.id)
@@ -711,7 +688,7 @@ public class ExcelComposer extends OutputComposer {
     }
 
     private void composeReport(Network net) throws IOException, ENException {
-        writer.write(Network.SectType.REPORT.parseStr,NEWLINE);
+        writer.write(Network.SectType.REPORT.parseStr, NEWLINE);
 
         PropertiesMap pMap = net.getPropertiesMap();
         FieldsMap fMap = net.getFieldsMap();
@@ -785,13 +762,13 @@ public class ExcelComposer extends OutputComposer {
             if (tank.getArea() == 0)
                 reservoirs.add(tank);
 
-        writer.write(Network.SectType.RESERVOIRS.parseStr,NEWLINE);
+        writer.write(Network.SectType.RESERVOIRS.parseStr, NEWLINE);
         writer.writeHeader(RESERVOIRS_SUBTITLE);
 
         for (Tank r : reservoirs) {
             writer.write(r.getId(), fMap.revertUnit(Type.ELEV, r.getElevation()));
 
-            if (r.getPattern()!=null)
+            if (r.getPattern() != null)
                 writer.write(r.getPattern().getId());
 
             if (r.getComment().length() != 0)
@@ -803,9 +780,9 @@ public class ExcelComposer extends OutputComposer {
     }
 
     private void composeRules(Network net) throws IOException, ENException {
-        writer.write(Network.SectType.RULES.parseStr,NEWLINE);
+        writer.write(Network.SectType.RULES.parseStr, NEWLINE);
         for (Rule r : net.getRules()) {
-            writer.write("RULE ",r.getLabel(), NEWLINE);
+            writer.write("RULE ", r.getLabel(), NEWLINE);
             for (String s : r.getCode().split("\n"))
                 writer.write(s, NEWLINE);
             writer.newLine();
@@ -813,11 +790,10 @@ public class ExcelComposer extends OutputComposer {
         writer.newLine();
     }
 
-    private void composeSource(Network net) throws IOException
-    {
+    private void composeSource(Network net) throws IOException {
         Collection<Node> nodes = net.getNodes();
 
-        writer.write(Network.SectType.SOURCES.parseStr,NEWLINE);
+        writer.write(Network.SectType.SOURCES.parseStr, NEWLINE);
         writer.writeHeader(SOURCE_SUBTITLE);
 
         for (Node node : nodes) {
@@ -836,7 +812,7 @@ public class ExcelComposer extends OutputComposer {
 
     private void composeStatus(Network net) throws IOException, ENException {
 
-        writer.write(Network.SectType.STATUS.parseStr,NEWLINE);
+        writer.write(Network.SectType.STATUS.parseStr, NEWLINE);
         writer.writeHeader(STATUS_SUBTITLE);
 
         for (Link link : net.getLinks()) {
@@ -874,12 +850,12 @@ public class ExcelComposer extends OutputComposer {
             if (tank.getArea() != 0)
                 tanks.add(tank);
 
-        writer.write(Network.SectType.TANKS.parseStr,NEWLINE);
+        writer.write(Network.SectType.TANKS.parseStr, NEWLINE);
         writer.writeHeader(TANK_SUBTITLE);
 
         for (Tank tank : tanks) {
             double Vmin = tank.getVmin();
-            if(Math.abs(Vmin/tank.getArea() - (tank.getHmin()-tank.getElevation()))<0.1)
+            if (Math.abs(Vmin / tank.getArea() - (tank.getHmin() - tank.getElevation())) < 0.1)
                 Vmin = 0;
 
             writer.write(tank.getId(),
@@ -888,7 +864,7 @@ public class ExcelComposer extends OutputComposer {
                     fMap.revertUnit(Type.ELEV, tank.getHmin() - tank.getElevation()),
                     fMap.revertUnit(Type.ELEV, tank.getHmax() - tank.getElevation()),
                     fMap.revertUnit(Type.ELEV, 2 * Math.sqrt(tank.getArea() / Constants.PI)),
-                    fMap.revertUnit(Type.VOLUME,Vmin));
+                    fMap.revertUnit(Type.VOLUME, Vmin));
 
             if (tank.getVcurve() != null)
                 writer.write(tank.getVcurve().getId());
@@ -901,9 +877,8 @@ public class ExcelComposer extends OutputComposer {
         writer.newLine();
     }
 
-
     private void composeTimes(Network net) throws IOException, ENException {
-        writer.write(Network.SectType.TIMES.parseStr,NEWLINE);
+        writer.write(Network.SectType.TIMES.parseStr, NEWLINE);
         PropertiesMap pMap = net.getPropertiesMap();
         //writer.write("DURATION", Utilities.getClockTime(pMap.getDuration()), NEWLINE);
         //writer.write("HYDRAULIC", "TIMESTEP", Utilities.getClockTime(pMap.getHstep()), NEWLINE);
@@ -931,7 +906,7 @@ public class ExcelComposer extends OutputComposer {
         FieldsMap fMap = net.getFieldsMap();
         List<Valve> valves = new ArrayList<Valve>(net.getValves());
 
-        writer.write(Network.SectType.VALVES.parseStr,NEWLINE);
+        writer.write(Network.SectType.VALVES.parseStr, NEWLINE);
         writer.writeHeader(VALVES_SUBTITLE);
 
         for (Valve valve : valves) {
@@ -972,7 +947,7 @@ public class ExcelComposer extends OutputComposer {
     }
 
     private void composeVertices(Network net) throws IOException {
-        writer.write(Network.SectType.VERTICES.parseStr,NEWLINE);
+        writer.write(Network.SectType.VERTICES.parseStr, NEWLINE);
         writer.writeHeader(VERTICES_SUBTITLE);
 
         for (Link link : net.getLinks()) {
@@ -983,6 +958,5 @@ public class ExcelComposer extends OutputComposer {
 
         writer.newLine();
     }
-
 
 }

@@ -17,7 +17,6 @@
 
 package org.addition.epanet.network;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.network.io.Keywords;
 import org.addition.epanet.util.ENException;
@@ -212,7 +211,6 @@ public class PropertiesMap {
         }
     }
 
-
     /**
      * Unit system.
      */
@@ -296,8 +294,6 @@ public class PropertiesMap {
     };
 
     private Map<String, Object> values;
-
-
 
     public PropertiesMap() {
         values = new HashMap<String, Object>();
@@ -623,9 +619,7 @@ public class PropertiesMap {
         put(DMULT, new Double(1.0d));     // Demand multiplier
         put(EMAX, new Double(0.0d));     // Zero peak energy usage
 
-
     }
-
 
     /**
      * Insert an object into the map.
@@ -868,6 +862,5 @@ public class PropertiesMap {
     public void setWallOrder(Double wallOrder) throws ENException {
         put(WALLORDER, wallOrder);
     }
-
 
 }

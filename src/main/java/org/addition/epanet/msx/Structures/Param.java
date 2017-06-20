@@ -20,8 +20,8 @@ package org.addition.epanet.msx.Structures;
 // Reaction rate parameter object
 public class Param {
 
-    private String  id;     // name
-    private double  value;  // value
+    private String id;     // name
+    private double value;  // value
 
     public Param() {
     }

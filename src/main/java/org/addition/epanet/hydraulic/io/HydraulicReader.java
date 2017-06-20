@@ -17,11 +17,11 @@
 
 package org.addition.epanet.hydraulic.io;
 
-
-import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.util.ENException;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.DataInput;
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -30,7 +30,6 @@ import java.util.Iterator;
 public class HydraulicReader implements Iterable<AwareStep> {
 
     private AwareStep.HeaderInfo headerInfo;
-
 
     /**
      * Current hydraulic step snapshot.
@@ -42,13 +41,10 @@ public class HydraulicReader implements Iterable<AwareStep> {
      */
     private DataInput inputStream;
 
-
     public HydraulicReader(DataInput inputStream) throws IOException, ENException {
         this.inputStream = inputStream;
         headerInfo = AwareStep.readHeader(inputStream);
     }
-
-
 
     /**
      * Read step data from file with a given time instant — it assumes the requested timestep is the same or after the current one.
@@ -61,7 +57,7 @@ public class HydraulicReader implements Iterable<AwareStep> {
         if (curStep != null) {
             if (curStep.getTime() == time) return curStep;
         }
-        while (curStep==null || curStep.getTime() < time)
+        while (curStep == null || curStep.getTime() < time)
             curStep = new AwareStep(inputStream, headerInfo);
         return curStep.getTime() >= time ? curStep : null;
 
@@ -77,7 +73,6 @@ public class HydraulicReader implements Iterable<AwareStep> {
             ((Closeable) inputStream).close();
         }
     }
-
 
     /**
      * Get the epanet hydraulic file version.
@@ -107,7 +102,6 @@ public class HydraulicReader implements Iterable<AwareStep> {
     }
 
     /**
-     *
      * @return
      */
     public long getReportStart() {
@@ -115,7 +109,6 @@ public class HydraulicReader implements Iterable<AwareStep> {
     }
 
     /**
-     *
      * @return
      */
     public long getReportStep() {
@@ -123,7 +116,6 @@ public class HydraulicReader implements Iterable<AwareStep> {
     }
 
     /**
-     *
      * @return
      */
     public long getDuration() {
@@ -180,6 +172,5 @@ public class HydraulicReader implements Iterable<AwareStep> {
         }
 
     }
-
 
 }

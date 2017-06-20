@@ -60,7 +60,6 @@ public class SimulationPump extends SimulationLink {
 
     private double energy[] = {0, 0, 0, 0, 0, 0};
 
-
     public Pump.Type getPtype() {
         return ((Pump) link).getPtype();
     }
@@ -76,7 +75,6 @@ public class SimulationPump extends SimulationLink {
     public double getHmax() {
         return ((Pump) link).getHmax();
     }
-
 
     public Curve getHcurve() {
         return ((Pump) link).getHcurve();
@@ -98,9 +96,7 @@ public class SimulationPump extends SimulationLink {
         return ((Pump) link).getEcost();
     }
 
-
     // Simulation getters and setters
-
 
     public double getEnergy(int id) {
         return energy[id];//((Pump)node).getEnergy(id);
@@ -109,7 +105,6 @@ public class SimulationPump extends SimulationLink {
     public void setEnergy(int id, double value) {
         energy[id] = value;
     }
-
 
     private void setH0(double h0) {
         this.h0 = h0;
@@ -162,7 +157,6 @@ public class SimulationPump extends SimulationLink {
 
         return ret;
     }
-
 
     // Accumulates pump energy usage.
     private double updateEnergy(PropertiesMap pMap, FieldsMap fMap,
@@ -252,7 +246,6 @@ public class SimulationPump extends SimulationLink {
                                     long htime, long hstep) throws ENException {
         double dt, psum = 0.0;
 
-
         if (pMap.getDuration() == 0)
             dt = 1.0;
         else if (htime < pMap.getDuration())
@@ -264,7 +257,6 @@ public class SimulationPump extends SimulationLink {
             return 0.0;
 
         long n = (htime + pMap.getPstart()) / pMap.getPstep();
-
 
         double c0 = pMap.getEcost();
         double f0 = 1.0;
@@ -280,6 +272,5 @@ public class SimulationPump extends SimulationLink {
 
         return psum;
     }
-
 
 }

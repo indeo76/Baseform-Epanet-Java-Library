@@ -17,7 +17,6 @@
 
 package org.addition.epanet.hydraulic.models;
 
-
 import org.addition.epanet.hydraulic.structures.SimulationLink;
 import org.addition.epanet.network.PropertiesMap;
 import org.addition.epanet.network.structures.Link;
@@ -188,7 +187,6 @@ public class DwModelCalculator implements PipeHeadModel {
                 fa, fb, r2;
         double s, w;
 
-
         if (one)
             resistance = 1d;
         else {
@@ -236,6 +234,5 @@ public class DwModelCalculator implements PipeHeadModel {
     }
 
 //    static native LinkCoeffs innerDwCalcNative(double viscos, double rQtol, double hexp, double simFlow, double q, double km, double flowResistance, double roughness, double diameter, boolean one);
-
 
 }

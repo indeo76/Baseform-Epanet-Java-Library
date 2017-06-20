@@ -18,14 +18,13 @@
 package org.addition.epanet.ui;
 
 import org.addition.epanet.network.Network;
-import org.addition.epanet.network.structures.*;
 import org.addition.epanet.network.structures.Label;
+import org.addition.epanet.network.structures.*;
 import org.addition.epanet.network.structures.Point;
-
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,23 +45,24 @@ public class NetworkImage {
     private static final Color NODE_FILL_COLOR = new Color(0xcc / 256f, 0xcc / 256f, 0xcc / 256f, .4f);
     private static final int NODE_DIAM = 2;
 
-    static private Color LABEL_COLOR = new Color(0,0,0);
+    static private Color LABEL_COLOR = new Color(0, 0, 0);
 
     /**
      * Get the nearest node to the mouse cursor position.
-     * @param w Canvas width.
-     * @param h Canvas height.
-     * @param x Mouse x position.
-     * @param y Mouse y position.
+     *
+     * @param w   Canvas width.
+     * @param h   Canvas height.
+     * @param x   Mouse x position.
+     * @param y   Mouse y position.
      * @param net Epanet network.
      * @return Reference to the nearest node.
      */
-    public static Node peekNearest(int w, int h,int x,int y, Network net){
-        if(net==null)
+    public static Node peekNearest(int w, int h, int x, int y, Network net) {
+        if (net == null)
             return null;
 
         Rectangle2D.Double bounds = null;
-        for(Node node : net.getNodes()){
+        for (Node node : net.getNodes()) {
             if (node.getPosition() != null) {
                 if (bounds == null)
                     bounds = new Rectangle2D.Double((int) node.getPosition().getX(), (int) -node.getPosition().getY(), 0, 0);
@@ -70,7 +70,7 @@ public class NetworkImage {
                     bounds.add(new java.awt.Point((int) node.getPosition().getX(), (int) -node.getPosition().getY()));
             }
         }
-        for(Link link : net.getLinks()){
+        for (Link link : net.getLinks()) {
             //java.util.List<org.addition.epanetold.Types.Point> vertices = link.getVertices();
             for (Point position : link.getVertices()) {
                 if (position != null) {
@@ -96,12 +96,12 @@ public class NetworkImage {
 
         Node nearest = null;
         double distance = 0;
-        for(Node n : net.getNodes()){
+        for (Node n : net.getNodes()) {
             Point point = new Point(
                     (int) ((n.getPosition().getX() - dx) * factor),
                     (int) ((-n.getPosition().getY() - dy) * factor));
-            double dist = Math.sqrt( Math.pow(point.getX() - x,2) +  Math.pow(point.getY() - y,2));
-            if(nearest == null || dist< distance){
+            double dist = Math.sqrt(Math.pow(point.getX() - x, 2) + Math.pow(point.getY() - y, 2));
+            if (nearest == null || dist < distance) {
 
                 nearest = n;
                 distance = dist;
@@ -113,21 +113,22 @@ public class NetworkImage {
 
     /**
      * Render the network in the canvas.
-     * @param g Reference to the canvas graphics.
-     * @param w Canvas width.
-     * @param h Canvas height.
-     * @param net Epanet network.
+     *
+     * @param g         Reference to the canvas graphics.
+     * @param w         Canvas width.
+     * @param h         Canvas height.
+     * @param net       Epanet network.
      * @param drawPipes Draw pipes flag.
      * @param drawTanks Draw tanks flag.
      * @param drawNodes Draw nodes flag.
-     * @param selNode Reference to the selected node.
+     * @param selNode   Reference to the selected node.
      */
     public static void drawNetwork(Graphics g, int w, int h, Network net, boolean drawPipes, boolean drawTanks, boolean drawNodes, Node selNode) {
         //int maxNodes = net.getMaxNodes();
         //int maxLinks = net.getMaxLinks();
 
         Rectangle2D.Double bounds = null;
-        for(Node node : net.getNodes()){
+        for (Node node : net.getNodes()) {
             if (node.getPosition() != null) {
                 if (bounds == null)
                     bounds = new Rectangle2D.Double((int) node.getPosition().getX(), (int) -node.getPosition().getY(), 0, 0);
@@ -135,7 +136,7 @@ public class NetworkImage {
                     bounds.add(new java.awt.Point((int) node.getPosition().getX(), (int) -node.getPosition().getY()));
             }
         }
-        for(Link link : net.getLinks()){
+        for (Link link : net.getLinks()) {
             //java.util.List<org.addition.epanetold.Types.Point> vertices = link.getVertices();
             for (Point position : link.getVertices()) {
                 if (position != null) {
@@ -163,11 +164,10 @@ public class NetworkImage {
         dx += dwidth * .5d - w * 0.5 / factor;
         dy += dheight * .5d - h * 0.5 / factor;
 
-
         //tanks
         if (drawTanks) {
-            for(Tank tank : net.getTanks()){
-                if(tank.getArea()==0){
+            for (Tank tank : net.getTanks()) {
+                if (tank.getArea() == 0) {
                     // Reservoir
                     Point position = tank.getPosition();
                     if (position != null) {
@@ -175,12 +175,11 @@ public class NetworkImage {
                                 (int) ((position.getX() - dx) * factor),
                                 (int) ((-position.getY() - dy) * factor));
                         g.setColor(RESERVOIRS_FILL_COLOR);
-                        g.fillRect((int)(point.getX() - RESERVOIR_DIAM / 2),(int)(point.getY()-RESERVOIR_DIAM/2), RESERVOIR_DIAM, RESERVOIR_DIAM);
+                        g.fillRect((int) (point.getX() - RESERVOIR_DIAM / 2), (int) (point.getY() - RESERVOIR_DIAM / 2), RESERVOIR_DIAM, RESERVOIR_DIAM);
                         g.setColor(RESERVOIRS_STROKE_COLOR);
-                        g.drawRect((int)(point.getX() - RESERVOIR_DIAM / 2),(int)(point.getY()-RESERVOIR_DIAM/2), RESERVOIR_DIAM, RESERVOIR_DIAM);
+                        g.drawRect((int) (point.getX() - RESERVOIR_DIAM / 2), (int) (point.getY() - RESERVOIR_DIAM / 2), RESERVOIR_DIAM, RESERVOIR_DIAM);
                     }
-                }
-                else {
+                } else {
                     // Tank
                     Point position = tank.getPosition();
                     if (position != null) {
@@ -188,9 +187,9 @@ public class NetworkImage {
                                 (int) ((position.getX() - dx) * factor),
                                 (int) ((-position.getY() - dy) * factor));
                         g.setColor(TANKS_FILL_COLOR);
-                        g.fillRect((int)(point.getX() - RESERVOIR_DIAM / 2),(int)(point.getY()-RESERVOIR_DIAM/2), TANK_DIAM, TANK_DIAM);
+                        g.fillRect((int) (point.getX() - RESERVOIR_DIAM / 2), (int) (point.getY() - RESERVOIR_DIAM / 2), TANK_DIAM, TANK_DIAM);
                         g.setColor(TANKS_STROKE_COLOR);
-                        g.drawRect((int)(point.getX() - RESERVOIR_DIAM / 2),(int)(point.getY()-RESERVOIR_DIAM/2), TANK_DIAM, TANK_DIAM);
+                        g.drawRect((int) (point.getX() - RESERVOIR_DIAM / 2), (int) (point.getY() - RESERVOIR_DIAM / 2), TANK_DIAM, TANK_DIAM);
                     }
                 }
             }
@@ -199,7 +198,7 @@ public class NetworkImage {
         if (drawPipes) {
             //links
             g.setColor(PIPES_FILL_COLOR);
-            for(Link link : net.getLinks()){
+            for (Link link : net.getLinks()) {
                 List<Point> vertices = new ArrayList<Point>(link.getVertices());
                 Node node1 = link.getFirst();
                 Node node2 = link.getSecond();
@@ -211,7 +210,7 @@ public class NetworkImage {
                             (int) ((position.getX() - dx) * factor),
                             (int) ((-position.getY() - dy) * factor));
                     if (prev != null) {
-                        g.drawLine((int)prev.getX(),(int) prev.getY(),(int) point.getX(),(int) point.getY());
+                        g.drawLine((int) prev.getX(), (int) prev.getY(), (int) point.getX(), (int) point.getY());
                     }
                     prev = point;
 
@@ -224,40 +223,39 @@ public class NetworkImage {
             Color nodefillColor = NODE_FILL_COLOR;
             Color nodeStrokeColor = NODE_STROKE_COLOR;
             g.setColor(nodefillColor);
-            for(Node node : net.getNodes()){
+            for (Node node : net.getNodes()) {
                 Point position = node.getPosition();
                 if (position != null) {
                     Point point = new Point(
                             (int) ((position.getX() - dx) * factor),
                             (int) ((-position.getY() - dy) * factor));
                     g.setColor(nodefillColor);
-                    g.fillOval((int)(point.getX() - NODE_DIAM / 2), (int)(point.getY() - NODE_DIAM / 2), NODE_DIAM, NODE_DIAM);
+                    g.fillOval((int) (point.getX() - NODE_DIAM / 2), (int) (point.getY() - NODE_DIAM / 2), NODE_DIAM, NODE_DIAM);
                     g.setColor(nodeStrokeColor);
-                    g.drawOval((int)(point.getX() - NODE_DIAM / 2), (int)(point.getY() - NODE_DIAM / 2), NODE_DIAM, NODE_DIAM);
+                    g.drawOval((int) (point.getX() - NODE_DIAM / 2), (int) (point.getY() - NODE_DIAM / 2), NODE_DIAM, NODE_DIAM);
                 }
             }
         }
 
-        for(Label l : net.getLabels()){
+        for (Label l : net.getLabels()) {
             Point point = new Point(
                     (int) ((l.getPosition().getX() - dx) * factor),
                     (int) ((-l.getPosition().getY() - dy) * factor));
             g.setColor(LABEL_COLOR);
-            g.drawString(l.getText(),(int)point.getX(),(int)point.getY());
+            g.drawString(l.getText(), (int) point.getX(), (int) point.getY());
         }
 
-        if(selNode!=null){
+        if (selNode != null) {
             Point point = new Point(
                     (int) ((selNode.getPosition().getX() - dx) * factor),
                     (int) ((-selNode.getPosition().getY() - dy) * factor));
 
             g.setColor(new Color(0xFF0000));
-            g.drawOval((int)(point.getX() - 20 / 2), (int)(point.getY() - 20 / 2), 20, 20);
+            g.drawOval((int) (point.getX() - 20 / 2), (int) (point.getY() - 20 / 2), 20, 20);
 
             g.setColor(LABEL_COLOR);
-            g.drawString(selNode.getId(),(int)point.getX()+20,(int)point.getY()+20);
+            g.drawString(selNode.getId(), (int) point.getX() + 20, (int) point.getY() + 20);
         }
-
 
     }
 

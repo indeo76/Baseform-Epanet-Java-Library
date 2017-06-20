@@ -18,7 +18,6 @@
 package org.addition.epanet.network.structures;
 
 import org.addition.epanet.Constants;
-import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.network.PropertiesMap;
 import org.addition.epanet.network.io.Keywords;
 import org.addition.epanet.util.ENException;
@@ -37,7 +36,6 @@ public class Link implements Comparable<Link> {
      * @param formflag
      * @param hexp
      * @throws org.addition.epanet.util.ENException
-     *
      */
     public void initResistance(PropertiesMap.FormType formflag, Double hexp) {
         double e, d, L;
@@ -190,7 +188,6 @@ public class Link implements Comparable<Link> {
          * Report string.
          */
         public final String reportStr;
-
 
         private StatType(int val, String str, String rep) {
             id = val;
@@ -382,7 +379,6 @@ public class Link implements Comparable<Link> {
         km = 0.02517 * realkm / Math.pow(diameter, 4);
         initResistance(net.getPropertiesMap().getFormflag(), net.getPropertiesMap().getHexp());
     }
-
 
     public void setFirst(Node n1) {
         first = n1;

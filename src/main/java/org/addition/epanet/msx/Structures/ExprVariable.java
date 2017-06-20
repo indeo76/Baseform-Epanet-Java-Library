@@ -22,5 +22,6 @@ package org.addition.epanet.msx.Structures;
  */
 public interface ExprVariable {
     public double getPipeVariableValue(int id);
+
     public double getTankVariableValue(int id);
 }

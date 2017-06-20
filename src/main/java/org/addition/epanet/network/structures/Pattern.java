@@ -32,19 +32,18 @@ public class Pattern {
     /**
      * Pattern name.
      */
-    private String  id;
+    private String id;
 
     public Pattern() {
         this.id = "";
         factors = new DblList();
     }
 
-    public void add(Double factor){
+    public void add(Double factor) {
         factors.add(factor);
     }
 
-
-    public List<Double> getFactorsList(){
+    public List<Double> getFactorsList() {
         return factors;
     }
 
@@ -52,11 +51,11 @@ public class Pattern {
         return id;
     }
 
-    public int getLength(){
+    public int getLength() {
         return factors.size();
     }
 
-    public void setId(String text){
+    public void setId(String text) {
         id = text;
     }
 }

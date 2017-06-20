@@ -17,7 +17,6 @@
 
 package org.addition.epanet.hydraulic.structures;
 
-
 import org.addition.epanet.Constants;
 import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.network.FieldsMap.Type;
@@ -48,14 +47,11 @@ public class SimulationTank extends SimulationNode {
         oldStat = StatType.TEMPCLOSED;
     }
 
-
     public Tank getNode() {
         return (Tank) node;
     }
 
-
     private double volume;
-
 
     public double getArea() {
         return ((Tank) node).getArea();
@@ -109,7 +105,6 @@ public class SimulationTank extends SimulationNode {
     //    return ((Tank)node).getV1max();
     //}
 
-
     /// Simulation getters & setters.
 
     public double getSimVolume() {
@@ -127,7 +122,6 @@ public class SimulationTank extends SimulationNode {
     public void setOldStat(StatType oldStat) {
         this.oldStat = oldStat;
     }
-
 
     /// Simulation methods
 

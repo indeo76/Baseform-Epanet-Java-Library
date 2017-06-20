@@ -73,7 +73,6 @@ public class SparseMatrix {
      */
     private final int[] Degree;
 
-
     public int getOrder(int id) {
         return Order[id + 1] - 1;
     }
@@ -105,9 +104,9 @@ public class SparseMatrix {
         for (int i = 0; i <= nodes.size(); i++)     // <= is necessary due to the array start index being 1
             adjList.add(new ArrayList<AdjItem>());
 
-        buildlists(adjList,nodes, links, true);     // Build node-link adjacency lists with parallel links removed.
+        buildlists(adjList, nodes, links, true);     // Build node-link adjacency lists with parallel links removed.
         xparalinks(adjList);           // Remove parallel links //,nodes.size()
-        countdegree(adjList,juncs);                 // Find degree of each junction
+        countdegree(adjList, juncs);                 // Find degree of each junction
 
         coeffsCount = links.size();
 
@@ -116,30 +115,30 @@ public class SparseMatrix {
         // list is updated with links representing non-zero coeffs.
         reordernodes(adjList, juncs);
 
-        storesparse(adjList,juncs);             // Sort row indexes in NZSUB to optimize linsolve()
+        storesparse(adjList, juncs);             // Sort row indexes in NZSUB to optimize linsolve()
         ordersparse(juncs);
-        buildlists(adjList,nodes, links, false); // Re-build adjacency lists without removing parallel links for use in future connectivity checking.
+        buildlists(adjList, nodes, links, false); // Re-build adjacency lists without removing parallel links for use in future connectivity checking.
     }
-
 
     /**
      * Builds linked list of links adjacent to each node.
-     * @param adjlist Nodes adjacency list.
-     * @param nodes Collecion of hydraulic simulation nodes.
-     * @param links Collection of hydraulic simulation links.
+     *
+     * @param adjlist  Nodes adjacency list.
+     * @param nodes    Collecion of hydraulic simulation nodes.
+     * @param links    Collection of hydraulic simulation links.
      * @param paraflag Remove parallel links.
      */
-    private void buildlists( List<List<AdjItem>> adjlist,List<SimulationNode> nodes, List<SimulationLink> links, boolean paraflag) {
+    private void buildlists(List<List<AdjItem>> adjlist, List<SimulationNode> nodes, List<SimulationLink> links, boolean paraflag) {
 
         boolean pmark = false;
 
-        for(SimulationLink link : links){
+        for (SimulationLink link : links) {
             int k = link.getIndex() + 1;
             int i = link.getFirst().getIndex() + 1;
             int j = link.getSecond().getIndex() + 1;
 
             if (paraflag)
-                pmark = paralink(adjlist,i, j, k);
+                pmark = paralink(adjlist, i, j, k);
 
             // Include link in start node i's list
             AdjItem alink = new AdjItem(!pmark ? j : 0, k);
@@ -153,15 +152,15 @@ public class SparseMatrix {
         }
     }
 
-
     /**
      * Checks for parallel links between nodes i and j.
+     *
      * @param adjlist Nodes adjacency list.
-     * @param i First node index.
-     * @param j Second node index.
-     * @param k Link index.
+     * @param i       First node index.
+     * @param j       Second node index.
+     * @param k       Link index.
      */
-    private boolean paralink(List<List<AdjItem>> adjlist,int i, int j, int k) {
+    private boolean paralink(List<List<AdjItem>> adjlist, int i, int j, int k) {
         for (AdjItem alink : adjlist.get(i)) {
             if (alink.getNode() == j) {
                 Ndx[k] = alink.getLink();
@@ -174,6 +173,7 @@ public class SparseMatrix {
 
     /**
      * Removes parallel links from nodal adjacency lists.
+     *
      * @param adjlist Nodes adjacency list.
      */
     private void xparalinks(List<List<AdjItem>> adjlist) {
@@ -189,10 +189,11 @@ public class SparseMatrix {
 
     /**
      * Counts number of nodes directly connected to each node.
+     *
      * @param adjlist Nodes adjacency list.
-     * @param Njuncs Number of junctions.
+     * @param Njuncs  Number of junctions.
      */
-    private void countdegree(List<List<AdjItem>> adjlist,int Njuncs) {
+    private void countdegree(List<List<AdjItem>> adjlist, int Njuncs) {
 
         Arrays.fill(Degree, 0);
 
@@ -204,9 +205,10 @@ public class SparseMatrix {
 
     /**
      * Re-orders nodes to minimize # of non-zeros that will appear in factorized solution matrix
+     *
      * @param adjlist Nodes adjacency list.
-     * @param Njuncs Number of junctions.
-      */
+     * @param Njuncs  Number of junctions.
+     */
     private void reordernodes(List<List<AdjItem>> adjlist, int Njuncs) {
         int k, knode, m, n;
 
@@ -220,7 +222,7 @@ public class SparseMatrix {
         for (k = 1; k <= n; k++) {
             m = mindegree(k, n);
             knode = Order[m];
-            growlist(adjlist,knode);
+            growlist(adjlist, knode);
             Order[m] = Order[k];
             Order[k] = knode;
             Degree[knode] = 0;
@@ -232,6 +234,7 @@ public class SparseMatrix {
 
     /**
      * Finds active node with fewest direct connections
+     *
      * @param k Junction id.
      * @param n Number of junctions
      * @return Node id.
@@ -253,27 +256,29 @@ public class SparseMatrix {
 
     /**
      * Creates new entries in knode's adjacency list for all unlinked pairs of active nodes that are adjacent to knode.
+     *
      * @param adjlist Nodes adjacency list.
-     * @param knode Node id.
-      */
-    private void growlist(List<List<AdjItem>> adjlist,int knode) {
+     * @param knode   Node id.
+     */
+    private void growlist(List<List<AdjItem>> adjlist, int knode) {
         for (int i = 0; i < adjlist.get(knode).size(); i++) {
             AdjItem alink = adjlist.get(knode).get(i);
             int node = alink.getNode();
             if (Degree[node] > 0) {
                 Degree[node]--;
-                newlink(adjlist,adjlist.get(knode), i);
+                newlink(adjlist, adjlist.get(knode), i);
             }
         }
     }
 
     /**
      * Links end of current adjacent link to end nodes of all links that follow it on adjacency list.
+     *
      * @param adjList Nodes adjacency list.
-     * @param list Adjacent links
-     * @param id Link id
+     * @param list    Adjacent links
+     * @param id      Link id
      */
-    private void newlink(List<List<AdjItem>> adjList,List<AdjItem> list, int id) {
+    private void newlink(List<List<AdjItem>> adjList, List<AdjItem> list, int id) {
         int inode, jnode;
 
         inode = list.get(id).getNode();
@@ -282,10 +287,10 @@ public class SparseMatrix {
             jnode = blink.getNode();
 
             if (Degree[jnode] > 0) {
-                if (!linked(adjList,inode, jnode)) {
+                if (!linked(adjList, inode, jnode)) {
                     coeffsCount++;
-                    addlink(adjList,inode, jnode, coeffsCount);
-                    addlink(adjList,jnode, inode, coeffsCount);
+                    addlink(adjList, inode, jnode, coeffsCount);
+                    addlink(adjList, jnode, inode, coeffsCount);
                     Degree[inode]++;
                     Degree[jnode]++;
                 }
@@ -295,12 +300,13 @@ public class SparseMatrix {
 
     /**
      * Checks if nodes i and j are already linked.
+     *
      * @param adjlist Nodes adjacency list.
-     * @param i Node i index.
-     * @param j Node j index.
+     * @param i       Node i index.
+     * @param j       Node j index.
      * @return True if linked.
      */
-    private boolean linked(List<List<AdjItem>> adjlist,int i, int j) {
+    private boolean linked(List<List<AdjItem>> adjlist, int i, int j) {
         for (AdjItem alink : adjlist.get(i))
             if (alink.getNode() == j)
                 return true;
@@ -309,12 +315,13 @@ public class SparseMatrix {
 
     /**
      * Augments node i's adjacency list with node j.
+     *
      * @param adjList
      * @param i
      * @param j
      * @param n
      */
-    private void addlink(List<List<AdjItem>> adjList,int i, int j, int n) {
+    private void addlink(List<List<AdjItem>> adjList, int i, int j, int n) {
         AdjItem alink = new AdjItem(j, n);
         adjList.get(i).add(0, alink);
     }
@@ -334,11 +341,11 @@ public class SparseMatrix {
 
     /**
      * Stores row indexes of non-zeros of each column of lower triangular portion of factorized matrix
+     *
      * @param adjlist Nodes adjacency list.
-     * @param n junctions count.
+     * @param n       junctions count.
      */
-    private void storesparse(List<List<AdjItem>> adjlist,int n)
-    {
+    private void storesparse(List<List<AdjItem>> adjlist, int n) {
         XLNZ = new int[n + 2];
         NZSUB = new int[coeffsCount + 2];
         LNZ = new int[coeffsCount + 2];
@@ -365,6 +372,7 @@ public class SparseMatrix {
 
     /**
      * Puts row indexes in ascending order in NZSUB.
+     *
      * @param n Number of junctions.
      */
     private void ordersparse(int n) {
@@ -390,10 +398,11 @@ public class SparseMatrix {
 
     /**
      * Determines sparse storage scheme for transpose of a matrix.
-     * @param n Number of junctions.
-     * @param il sparse storage scheme for original matrix.
-     * @param jl sparse storage scheme for original matrix.
-     * @param xl sparse storage scheme for original matrix.
+     *
+     * @param n   Number of junctions.
+     * @param il  sparse storage scheme for original matrix.
+     * @param jl  sparse storage scheme for original matrix.
+     * @param xl  sparse storage scheme for original matrix.
      * @param ilt sparse storage scheme for transposed matrix.
      * @param jlt sparse storage scheme for transposed matrix.
      * @param xlt sparse storage scheme for transposed matrix.
@@ -419,42 +428,39 @@ public class SparseMatrix {
 
     /**
      * Solves sparse symmetric system of linear equations using Cholesky factorization.
-     * @param n Number of equations.
+     *
+     * @param n   Number of equations.
      * @param Aii Diagonal entries of solution matrix.
      * @param Aij Non-zero off-diagonal entries of matrix.
-     * @param B Right hand side coeffs, after solving it's also used as the solution vector.
+     * @param B   Right hand side coeffs, after solving it's also used as the solution vector.
      * @return 0 if solution found, or index of equation causing system to be ill-conditioned.
      */
-    public int linsolve(int n, double [] Aii, double [] Aij, double [] B)
-    {
-        int    i, istop, istrt, isub, j, k, kfirst, newk;
+    public int linsolve(int n, double[] Aii, double[] Aij, double[] B) {
+        int i, istop, istrt, isub, j, k, kfirst, newk;
         double bj, diagj, ljk;
 
-        double [] temp = new double[n+1];
-        int [] link = new int[n+1];
-        int [] first = new int[n+1];
+        double[] temp = new double[n + 1];
+        int[] link = new int[n + 1];
+        int[] first = new int[n + 1];
 
         // Begin numerical factorization of matrix A into L
         // Compute column L(*,j) for j = 1,...n
-        for (j=1; j<=n; j++)
-        {
+        for (j = 1; j <= n; j++) {
             // For each column L(*,k) that affects L(*,j):
             diagj = 0.0;
             newk = link[j];
             k = newk;
-            while (k != 0)
-            {
+            while (k != 0) {
 
                 // Outer product modification of L(*,j) by
                 // L(*,k) starting at first[k] of L(*,k).
                 newk = link[k];
                 kfirst = first[k];
-                ljk = Aij[LNZ[kfirst]-1];
-                diagj += ljk*ljk;
+                ljk = Aij[LNZ[kfirst] - 1];
+                diagj += ljk * ljk;
                 istrt = kfirst + 1;
-                istop = XLNZ[k+1] - 1;
-                if (istop >= istrt)
-                {
+                istop = XLNZ[k + 1] - 1;
+                if (istop >= istrt) {
 
                     // Before modification, update vectors 'first'
                     // and 'link' for future modification steps.
@@ -464,10 +470,9 @@ public class SparseMatrix {
                     link[isub] = k;
 
                     // The actual mod is saved in vector 'temp'.
-                    for (i=istrt; i<=istop; i++)
-                    {
+                    for (i = istrt; i <= istop; i++) {
                         isub = NZSUB[i];
-                        temp[isub] += Aij[LNZ[i]-1]*ljk;
+                        temp[isub] += Aij[LNZ[i] - 1] * ljk;
                     }
                 }
                 k = newk;
@@ -475,66 +480,58 @@ public class SparseMatrix {
 
             // Apply the modifications accumulated
             // in 'temp' to column L(*,j).
-            diagj = Aii[j-1] - diagj;
+            diagj = Aii[j - 1] - diagj;
             if (diagj <= 0.0)        // Check for ill-conditioning
             {
                 return j;
             }
             diagj = Math.sqrt(diagj);
-            Aii[j-1] = diagj;
+            Aii[j - 1] = diagj;
             istrt = XLNZ[j];
-            istop = XLNZ[j+1] - 1;
-            if (istop >= istrt)
-            {
+            istop = XLNZ[j + 1] - 1;
+            if (istop >= istrt) {
                 first[j] = istrt;
                 isub = NZSUB[istrt];
                 link[j] = link[isub];
                 link[isub] = j;
-                for (i=istrt; i<=istop; i++)
-                {
+                for (i = istrt; i <= istop; i++) {
                     isub = NZSUB[i];
-                    bj = (Aij[LNZ[i]-1] - temp[isub])/diagj;
-                    Aij[LNZ[i]-1] = bj;
+                    bj = (Aij[LNZ[i] - 1] - temp[isub]) / diagj;
+                    Aij[LNZ[i] - 1] = bj;
                     temp[isub] = 0.0;
                 }
             }
         }
 
         // Foward substitution
-        for (j=1; j<=n; j++)
-        {
-            bj = B[j-1]/Aii[j-1];
-            B[j-1] = bj;
+        for (j = 1; j <= n; j++) {
+            bj = B[j - 1] / Aii[j - 1];
+            B[j - 1] = bj;
             istrt = XLNZ[j];
-            istop = XLNZ[j+1] - 1;
-            if (istop >= istrt)
-            {
-                for (i=istrt; i<=istop; i++)
-                {
+            istop = XLNZ[j + 1] - 1;
+            if (istop >= istrt) {
+                for (i = istrt; i <= istop; i++) {
                     isub = NZSUB[i];
-                    B[isub-1] -= Aij[LNZ[i]-1]*bj;
+                    B[isub - 1] -= Aij[LNZ[i] - 1] * bj;
                 }
             }
         }
 
         // Backward substitution
-        for (j=n; j>=1; j--)
-        {
-            bj = B[j-1];
+        for (j = n; j >= 1; j--) {
+            bj = B[j - 1];
             istrt = XLNZ[j];
-            istop = XLNZ[j+1] - 1;
-            if (istop >= istrt)
-            {
-                for (i=istrt; i<=istop; i++)
-                {
+            istop = XLNZ[j + 1] - 1;
+            if (istop >= istrt) {
+                for (i = istrt; i <= istop; i++) {
                     isub = NZSUB[i];
-                    bj -= Aij[LNZ[i]-1]*B[isub-1];
+                    bj -= Aij[LNZ[i] - 1] * B[isub - 1];
                 }
             }
-            B[j-1] = bj/Aii[j-1];
+            B[j - 1] = bj / Aii[j - 1];
         }
 
-        return(0);
+        return (0);
     }
 
 }

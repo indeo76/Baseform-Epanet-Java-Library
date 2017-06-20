@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * Epanet exception codes handler.
  */
-public class ENException extends Exception{
+public class ENException extends Exception {
 
     /**
      * Error text bundle.
@@ -33,7 +33,7 @@ public class ENException extends Exception{
     /**
      * Array of arguments to be used in the error string creation.
      */
-    private Object [] arguments;
+    private Object[] arguments;
 
     /**
      * Epanet error code.
@@ -42,37 +42,41 @@ public class ENException extends Exception{
 
     /**
      * Get error code.
+     *
      * @return Code id.
      */
-    public int getCodeID(){
+    public int getCodeID() {
         return codeID;
     }
 
     /**
      * Contructor from error code id.
+     *
      * @param id Error code id.
      */
-    public ENException(int id){
+    public ENException(int id) {
         arguments = null;
         codeID = id;
     }
 
     /**
      * Contructor from error code id and multiple arguments.
-     * @param id Error code id.
+     *
+     * @param id  Error code id.
      * @param arg Extra arguments.
      */
-    public ENException(int id, Object ... arg){
+    public ENException(int id, Object... arg) {
         codeID = id;
         arguments = arg;
     }
 
     /**
      * Contructor from other exception and multiple arguments.
+     *
      * @param e
      * @param arg
      */
-    public ENException(ENException e, Object ... arg){
+    public ENException(ENException e, Object... arg) {
         arguments = arg;
         codeID = e.getCodeID();
     }
@@ -80,20 +84,21 @@ public class ENException extends Exception{
     /**
      * Get arguments array.
      */
-    public Object [] getArguments(){
+    public Object[] getArguments() {
         return arguments;
     }
 
     /**
      * Handles the exception string conversion.
+     *
      * @return Final error string.
      */
-    public String toString(){
-        String str = errorBundle.getString("ERR"+codeID);
-        if(str==null)
-            return String.format("Unknown error message (%d)",codeID);
-        else if(arguments!=null)
-            return String.format(str,arguments);
+    public String toString() {
+        String str = errorBundle.getString("ERR" + codeID);
+        if (str == null)
+            return String.format("Unknown error message (%d)", codeID);
+        else if (arguments != null)
+            return String.format(str, arguments);
         return str;
     }
 

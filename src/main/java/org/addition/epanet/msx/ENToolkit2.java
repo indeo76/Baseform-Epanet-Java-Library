@@ -17,9 +17,8 @@
 
 package org.addition.epanet.msx;
 
-
-import org.addition.epanet.hydraulic.io.HydraulicReader;
 import org.addition.epanet.hydraulic.io.AwareStep;
+import org.addition.epanet.hydraulic.io.HydraulicReader;
 import org.addition.epanet.network.FieldsMap;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.PropertiesMap;
@@ -41,16 +40,13 @@ import java.util.List;
  */
 public class ENToolkit2 {
 
-
     public static final int EN_INITVOLUME = 14;
     public static final int EN_MIXMODEL = 15;
     public static final int EN_MIXZONEVOL = 16;
 
-
     public static final int EN_DIAMETER = 0;
     public static final int EN_LENGTH = 1;
     public static final int EN_ROUGHNESS = 2;
-
 
     public static final int EN_DURATION = 0;    // Time parameters
     public static final int EN_HYDSTEP = 1;
@@ -72,7 +68,6 @@ public class ENToolkit2 {
     public static final int EN_JUNCTION = 0;    // Node types
     public static final int EN_RESERVOIR = 1;
     public static final int EN_TANK = 2;
-
 
     private final List<Link> links;
     private final List<Node> nodes;
@@ -277,7 +272,6 @@ public class ENToolkit2 {
                 if (nodes.get(index - 1) instanceof Tank)
                     v = ((Tank) nodes.get(index - 1)).getMixModel().id;
                 break;
-
 
             case EN_MIXZONEVOL:
                 v = 0.0;

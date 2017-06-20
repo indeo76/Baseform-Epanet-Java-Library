@@ -17,9 +17,9 @@
 
 package org.addition.epanet.network;
 
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.io.Keywords;
 import org.addition.epanet.network.structures.*;
+import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.Utilities;
 
 import java.util.*;
@@ -85,6 +85,7 @@ public class Network {
                 if (Utilities.match(text, type.parseStr)) return type;
             return null;
         }
+
         /**
          * Sequencial id.
          */
@@ -148,7 +149,6 @@ public class Network {
      */
     private transient Map<String, Valve> valves;
 
-
     public Network() {
         titleText = new ArrayList<String>();
         patterns = new LinkedHashMap<String, Pattern>();
@@ -174,7 +174,6 @@ public class Network {
     public void addControl(Control ctr) {
         controls.add(ctr);
     }
-
 
     public void addCurve(String s, Curve cur) {
         cur.setId(s);
@@ -207,7 +206,6 @@ public class Network {
     public void addRule(Rule r) {
         rules.put(r.getLabel(), r);
     }
-
 
     public void addTank(String id, Tank tank) {
         tank.setId(id);

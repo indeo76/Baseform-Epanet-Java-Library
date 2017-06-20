@@ -17,9 +17,8 @@
 
 package org.addition.epanet.network.io.input;
 
-
-import org.addition.epanet.util.ENException;
 import org.addition.epanet.network.Network;
+import org.addition.epanet.util.ENException;
 import org.addition.epanet.util.Utilities;
 import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.*;
@@ -37,7 +36,6 @@ import java.util.regex.Pattern;
  * Excel XLSX file parser.
  */
 public class ExcelParser extends InpParser {
-
 
     public ExcelParser(Logger logger) {
         super(logger);
@@ -78,7 +76,7 @@ public class ExcelParser extends InpParser {
             if (validTimeFormats.contains(style.getDataFormat()))
                 timeStyles.add(style);
             else if (style.getDataFormatString().toLowerCase().contains("[h]:mm") ||
-                        style.getDataFormatString().toLowerCase().contains("[hh]:mm"))
+                    style.getDataFormatString().toLowerCase().contains("[hh]:mm"))
                 timeStyles.add(style);
         }
     }
@@ -119,7 +117,6 @@ public class ExcelParser extends InpParser {
 
             if (errSum != 0)
                 throw new ENException(200);
-
 
             stream.close();
 

@@ -17,11 +17,10 @@
 
 package org.addition.epanet.msx.Structures;
 
-
 public class Pipe {
-    double    hstep;        // integration time step
-    double    v;            // segment volume
-    double    [] c;         // species concentrations
+    double hstep;        // integration time step
+    double v;            // segment volume
+    double[] c;         // species concentrations
 
     public double getHstep() {
         return hstep;

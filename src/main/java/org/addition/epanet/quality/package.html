@@ -1,4 +1,3 @@
-
 <!--
   ~ Copyright (C) 2012  Addition, Lda. (addition at addition dot pt)
   ~
@@ -33,11 +32,11 @@ qReader.open(new File("qualitySimFile.bin")); <br>
 <br>
 long time = net.getPropertiesMap().getRstart();<br>
 for(QualityReader qStep : qReader){<br>
-    System.print(String.format("Instant %s , nodes quality : ",Utilities.getClockTime(time)));<br>
-    for(int i = 0;i &lt; net.getJunctions().size();i++)<br>
-        System.out.print(String.format("%f\t",qStep.getNodeQuality(i)));<br>
-    System.out.println("");<br>
-    time+=net.getPropertiesMap().getRstep();<br>
+System.print(String.format("Instant %s , nodes quality : ",Utilities.getClockTime(time)));<br>
+for(int i = 0;i &lt; net.getJunctions().size();i++)<br>
+System.out.print(String.format("%f\t",qStep.getNodeQuality(i)));<br>
+System.out.println("");<br>
+time+=net.getPropertiesMap().getRstep();<br>
 }<br>
 
 </body>
