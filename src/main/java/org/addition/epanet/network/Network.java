@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * Hydraulic network structure.
  */
-public class Network {
+public class Network implements Cloneable {
 
     /**
      * Available files types.
@@ -149,6 +149,7 @@ public class Network {
      */
     private transient Map<String, Valve> valves;
 
+
     public Network() {
         titleText = new ArrayList<String>();
         patterns = new LinkedHashMap<String, Pattern>();
@@ -174,6 +175,7 @@ public class Network {
     public void addControl(Control ctr) {
         controls.add(ctr);
     }
+
 
     public void addCurve(String s, Curve cur) {
         cur.setId(s);
@@ -206,6 +208,7 @@ public class Network {
     public void addRule(Rule r) {
         rules.put(r.getLabel(), r);
     }
+
 
     public void addTank(String id, Tank tank) {
         tank.setId(id);
@@ -368,6 +371,14 @@ public class Network {
         return valves.values();
     }
 
+    public void resetRules() {
+        rules.clear();
+    }
+
+    public void resetControls() {
+        controls.clear();
+    }
+
     private Object readResolve() throws ENException {
         updatedUnitsProperty();
         return this;
@@ -399,7 +410,15 @@ public class Network {
         return res;
     }
 
-//    public Node getNodeByIndex(int idx) {
+    @Override
+    public Network clone() throws CloneNotSupportedException {
+        Network clone = (Network) super.clone();
+        clone.controls = new ArrayList<>(this.controls);
+        clone.rules = new LinkedHashMap<>(this.rules);
+        return clone;
+    }
+
+    //    public Node getNodeByIndex(int idx) {
 //        return  new ArrayList<Node>(nodes.values()).get(idx);
 //    }
 //    public Link getLinkByIndex(int idx) {
