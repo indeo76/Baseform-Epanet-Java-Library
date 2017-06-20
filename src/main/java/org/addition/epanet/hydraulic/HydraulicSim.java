@@ -616,6 +616,7 @@ public class HydraulicSim {
      * Implements simple controls based on time or tank levels.
      */
     private void computeControls() throws ENException {
+
         SimulationControl.stepActions(logger, fMap, pMap, nControls, Htime);
     }
 
@@ -922,4 +923,11 @@ public class HydraulicSim {
         return nControls;
     }
 
+    public List<SimulationPump> getnPumps() {
+        return nPumps;
+    }
+
+    public List<SimulationTank> getnTanks() {
+        return nTanks;
+    }
 }
