@@ -3,6 +3,7 @@ package org.addition.epanet.hydraulic;
 import org.addition.epanet.network.Network;
 import org.addition.epanet.network.io.input.InpParser;
 import org.addition.epanet.util.ENException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -47,6 +48,12 @@ public class HydraulicSimTest {
     @Test
     public void producesCorrectResult_simple() throws Exception {
         assertNetworkHasCorrectResult("simple");
+    }
+
+    @Ignore
+    @Test
+    public void produceCorrectResult_THE_MICROPOLIS_MODEL() throws Exception {
+        assertNetworkHasCorrectResult("THE_MICROPOLIS_MODEL");
     }
 
     private void assertNetworkHasCorrectResult(String networkName) throws URISyntaxException, ENException, IOException {
