@@ -1312,7 +1312,7 @@ public class InpParser extends InputParser {
                 else throw new ENException(217);
             }
             if (pumpRef == null)
-                net.getPropertiesMap().setEpatId(t.getId());
+                net.getPropertiesMap().setEpatID(t.getId());
             else
                 pumpRef.setEpat(t);
             return;
@@ -1573,7 +1573,7 @@ public class InpParser extends InputParser {
         } else if (Utilities.match(Tok[0], Keywords.w_PATTERN)) {
             if (n < 1)
                 return false;
-            map.setDefPatId(Tok[1]);
+            map.setDefPatID(Tok[1]);
         } else
             return true;
         return false;
