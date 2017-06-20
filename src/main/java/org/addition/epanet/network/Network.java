@@ -149,7 +149,6 @@ public class Network implements Cloneable {
      */
     private transient Map<String, Valve> valves;
 
-
     public Network() {
         titleText = new ArrayList<String>();
         patterns = new LinkedHashMap<String, Pattern>();
@@ -175,7 +174,6 @@ public class Network implements Cloneable {
     public void addControl(Control ctr) {
         controls.add(ctr);
     }
-
 
     public void addCurve(String s, Curve cur) {
         cur.setId(s);
@@ -208,7 +206,6 @@ public class Network implements Cloneable {
     public void addRule(Rule r) {
         rules.put(r.getLabel(), r);
     }
-
 
     public void addTank(String id, Tank tank) {
         tank.setId(id);
@@ -417,11 +414,4 @@ public class Network implements Cloneable {
         clone.rules = new LinkedHashMap<>(this.rules);
         return clone;
     }
-
-    //    public Node getNodeByIndex(int idx) {
-//        return  new ArrayList<Node>(nodes.values()).get(idx);
-//    }
-//    public Link getLinkByIndex(int idx) {
-//        return  new ArrayList<Link>(links.values()).get(idx);
-//    }
 }
