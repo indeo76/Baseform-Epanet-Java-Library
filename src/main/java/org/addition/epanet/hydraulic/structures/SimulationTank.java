@@ -65,10 +65,6 @@ public class SimulationTank extends SimulationNode {
         return ((Tank) node).getHmax();
     }
 
-    //public double getH0() {
-    //    return ((Tank)node).getH0();
-    //}
-
     public double getVmin() {
         return ((Tank) node).getVmin();
     }
@@ -81,14 +77,6 @@ public class SimulationTank extends SimulationNode {
         return ((Tank) node).getV0();
     }
 
-    //public double getKb() {
-    //    return ((Tank)node).getKb();
-    //}
-    //
-    //public double [] getConcentration() {
-    //    return ((Tank)node).getConcentration();
-    //}
-
     public Pattern getPattern() {
         return ((Tank) node).getPattern();
     }
@@ -96,16 +84,6 @@ public class SimulationTank extends SimulationNode {
     public Curve getVcurve() {
         return ((Tank) node).getVcurve();
     }
-
-    //public MixType getMixModel() {
-    //    return ((Tank)node).getMixModel();
-    //}
-    //
-    //public double getV1max() {
-    //    return ((Tank)node).getV1max();
-    //}
-
-    /// Simulation getters & setters.
 
     public double getSimVolume() {
         return volume;//((Tank)node).getSimVolume();

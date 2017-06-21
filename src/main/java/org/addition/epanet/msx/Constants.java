@@ -28,8 +28,6 @@ public class Constants {
     public static final int VERSION = 100000;
     public static final int MAXMSG = 1024;            // Max. # characters in message text
     public static final int MAXLINE = 1024;            // Max. # characters in input line
-    //public static final int TRUE        =1;
-    //public static final int FALSE       =0;
     public static final double BIG = 1.E10d;
     public static final double TINY = 1.E-6d;
     public static final double MISSING = -1.E10d;

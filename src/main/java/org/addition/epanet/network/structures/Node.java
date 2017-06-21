@@ -85,14 +85,6 @@ public class Node implements Comparable<Node> {
         this.initDemand = initDemand;
     }
 
-    //public NodeType getType() {
-    //    return type;
-    //}
-    //
-    //public void setType(NodeType type) {
-    //    this.type = type;
-    //}
-
     public Node() {
         C0 = new double[1];
         comment = "";

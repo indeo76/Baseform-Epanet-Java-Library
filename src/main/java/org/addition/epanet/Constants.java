@@ -36,9 +36,6 @@ public class Constants {
      * Max. input errors reported
      */
     public static final int MAXERRS = 10;
-    //public static final int     MAXMSG = 79;
-    //public static final int     MAXID  = 31;
-    //public static final int     MAXFNAME = 259;
 
     /**
      * Epanet binary files code version
@@ -127,11 +124,6 @@ public class Constants {
      * Default damping threshold
      */
     public static final double DAMPLIMIT = 0;
-
-    ///**
-    // * Max. # types of network variables
-    // */
-    //public static final int     MAXVAR = 21;
 
     public static final double BIG = 1.E10d;
     public static final double TINY = 1.E-6d;

@@ -46,7 +46,6 @@ public interface PipeHeadModel {
             return flowCorrection;
         }
     }
-    //public double compute(PropertiesMap pMap,SimulationLink link) throws ENException;
 
     /**
      * Compute link coefficients through the implemented pipe headloss model.

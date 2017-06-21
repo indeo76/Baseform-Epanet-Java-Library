@@ -129,17 +129,9 @@ public class SimulationLink {
         return link.getC0();
     }
 
-    //public double[] getParam() {
-    //    return node.getParam();
-    //}
-
     public double getDiameter() {
         return link.getDiameter();
     }
-
-    //public double getLenght() {
-    //    return node.getLenght();
-    //}
 
     public double getRoughness() {
         return link.getRoughness();
@@ -149,14 +141,6 @@ public class SimulationLink {
         return link.getKm();
     }
 
-    //public double getKb() {
-    //    return node.getKb();
-    //}
-    //
-    //public double getKw() {
-    //    return node.getKw();
-    //}
-
     public double getFlowResistance() {
         return link.getFlowResistance();
     }
@@ -164,14 +148,6 @@ public class SimulationLink {
     public LinkType getType() {
         return link.getType();
     }
-
-    //public StatType getStat() {
-    //    return node.getStat();
-    //}
-    //
-    //public boolean getRptFlag() {
-    //    return node.isRptFlag();
-    //}
 
     // Simulation getters & setters
 

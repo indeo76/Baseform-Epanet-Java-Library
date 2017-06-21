@@ -147,23 +147,6 @@ public class MathExpr {
         variables = new Hashtable<ASTVarNode, Integer>();
     }
 
-    //public double evaluate(Chemical chem, boolean pipe){
-    //    double res = 0;
-    //
-    //    for( Map.Entry<ASTVarNode,Integer> entry :  variables.entrySet()){
-    //        if(pipe)
-    //            entry.getKey().setValue(chem.getPipeVariableValue(entry.getValue()) );
-    //        else
-    //            entry.getKey().setValue(chem.getTankVariableValue(entry.getValue()) );
-    //    }
-    //
-    //    try {
-    //        return topNode.getValue();
-    //    } catch (org.cheffo.jeplite.ParseException e) {
-    //        return 0;
-    //    }
-    //}
-
     public double evaluatePipeExp(ExprVariable var) {
         for (Map.Entry<ASTVarNode, Integer> entry : variables.entrySet()) {
             entry.getKey().setValue(var.getPipeVariableValue(entry.getValue()));

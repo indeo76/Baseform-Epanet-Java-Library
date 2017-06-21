@@ -42,54 +42,6 @@ public class Newton {
         Nmax = n;
     }
 
-    //=============================================================================
-    // uses newton-raphson iterations to solve n nonlinear eqns.
-    /*public int newton_solve(double x[], int n, int maxit, int numsig,
-                     JacobianFunction func)
-    {
-        int i, k;
-        double errx, errmax, cscal, relconvg = Math.pow(10.0, -numsig);
-
-        // --- check that system was sized adequetely
-
-        if ( n > Nmax ) return -3;
-
-        // --- use up to maxit iterations to find a solution
-
-        for (k=1; k<=maxit; k++)
-        {
-            // --- evaluate the Jacobian matrix
-
-            Utilities.jacobian(x, n, F, W, J, func);
-
-            // --- factorize the Jacobian
-
-            if ( Utilities.factorize(J, n, W, Indx) ==0 ) return -1;
-
-            // --- solve for the updates to x (returned in F)
-
-            for (i=1; i<=n; i++) F[i] = -F[i];
-            Utilities.solve(J, n, Indx, F);
-
-            // --- update solution x & check for convergence
-
-            errmax = 0.0;
-            for (i=1; i<=n; i++)
-            {
-                cscal = x[i];
-                if (cscal < relconvg) cscal = relconvg;
-                x[i] += F[i];
-                errx = Math.abs(F[i]/cscal);
-                if (errx > errmax) errmax = errx;
-            }
-            if (errmax <= relconvg) return k;
-        }
-
-        // --- return error code if no convergence
-
-        return -2;
-    }*/
-
     /**
      * uses newton-raphson iterations to solve n nonlinear eqns.
      */

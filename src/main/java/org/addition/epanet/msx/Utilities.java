@@ -248,38 +248,6 @@ public class Utilities {
         }
     }
 
-    //=============================================================================
-    // computes Jacobian matrix of F(t,X) at given X
-    /*public static void jacobian(double [] x, int n, double [] f, double [] w, double [][]a, JacobianFunction func)
-                  //void (*func)(double, double*, int, double*))
-
-    {
-
-        int    i, j;
-        double temp, eps = 1.0e-7, eps2;
-
-        for (j=1; j<=n; j++)
-        {
-            temp = x[j];
-            x[j] = temp + eps;
-            func.solve(0.0, x, n, f);
-            if ( temp == 0.0 )
-            {
-                x[j] = temp;
-                eps2 = eps;
-            }
-            else
-            {
-                x[j] = temp - eps;
-                eps2 = 2.0*eps;
-            }
-            func.solve(0.0, x, n, w);
-            for (i=1; i<=n; i++) a[i][j] = (f[i] - w[i]) / eps2;
-            x[j] = temp;
-        }
-
-    }*/
-
     // computes Jacobian matrix of F(t,X) at given X
     public static void jacobian(double[] x, int n, double[] f, double[] w, double[][] a, JacobianInterface jint, JacobianInterface.Operation op) {
         int i, j;

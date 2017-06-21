@@ -108,10 +108,6 @@ public class EpanetMSX {
         return mQuality;
     }
 
-    //public Epanet getEpanet() {
-    //    return mEpanet;
-    //}
-
     public ENToolkit2 getENToolkit() {
         return mENToolkit;
     }

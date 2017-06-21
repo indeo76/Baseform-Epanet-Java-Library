@@ -74,10 +74,6 @@ public class Tank extends Node {
      */
     private double area;
     /**
-     * Tank volume (feet^3).
-     */
-    //private double v;
-    /**
      * Species concentration.
      */
     private double[] c;
@@ -257,14 +253,6 @@ public class Tank extends Node {
     public void setNUInitVolume(PropertiesMap.UnitsType type, double value) {
         v0 = NUConvert.convertVolume(type, value);
     }
-
-    //public double getVolume() {
-    //    return v;
-    //}
-    //
-    //public void setVolume(double v) {
-    //    this.v = v;
-    //}
 
     public void setNUMaximumHead(PropertiesMap.UnitsType type, double value) {
         hMax = NUConvert.revertDistance(type, value);

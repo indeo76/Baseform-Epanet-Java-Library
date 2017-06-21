@@ -63,10 +63,6 @@ public class SimulationNode {
         return node.getId();
     }
 
-    //public NodeType getType() {
-    //    return node.getType();
-    //}
-
     public double getElevation() {
         return node.getElevation();
     }
@@ -75,10 +71,6 @@ public class SimulationNode {
         return node.getDemand();
     }
 
-    //public Source getSource() {
-    //    return node.getSource();
-    //}
-
     public double[] getC0() {
         return node.getC0();
     }
@@ -86,12 +78,6 @@ public class SimulationNode {
     public double getKe() {
         return node.getKe();
     }
-
-    //public boolean getRptFlag() {
-    //    return node.isRptFlag();
-    //}
-
-    ////
 
     public double getSimHead() {
         return head;

@@ -108,19 +108,6 @@ public class QualityLink {
         return flowDir;
     }
 
-    ///**
-    // * Current reaction rate.
-    // */
-    //double  reactionRate;    // Pipe reaction rate
-    //
-    //public double getReactionRate() {
-    //    return reactionRate;
-    //}
-    //
-    //public void setReactionRate(double reactionRate) {
-    //    this.reactionRate = reactionRate;
-    //}
-
     /**
      * Get the link flow resistance.
      *

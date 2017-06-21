@@ -148,32 +148,6 @@ public class ExcelComposer extends OutputComposer {
     private static final String TITLE_SUBTITLE = "Text";
     private static final String VALVES_SUBTITLE = "ID\tNode1\tNode2\tDiameter\tType\tSetting\tMinorLoss\tComment";
 
-    //private static final String TITLE_TAG       = "[TITLE]";
-    //private static final String JUNCTIONS_TAG   = "[JUNCTIONS]";
-    //private static final String TANKS_TAG       = "[TANKS]";
-    //private static final String RESERVOIRS_TAG  = "[RESERVOIRS]";
-    //private static final String PIPES_TAG       = "[PIPES]";
-    //private static final String PUMPS_TAG       = "[PUMPS]";
-    //private static final String VALVES_TAG      = "[VALVES]";
-    //private static final String DEMANDS_TAG     = "[DEMANDS]";
-    //private static final String EMITTERS_TAG    = "[EMITTERS]";
-    //private static final String STATUS_TAG      = "[STATUS]";
-    //private static final String PATTERNS_TAG    = "[PATTERNS]";
-    //private static final String CURVES_TAG      = "[CURVES]";
-    //private static final String CONTROLS_TAG    = "[CONTROLS]";
-    //private static final String QUALITY_TAG     = "[QUALITY]";
-    //private static final String SOURCE_TAG      = "[SOURCE]";
-    //private static final String MIXING_TAG      = "[MIXING]";
-    //private static final String REACTIONS_TAG   = "[REACTIONS]";
-    //private static final String ENERGY_TAG      = "[ENERGY]";
-    //private static final String TIMES_TAG       = "[TIMES]";
-    //private static final String OPTIONS_TAG     = "[OPTIONS]";
-    //private static final String REPORT_TAG      = "[REPORT]";
-    //private static final String COORDINATES_TAG = "[COORDINATES]";
-    //private static final String RULES_TAG       = "[RULES]";
-    //private static final String VERTICES_TAG    = "[VERTICES]";
-    //private static final String LABELS_TAG      = "[LABELS]";
-
     private static final String VERTICES_SUBTITLE = "Link\tX-Coord\tY-Coord";
 
     Workbook workbook;

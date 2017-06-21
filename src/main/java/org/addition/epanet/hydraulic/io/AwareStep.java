@@ -145,39 +145,6 @@ public class AwareStep {
         outStream.write(buf.array());
     }
 
-     /*public static void writeHybrid(DataOutput outStream,HydraulicSim hydraulicSim, double [] qN, double [] qL , long step, long time) throws IOException, ENException {
-
-        List<SimulationNode> nodes = hydraulicSim.getnNodes();
-        List<SimulationLink> links = hydraulicSim.getnLinks();
-
-        int nNodes = nodes.size();
-        int nLinks = links.size();
-
-        int baSize = (nNodes * 3 + nLinks * 3) * Double.SIZE / 8 +
-                Long.SIZE * 2 / 8;
-        ByteBuffer buf = ByteBuffer.allocate(baSize);
-
-        int count= 0;
-        for (SimulationNode node : nodes) {
-            buf.putDouble(node.getSimDemand());
-            buf.putDouble(node.getSimHead());
-            buf.putDouble(qN[count++]);
-        }
-
-        count = 0;
-        for (SimulationLink link : links) {
-            buf.putDouble(link.getSimStatus().id <= Link.StatType.CLOSED.id ? 0d : link.getSimFlow());
-            buf.putDouble((link.getFirst().getSimHead() - link.getSecond().getSimHead()));
-            buf.putDouble(qL[count++]);
-        }
-
-        buf.putLong(step);
-        buf.putLong(time);
-
-        buf.flip();
-        outStream.write(buf.array());
-    } */
-
     public AwareStep(DataInput inStream, HeaderInfo headerInfo) throws IOException {
         int nNodes = headerInfo.nodes;
         int nLinks = headerInfo.links;
