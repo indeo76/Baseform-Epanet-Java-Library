@@ -10,11 +10,11 @@ Optimized version of Baseform port of Epanet.
 <dependency>
     <groupId>com.github.swms-project</groupId>
     <artifactId>Epanet</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 ### Gradle
 ```
-compile group: 'com.github.swms-project', name: 'Epanet', version: '1.0.2'
+compile group: 'com.github.swms-project', name: 'Epanet', version: '1.0.3'
 ```
 
