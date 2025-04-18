@@ -277,7 +277,7 @@ public class FieldsMap {
      * @throws ENException
      */
     public double revertUnit(Type type, double value) throws ENException {
-        return type != null ? value * getUnits(type) : value;
+        return value;
     }
 
     public double convertUnitToSystem(Type type, double value) throws ENException {
